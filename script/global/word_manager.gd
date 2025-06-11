@@ -1,8 +1,10 @@
 extends Node
 #class_name WordManager
 
-func get_common_words() -> String:
-	var text: String = ""
+var current_text: Array[String] = []
+var current_word : String
+
+func get_common_words() -> Array[String]:
 	for i in range(50):
-		text += Words.common_words.pick_random() + " "
-	return text
+		current_text.append(Words.common_words.pick_random())
+	return current_text

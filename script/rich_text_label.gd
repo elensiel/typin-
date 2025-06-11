@@ -1,4 +1,8 @@
 extends RichTextLabel
 
 func _enter_tree() -> void:
-	text = WordManager.get_common_words()
+	var words: Array[String] = WordManager.get_common_words()
+	
+	text = ""
+	for word in words:
+		text += word + " "

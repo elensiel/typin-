@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cv8i21q77mmvy"]
+[gd_scene load_steps=3 format=3 uid="uid://cv8i21q77mmvy"]
 
 [ext_resource type="Script" uid="uid://cgwr45stsl34b" path="res://script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://dx7nsid7ou66x" path="res://resource/main_theme.tres" id="1_wp4xf"]
-[ext_resource type="Script" uid="uid://dwdlo5nya2vrl" path="res://script/rich_text_label.gd" id="2_v0l8b"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -34,14 +33,16 @@ theme_override_constants/margin_right = -200
 [node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 focus_mode = 2
+bbcode_enabled = true
 text = "some text"
 fit_content = true
 hint_underlined = false
 selection_enabled = true
-script = ExtResource("2_v0l8b")
 
 [node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 
 [node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/MarginContainer2"]
 layout_mode = 2
+
+[connection signal="text_changed" from="CenterContainer/VBoxContainer/MarginContainer2/LineEdit" to="." method="_on_line_edit_text_changed"]
