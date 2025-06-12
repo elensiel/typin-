@@ -44,5 +44,3 @@ layout_mode = 2
 
 [node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/MarginContainer2"]
 layout_mode = 2
-
-[connection signal="text_changed" from="CenterContainer/VBoxContainer/MarginContainer2/LineEdit" to="." method="_on_line_edit_text_changed"]
