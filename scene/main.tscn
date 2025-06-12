@@ -28,16 +28,14 @@ alignment = 1
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = -200
+theme_override_constants/margin_top = -75
 theme_override_constants/margin_right = -200
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
-focus_mode = 2
 bbcode_enabled = true
 text = "some text"
-fit_content = true
 hint_underlined = false
-selection_enabled = true
 
 [node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2

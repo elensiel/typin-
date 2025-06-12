@@ -6,6 +6,6 @@ func _ready() -> void:
 	TypingManager.connect_line_edit(line_edit)
 	line_edit.grab_focus()
 	
-	var rtl := $CenterContainer/VBoxContainer/MarginContainer/RichTextLabel
+	var rtl: RichTextLabel = $CenterContainer/VBoxContainer/MarginContainer/RichTextLabel
 	TextManager.text_label = rtl
 	TextManager.randomize_text()
