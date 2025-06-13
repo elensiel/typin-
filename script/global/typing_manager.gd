@@ -28,19 +28,20 @@ func evaluate_word(word: String) -> void:
 	TextManager.update()
 
 func next_word() -> void:
+	# set necessary values
 	pointer += 1
 	current_char_idx += current_word.length() + 1
+	input.text = ""
 	
-	if pointer > TextManager.current_text.size() / 2:
+	# appends 50 more words on 75% completion
+	if pointer > (TextManager.current_text.size() * 0.75):
 		TextManager.add_text()
 	
 	current_word = TextManager.current_text[pointer]
 	TextManager.current_text[pointer] = set_text_bgcolor(current_word, "dimgray")
-	
-	input.text = ""
 	TextManager.update()
-	
 	TextManager.scroll_update()
+	
 
 func set_text_color(word: String, color: String) -> String:
 	return "[color=" + color + "]" + word + "[/color]"
@@ -49,7 +50,9 @@ func set_text_bgcolor(word: String, color: String) -> String:
 	return "[bgcolor=" + color + "]" + word + "[/bgcolor]"
 
 func _on_input_text_changed(new_text: String) -> void:
-	if new_text.ends_with(" "):
+	if new_text.begins_with(" "): # accidental space
+		input.text = ""
+	elif new_text.ends_with(" "):
 		evaluate_word(new_text.trim_suffix(" "))
 		next_word()
 	else:

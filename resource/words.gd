@@ -61,7 +61,7 @@ const common_words: Array[String] = [
 	"door", "down", "draw", "dream", "drive", "drop", "during", "each", "early",
 	"east", "easy", "eat", "economy", "edge", "education", "effect", "effort",
 	"eight", "either", "element", "else", "end", "enjoy", "enough", "enter",
-	"entire", "environ", "equal", "especial", "even", "evening", "event",
+	"entire", "environment", "equal", "especially", "even", "evening", "event",
 	"ever", "every", "everyone", "exact", "example", "exist", "expect",
 	"explain", "express", "extra", "eye", "face", "fact", "fall", "family",
 	"far", "fast", "father", "fear", "feature", "feel", "field", "fight",

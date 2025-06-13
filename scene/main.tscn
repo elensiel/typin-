@@ -35,6 +35,7 @@ theme_override_constants/margin_right = -200
 layout_mode = 2
 bbcode_enabled = true
 text = "some text"
+scroll_active = false
 hint_underlined = false
 
 [node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
