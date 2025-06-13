@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 TextManager="*res://script/global/text_manager.gd"
 TypingManager="*res://script/global/typing_manager.gd"
+StateMachine="*res://script/global/state_machine.gd"
+GlobalTimer="*res://script/global/timer.gd"
 
 [display]
 

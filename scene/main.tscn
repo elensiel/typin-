@@ -27,9 +27,7 @@ alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = -200
-theme_override_constants/margin_top = -75
-theme_override_constants/margin_right = -200
+theme_type_variation = &"TextFieldMargin"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
@@ -38,8 +36,32 @@ text = "some text"
 scroll_active = false
 hint_underlined = false
 
-[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/MarginContainer2"]
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+theme_override_constants/margin_left = -200
+theme_override_constants/margin_right = -150
+
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+theme_override_constants/margin_right = -190
+
+[node name="TimerLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "0:00"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Timer" type="Timer" parent="CenterContainer/VBoxContainer/HBoxContainer/MarginContainer"]

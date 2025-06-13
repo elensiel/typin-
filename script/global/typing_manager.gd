@@ -50,6 +50,9 @@ func set_text_bgcolor(word: String, color: String) -> String:
 	return "[bgcolor=" + color + "]" + word + "[/bgcolor]"
 
 func _on_input_text_changed(new_text: String) -> void:
+	if StateMachine.current_state != StateMachine.State.TYPING:
+		StateMachine.change_state(StateMachine.State.TYPING)
+	
 	if new_text.begins_with(" "): # accidental space
 		input.text = ""
 	elif new_text.ends_with(" "):
