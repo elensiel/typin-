@@ -1,62 +1,106 @@
 extends Node
 #class_name TypingManager
 
-var input : LineEdit
+var line_edit : LineEdit
 
-var pointer: int = 0
-var current_word : String
-var current_char_idx: int = 0
+var ptr: int = 0
+var cur_word : String
+var cur_char_idx: int = 0
+var cur_typed_len: int = 0
+
+#region color values
+# word submitted
+var correct_word_color: String = "seagreen"
+var wrong_word_color: String = "darkred"
+
+# typing color
+var correct_typed_color: String = "dimgray"
+var wrong_typed_color: String = "darkred"
+#endregion
 
 func connect_line_edit(node: LineEdit) -> void:
-	input = node
-	input.connect("text_changed", Callable.create(self, "_on_input_text_changed"))
+	line_edit = node
+	line_edit.connect("text_changed", Callable.create(self, "_on_line_edit_text_changed"))
 
-func evaluate_typed(typed: String) -> void:
-	if typed.length() > current_word.length() or !current_word.begins_with(typed):
-		TextManager.current_text[pointer] = set_text_bgcolor(current_word, "darkred")
+#region evaluations
+func _evaluate_typed(typed: String) -> void:
+	var length: int = typed.length()
+	
+	if length > cur_word.length() or !cur_word.begins_with(typed):
+		if length > cur_typed_len:
+			pass # TODO - wrong keystroke
+		
+		TextManager.cur_text[ptr] = set_text_bgcolor(cur_word, wrong_typed_color)
 	else:
-		TextManager.current_text[pointer] = set_text_bgcolor(current_word, "dimgray")
+		if length > cur_typed_len:
+			pass # TODO - correct keystroke
+		
+		TextManager.cur_text[ptr] = set_text_bgcolor(cur_word, correct_typed_color)
 	
-	TextManager.update()
+	TextManager.update_text()
 
-func evaluate_word(word: String) -> void:
-	if word == current_word:
-		TextManager.current_text[pointer] = set_text_color(current_word, "seagreen")
+func _evaluate_word(word: String) -> void:
+	if word == cur_word:
+		# TODO -- + correct word 
+		TextManager.cur_text[ptr] = set_text_color(cur_word, correct_word_color)
 	else:
-		TextManager.current_text[pointer] = set_text_color(current_word, "darkred")
+		# TODO -- + wrong word
+		TextManager.cur_text[ptr] = set_text_color(cur_word, wrong_word_color)
 	
-	TextManager.update()
+	TextManager.update_text()
+	TextManager.scroll_update()
+#endregion
 
-func next_word() -> void:
-	# set necessary values
-	pointer += 1
-	current_char_idx += current_word.length() + 1
-	input.text = ""
+func _next_word() -> void:
+	# setters and resetters
+	ptr += 1
+	cur_char_idx += cur_word.length() + 1 # +1 for the whitespace
+	cur_typed_len = 0
+	line_edit.text = ""
 	
-	# appends 50 more words on 75% completion
-	if pointer > (TextManager.current_text.size() * 0.75):
+	# add 50 more words on 70% completion
+	if ptr > (TextManager.cur_text.size() * 0.70):
 		TextManager.add_text()
 	
-	current_word = TextManager.current_text[pointer]
-	TextManager.current_text[pointer] = set_text_bgcolor(current_word, "dimgray")
-	TextManager.update()
+	# text stuff
+	cur_word = TextManager.cur_text[ptr]
+	TextManager.cur_text[ptr] = set_text_bgcolor(cur_word, correct_typed_color)
+	TextManager.update_text()
 	TextManager.scroll_update()
-	
 
-func set_text_color(word: String, color: String) -> String:
+func new_test() -> void:
+	# value setters
+	ptr = 0
+	cur_word = TextManager.cur_text[ptr]
+	cur_char_idx = 0
+	cur_typed_len = 0
+	
+	# visual
+	line_edit.text = ""
+	TextManager.cur_text[ptr] = set_text_bgcolor(cur_word, correct_typed_color)
+	
+	#enable typing
+	line_edit.editable = true
+
+func stop_test() -> void:
+	line_edit.editable = false
+
+#region color setters
+func set_text_color(word: String, color: String) -> String: 
 	return "[color=" + color + "]" + word + "[/color]"
 
 func set_text_bgcolor(word: String, color: String) -> String:
 	return "[bgcolor=" + color + "]" + word + "[/bgcolor]"
+#endregion
 
-func _on_input_text_changed(new_text: String) -> void:
-	if StateMachine.current_state != StateMachine.State.TYPING:
+func _on_line_edit_text_changed(new_text: String) -> void:
+	if StateMachine.cur_state != StateMachine.State.TYPING:
 		StateMachine.change_state(StateMachine.State.TYPING)
 	
-	if new_text.begins_with(" "): # accidental space
-		input.text = ""
+	if new_text.match(" "):
+		line_edit.text = ""
 	elif new_text.ends_with(" "):
-		evaluate_word(new_text.trim_suffix(" "))
-		next_word()
+		_evaluate_word(new_text.trim_suffix(" "))
+		_next_word()
 	else:
-		evaluate_typed(new_text)
+		_evaluate_typed(new_text)

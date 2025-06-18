@@ -2,31 +2,37 @@ extends Node
 #class_name StateMachine
 
 enum State {
-	IDLE,
+	NEW,
 	TYPING,
 	END,
+	RESET,
 }
-var current_state: State = State.IDLE
+var cur_state: State = State.NEW
 
-func change_state(new_state) -> void: 
-	current_state = new_state
+func change_state(new_state: State) -> void:
+	cur_state = new_state
 	
-	match current_state:
-		State.IDLE:
-			_handle_idle()
+	match cur_state:
+		State.NEW:
+			_handle_new()
 		State.TYPING:
 			_handle_typing()
 		State.END:
 			_handle_end()
+		State.RESET:
+			_handle_reset()
 
-func _handle_idle() -> void:
-	pass
-	# idk what to put here for now
-	# reset maybe
+func _handle_new() -> void:
+	TextManager.new_text()
+	TypingManager.new_test()
+	TextManager.update_text()
 
 func _handle_typing() -> void:
-	GlobalTimer.timer.start()
+	TimerManager.start()
 
 func _handle_end() -> void:
+	TypingManager.stop_test()
+	TimerManager.stop()
+
+func _handle_reset() -> void:
 	pass
-	# do wpm calc here

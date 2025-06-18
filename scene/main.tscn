@@ -1,7 +1,27 @@
 [gd_scene load_steps=3 format=3 uid="uid://cv8i21q77mmvy"]
 
-[ext_resource type="Script" uid="uid://cgwr45stsl34b" path="res://script/main.gd" id="1_itxqv"]
 [ext_resource type="Theme" uid="uid://dx7nsid7ou66x" path="res://resource/main_theme.tres" id="1_wp4xf"]
+
+[sub_resource type="GDScript" id="GDScript_itxqv"]
+script/source = "extends Control
+class_name Main
+
+func _ready() -> void:
+	var line_edit: LineEdit = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer2/LineEdit
+	TypingManager.connect_line_edit(line_edit)
+	line_edit.grab_focus()
+	
+	var main_text: RichTextLabel = $CenterContainer/VBoxContainer/MarginContainer/RichTextLabel
+	TextManager.connect_label(main_text)
+	
+	var timer: Timer = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer/Timer
+	TimerManager.connect_timer(timer)
+	
+	var timer_label: RichTextLabel = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer/TimerLabel
+	TimerManager.connect_label(timer_label)
+	
+	StateMachine.change_state(StateMachine.State.NEW)
+"
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -11,7 +31,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_wp4xf")
-script = ExtResource("1_itxqv")
+script = SubResource("GDScript_itxqv")
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
