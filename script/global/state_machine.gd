@@ -26,6 +26,7 @@ func _handle_new() -> void:
 	TextManager.new_text()
 	TypingManager.new_test()
 	TextManager.update_text()
+	TextManager.scroll_update()
 
 func _handle_typing() -> void:
 	TimerManager.start()
@@ -35,4 +36,5 @@ func _handle_end() -> void:
 	TimerManager.stop()
 
 func _handle_reset() -> void:
-	pass
+	TimerManager.stop()
+	change_state(State.NEW)

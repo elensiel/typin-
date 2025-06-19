@@ -8,7 +8,9 @@ var minute: int = 1
 var second: int = 0
 
 #region node connections
-func connect_label(node: RichTextLabel) -> void: label = node
+func connect_label(node: RichTextLabel) -> void: 
+	label = node
+	_update_label()
 
 func connect_timer(node: Timer) -> void:
 	timer = node
@@ -25,6 +27,11 @@ func start() -> void:
 
 func stop() -> void:
 	timer.stop()
+	
+	minute = 1
+	second = 0
+	
+	_update_label()
 
 func _update_label() -> void: label.text = "%02d:%02d" % [minute, second]
 

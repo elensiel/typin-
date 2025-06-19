@@ -22,6 +22,7 @@ TextManager="*res://script/global/text_manager.gd"
 TypingManager="*res://script/global/typing_manager.gd"
 TimerManager="*res://script/global/timer_manager.gd"
 ScoreManager="*res://script/global/score_manager.gd"
+InputManager="*res://script/global/input_manager.gd"
 
 [display]
 

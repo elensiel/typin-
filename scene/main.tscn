@@ -9,7 +9,6 @@ class_name Main
 func _ready() -> void:
 	var line_edit: LineEdit = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer2/LineEdit
 	TypingManager.connect_line_edit(line_edit)
-	line_edit.grab_focus()
 	
 	var main_text: RichTextLabel = $CenterContainer/VBoxContainer/MarginContainer/RichTextLabel
 	TextManager.connect_label(main_text)

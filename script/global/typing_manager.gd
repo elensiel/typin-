@@ -81,6 +81,7 @@ func new_test() -> void:
 	
 	#enable typing
 	line_edit.editable = true
+	line_edit.edit()
 
 func stop_test() -> void:
 	line_edit.editable = false
