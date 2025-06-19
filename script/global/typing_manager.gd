@@ -28,23 +28,25 @@ func _evaluate_typed(typed: String) -> void:
 	
 	if length > cur_word.length() or !cur_word.begins_with(typed):
 		if length > cur_typed_len:
-			pass # TODO - wrong keystroke
+			ScoreManager.wrong_keystrokes += 1
 		
+		cur_typed_len = length
 		TextManager.cur_text[ptr] = set_text_bgcolor(cur_word, wrong_typed_color)
 	else:
 		if length > cur_typed_len:
-			pass # TODO - correct keystroke
+			ScoreManager.correct_keystrokes += 1
 		
+		cur_typed_len = length
 		TextManager.cur_text[ptr] = set_text_bgcolor(cur_word, correct_typed_color)
 	
 	TextManager.update_text()
 
 func _evaluate_word(word: String) -> void:
 	if word == cur_word:
-		# TODO -- + correct word 
+		#ScoreManager.correct_words += 1
 		TextManager.cur_text[ptr] = set_text_color(cur_word, correct_word_color)
 	else:
-		# TODO -- + wrong word
+		#ScoreManager.wrong_words += 1
 		TextManager.cur_text[ptr] = set_text_color(cur_word, wrong_word_color)
 	
 	TextManager.update_text()
@@ -98,10 +100,15 @@ func _on_line_edit_text_changed(new_text: String) -> void:
 	if StateMachine.cur_state != StateMachine.State.TYPING:
 		StateMachine.change_state(StateMachine.State.TYPING)
 	
-	if new_text.match(" "):
+	if new_text.match(" "): # accidentally 'spaced'
 		line_edit.text = ""
-	elif new_text.ends_with(" "):
+	elif new_text.ends_with(" "): # submit and eval
 		_evaluate_word(new_text.trim_suffix(" "))
 		_next_word()
-	else:
+	elif new_text.contains(" "): # bandaid for the not submitting bug
+		var idx := new_text.find(" ")
+		_evaluate_word(new_text.substr(0, idx))
+		_next_word()
+		line_edit.insert_text_at_caret(new_text.substr(idx + 1, new_text.length()))
+	else: # visuals while typing
 		_evaluate_typed(new_text)

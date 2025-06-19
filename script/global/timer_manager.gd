@@ -17,21 +17,21 @@ func connect_timer(node: Timer) -> void:
 	timer.connect("timeout", Callable.create(self, "_on_timer_timeout"))
 #endregion
 
+func get_time() -> float: return float(minute) + (float(second) / 60)
+
 func new_test() -> void:
 	timer.stop()
 	minute = 1
 	second = 0
+	_update_label()
 
 func start() -> void:
 	timer.start()
 
 func stop() -> void:
 	timer.stop()
-	
 	minute = 1
 	second = 0
-	
-	_update_label()
 
 func _update_label() -> void: label.text = "%02d:%02d" % [minute, second]
 

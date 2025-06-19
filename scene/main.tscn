@@ -7,17 +7,22 @@ script/source = "extends Control
 class_name Main
 
 func _ready() -> void:
-	var line_edit: LineEdit = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer2/LineEdit
+	var line_edit: LineEdit = $CenterContainer/Test/HBoxContainer/MarginContainer2/LineEdit
 	TypingManager.connect_line_edit(line_edit)
 	
-	var main_text: RichTextLabel = $CenterContainer/VBoxContainer/MarginContainer/RichTextLabel
+	var main_text: RichTextLabel = $CenterContainer/Test/MarginContainer/RichTextLabel
 	TextManager.connect_label(main_text)
 	
-	var timer: Timer = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer/Timer
+	var timer: Timer = $CenterContainer/Test/HBoxContainer/MarginContainer/Timer
 	TimerManager.connect_timer(timer)
 	
-	var timer_label: RichTextLabel = $CenterContainer/VBoxContainer/HBoxContainer/MarginContainer/TimerLabel
+	var timer_label: RichTextLabel = $CenterContainer/Test/HBoxContainer/MarginContainer/TimerLabel
 	TimerManager.connect_label(timer_label)
+	
+	ScoreManager.connect_label($CenterContainer/WpmPanel/VBoxContainer/MarginContainer/RichTextLabel)
+	
+	StateMachine.wpm_panel = $CenterContainer/WpmPanel
+	StateMachine.test_field = $CenterContainer/Test
 	
 	StateMachine.change_state(StateMachine.State.NEW)
 "
@@ -40,42 +45,67 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="WpmPanel" type="PanelContainer" parent="CenterContainer"]
+visible = false
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/WpmPanel"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/WpmPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = -75
+theme_override_constants/margin_right = -75
+
+[node name="Panel" type="Panel" parent="CenterContainer/WpmPanel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/WpmPanel/VBoxContainer/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "WPM
+100"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Test" type="VBoxContainer" parent="CenterContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Test"]
 layout_mode = 2
 theme_type_variation = &"TextFieldMargin"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/MarginContainer"]
+[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer/Test/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
 text = "some text"
 scroll_active = false
 hint_underlined = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/Test"]
 layout_mode = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/Test/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
 theme_override_constants/margin_left = -200
 theme_override_constants/margin_right = -150
 
-[node name="LineEdit" type="LineEdit" parent="CenterContainer/VBoxContainer/HBoxContainer/MarginContainer2"]
+[node name="LineEdit" type="LineEdit" parent="CenterContainer/Test/HBoxContainer/MarginContainer2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Test/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 theme_override_constants/margin_right = -190
 
-[node name="TimerLabel" type="RichTextLabel" parent="CenterContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="TimerLabel" type="RichTextLabel" parent="CenterContainer/Test/HBoxContainer/MarginContainer"]
 layout_mode = 2
 bbcode_enabled = true
 text = "0:00"
@@ -83,4 +113,4 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 2
 
-[node name="Timer" type="Timer" parent="CenterContainer/VBoxContainer/HBoxContainer/MarginContainer"]
+[node name="Timer" type="Timer" parent="CenterContainer/Test/HBoxContainer/MarginContainer"]
