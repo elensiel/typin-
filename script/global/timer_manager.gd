@@ -1,20 +1,18 @@
 extends Node
 #class_name TimerManager
 
-var timer : Timer
-var label : RichTextLabel
+var timer: Timer = Timer.new()
+var label : Label
 
 var minute: int = 1
 var second: int = 0
 
+func _init() -> void: timer.connect("timeout", Callable.create(self, "_on_timer_timeout"))
+
 #region node connections
-func connect_label(node: RichTextLabel) -> void: 
+func connect_label(node: Label) -> void: 
 	label = node
 	_update_label()
-
-func connect_timer(node: Timer) -> void:
-	timer = node
-	timer.connect("timeout", Callable.create(self, "_on_timer_timeout"))
 #endregion
 
 func get_time() -> float: return float(minute) + (float(second) / 60)

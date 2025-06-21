@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2v3vyv0582mg"]
+
+[ext_resource type="Script" uid="uid://ciywdq68826ul" path="res://script/test_field.gd" id="1_bpgs5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bpgs5"]
+
+[node name="TestField" type="PanelContainer"]
+custom_minimum_size = Vector2(960, 216)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -108.0
+offset_right = 480.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_bpgs5")
+script = ExtResource("1_bpgs5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 45
+bbcode_enabled = true
+text = "ewqewqewqewqewq"
+scroll_active = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 10.0
+theme_override_font_sizes/font_size = 30
+placeholder_text = "Type here"
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "01:00"
+horizontal_alignment = 1
+vertical_alignment = 1
