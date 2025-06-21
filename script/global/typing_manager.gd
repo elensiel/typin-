@@ -1,5 +1,4 @@
 extends Node
-#class_name TypingManager
 
 var line_edit : LineEdit
 

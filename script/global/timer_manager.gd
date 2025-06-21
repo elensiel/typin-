@@ -1,5 +1,4 @@
 extends Node
-#class_name TimerManager
 
 var timer: Timer = Timer.new()
 var label : Label
@@ -7,7 +6,9 @@ var label : Label
 var minute: int = 1
 var second: int = 0
 
-func _init() -> void: timer.connect("timeout", Callable.create(self, "_on_timer_timeout"))
+func _ready() -> void: 
+	timer.connect("timeout", Callable.create(self, "_on_timer_timeout"))
+	add_child(timer)
 
 #region node connections
 func connect_label(node: Label) -> void: 

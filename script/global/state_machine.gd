@@ -1,8 +1,7 @@
 extends Node
-#class_name StateMachine
 
-var wpm_panel : PanelContainer
-var test_field : VBoxContainer
+var wpm_panel : WpmPanel
+var test_field : TestField
 
 enum State {
 	NEW,
@@ -26,7 +25,7 @@ func change_state(new_state: State) -> void:
 			_handle_reset()
 
 func _handle_new() -> void:
-	#region do not touch--the ff must be in order
+	#region do not touch--ff must be in order
 	TextManager.new_text()
 	TypingManager.new_test()
 	TextManager.update_text()

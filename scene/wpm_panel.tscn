@@ -1,0 +1,115 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyqtvxallb714"]
+
+[ext_resource type="Script" uid="uid://cu31yq6dqkyvw" path="res://script/wpm_panel.gd" id="1_88pst"]
+
+[sub_resource type="GDScript" id="GDScript_88pst"]
+resource_name = "WpmPanelNetWpm"
+script/source = "extends Label
+
+func _ready() -> void: ScoreManager.labels[0] = self
+"
+
+[sub_resource type="GDScript" id="GDScript_mcs0j"]
+resource_name = "WpmPanelAccuracy"
+script/source = "extends Label
+
+func _ready() -> void: ScoreManager.labels[1] = self
+"
+
+[sub_resource type="GDScript" id="GDScript_00rrk"]
+resource_name = "WpmPanelRawSpeed"
+script/source = "extends Label
+
+func _ready() -> void: ScoreManager.labels[2] = self
+"
+
+[node name="WpmPanel" type="PanelContainer"]
+custom_minimum_size = Vector2(384, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_88pst")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="NetWPM" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/NetWPM"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.5
+theme_override_font_sizes/font_size = 60
+text = "75"
+horizontal_alignment = 2
+vertical_alignment = 1
+script = SubResource("GDScript_88pst")
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/NetWPM"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 25
+text = "WPM"
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Accuracy" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/Accuracy"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Accuracy:  "
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/Accuracy"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 30
+text = "95%"
+script = SubResource("GDScript_mcs0j")
+
+[node name="RawSpeed" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/RawSpeed"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Raw Speed:  "
+
+[node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/RawSpeed"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 30
+text = "95 WPM"
+script = SubResource("GDScript_00rrk")

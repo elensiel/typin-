@@ -1,8 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://c2v3vyv0582mg"]
+[gd_scene load_steps=6 format=3 uid="uid://c2v3vyv0582mg"]
 
 [ext_resource type="Script" uid="uid://ciywdq68826ul" path="res://script/test_field.gd" id="1_bpgs5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bpgs5"]
+
+[sub_resource type="GDScript" id="GDScript_bpgs5"]
+resource_name = "TestFieldRichTextLabel"
+script/source = "extends RichTextLabel
+
+func _ready() -> void: TextManager.connect_label(self)
+"
+
+[sub_resource type="GDScript" id="GDScript_p33gt"]
+resource_name = "TestFieldLineEdit"
+script/source = "extends LineEdit
+
+func _ready() -> void: TypingManager.connect_line_edit(self)
+"
+
+[sub_resource type="GDScript" id="GDScript_3q0br"]
+resource_name = "TestFieldTimerLabel"
+script/source = "extends Label
+
+func _ready() -> void: TimerManager.connect_label(self)
+"
 
 [node name="TestField" type="PanelContainer"]
 custom_minimum_size = Vector2(960, 216)
@@ -38,6 +59,7 @@ text = "ewqewqewqewqewq"
 scroll_active = false
 deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
+script = SubResource("GDScript_bpgs5")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -47,7 +69,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 10.0
 theme_override_font_sizes/font_size = 30
-placeholder_text = "Type here"
+script = SubResource("GDScript_p33gt")
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -56,3 +78,4 @@ theme_override_font_sizes/font_size = 30
 text = "01:00"
 horizontal_alignment = 1
 vertical_alignment = 1
+script = SubResource("GDScript_3q0br")
