@@ -9,6 +9,9 @@ const test_field: Dictionary = {
 		"timer_label" : 30,
 	},
 	"custom_min_size" : Vector2(1920 / 2, 1080 / 5),
+	"text" : {
+		"target_lines" : 3,
+	},
 }
 
 const wpm_panel: Dictionary = {

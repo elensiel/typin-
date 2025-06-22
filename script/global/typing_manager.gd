@@ -96,7 +96,7 @@ func set_text_bgcolor(word: String, color: String) -> String:
 #endregion
 
 func _on_line_edit_text_changed(new_text: String) -> void:
-	if StateMachine.cur_state != StateMachine.State.TYPING:
+	if StateMachine.cur_state != StateMachine.State.END and StateMachine.cur_state != StateMachine.State.TYPING:
 		StateMachine.change_state(StateMachine.State.TYPING)
 	
 	if new_text.match(" "): # accidentally 'spaced'
@@ -111,3 +111,7 @@ func _on_line_edit_text_changed(new_text: String) -> void:
 		line_edit.insert_text_at_caret(new_text.substr(idx + 1, new_text.length()))
 	else: # visuals while typing
 		_evaluate_typed(new_text)
+	
+	# cursor visibility
+	if StateMachine.cur_state == StateMachine.State.TYPING:
+		Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
