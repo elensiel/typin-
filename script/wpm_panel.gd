@@ -13,5 +13,5 @@ func _scale() -> void:
 	
 	scale = Vector2(target_scale_x, target_scale_y)
 	
-	custom_minimum_size.x = Defaults.wpm_panel.custom_min_size.x
+	custom_minimum_size.x = Defaults.wpm_panel.custom_min_size.x * 1.4
 	custom_minimum_size.y = Defaults.wpm_panel.custom_min_size.y
