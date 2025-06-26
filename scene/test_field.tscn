@@ -9,12 +9,14 @@ resource_name = "TestFieldTextField"
 script/source = "extends MarginContainer
 
 ## sets height relative to how much lines should be visible
-func _enter_tree() -> void:
+func _enter_tree() -> void: adjust_display()
+
+func adjust_display() -> void:
 	var label: RichTextLabel = $RichTextLabel
 	var font: Font = label.get_theme_font(\"normal_font_size\")
 	var font_size: int = label.get_theme_font_size(\"normal_font_size\")
 	var height: float = font.get_height(font_size)
-	var target_lines: int = Defaults.test_field.text.target_lines
+	var target_lines: int = SettingsManager.changed_settings.general.lines_shown
 	
 	custom_minimum_size.y = height * target_lines
 "
@@ -40,7 +42,7 @@ script/source = "extends Label
 func _ready() -> void: TimerManager.connect_label(self)
 "
 
-[node name="TestField" type="PanelContainer"]
+[node name="TestField" type="PanelContainer" groups=["adjustable_displays"]]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -58,7 +60,7 @@ script = ExtResource("1_bpgs5")
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Text" type="MarginContainer" parent="VBoxContainer"]
+[node name="Text" type="MarginContainer" parent="VBoxContainer" groups=["adjustable_displays"]]
 custom_minimum_size = Vector2(2.08189e-12, 186)
 layout_mode = 2
 theme_override_constants/margin_left = 5

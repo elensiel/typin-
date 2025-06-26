@@ -1,0 +1,300 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4tnwp1e0j6wl"]
+
+[ext_resource type="Script" uid="uid://dsjnry33o566h" path="res://script/settings.gd" id="1_likc5"]
+
+[sub_resource type="GDScript" id="GDScript_ok4lx"]
+resource_name = "general_lines_shown"
+script/source = "extends OptionButton
+
+func _ready() -> void: selected = SettingsManager.current_settings.general.lines_shown - 1
+func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.lines_shown = index + 1
+"
+
+[sub_resource type="GDScript" id="GDScript_likc5"]
+resource_name = "display_resolution"
+script/source = "extends OptionButton
+
+#func _ready() -> void:
+	#match SettingsManager.current_settings.display.resolution:
+		#Vector2i(1024, 720):
+			#selected = 0
+		#Vector2i(1024, 768):
+			#selected = 1
+		#Vector2i(1280, 720):
+			#selected = 2
+		#Vector2i(1280, 768):
+			#selected = 3
+		#Vector2i(1366, 720):
+			#selected = 4
+		#Vector2i(1366, 768):
+			#selected = 5
+		#Vector2i(1920, 720):
+			#selected = 6
+		#Vector2i(1920, 768):
+			#selected = 7
+		#Vector2i(1920, 1080):
+			#selected = 8
+#
+#func _on_item_selected(index: int) -> void:
+	#match index:
+		#0:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1024, 720)
+		#1:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1024, 768)
+		#2:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1280, 720)
+		#3:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1280, 768)
+		#4:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1366, 720)
+		#5:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1366, 768)
+		#6:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1920, 720)
+		#7:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1920, 768)
+		#8:
+			#SettingsManager.changed_settings.display.resolution = Vector2i(1920, 1080)
+"
+
+[sub_resource type="GDScript" id="GDScript_eyhni"]
+resource_name = "display_window_mode"
+script/source = "extends OptionButton
+
+func _ready() -> void:
+	match DisplayServer.window_get_mode():
+		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED:
+			select(0)
+		DisplayServer.WindowMode.WINDOW_MODE_MAXIMIZED:
+			select(1)
+		DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN:
+			select(2)
+
+func _on_item_selected(index: int) -> void:
+	match index:
+		0:
+			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_WINDOWED
+		1:
+			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_MAXIMIZED
+		2:
+			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
+"
+
+[sub_resource type="GDScript" id="GDScript_wyye3"]
+resource_name = "display_resizable"
+script/source = "extends CheckBox
+
+func _ready() -> void: button_pressed = SettingsManager.current_settings.display.resizable
+func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
+"
+
+[sub_resource type="GDScript" id="GDScript_ftovt"]
+resource_name = "settings_confirmation_restore"
+script/source = "extends Button
+
+func _on_pressed() -> void: SettingsManager.restore_default_settings()
+"
+
+[sub_resource type="GDScript" id="GDScript_uhf66"]
+resource_name = "settings_confirmation_apply"
+script/source = "extends Button
+
+func _on_pressed() -> void: SettingsManager.apply_settings()
+"
+
+[node name="Settings" type="PanelContainer" groups=["adjustable_displays"]]
+custom_minimum_size = Vector2(960, 540)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -480.0
+offset_top = -270.0
+offset_right = 480.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_likc5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 30
+current_tab = 1
+
+[node name="General" type="MarginContainer" parent="VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/General"]
+layout_mode = 2
+
+[node name="FontSize" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Font Size"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 25
+item_count = 1
+popup/item_0/text = "8"
+popup/item_0/id = 0
+
+[node name="LinesShown" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Lines Shown"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 25
+item_count = 6
+popup/item_0/text = "1"
+popup/item_0/id = 0
+popup/item_1/text = "2"
+popup/item_1/id = 1
+popup/item_2/text = "3"
+popup/item_2/id = 2
+popup/item_3/text = "4"
+popup/item_3/id = 3
+popup/item_4/text = "5"
+popup/item_4/id = 4
+popup/item_5/text = "6"
+popup/item_5/id = 5
+script = SubResource("GDScript_ok4lx")
+
+[node name="Display" type="MarginContainer" parent="VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Display"]
+layout_mode = 2
+
+[node name="Resolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/Display/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Resolution"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 25
+item_count = 9
+popup/item_0/text = "1024x720"
+popup/item_0/id = 0
+popup/item_1/text = "1024x768"
+popup/item_1/id = 1
+popup/item_2/text = "1280x720"
+popup/item_2/id = 2
+popup/item_3/text = "1280x768"
+popup/item_3/id = 3
+popup/item_4/text = "1366x720"
+popup/item_4/id = 4
+popup/item_5/text = "1366x768"
+popup/item_5/id = 5
+popup/item_6/text = "1920x720"
+popup/item_6/id = 6
+popup/item_7/text = "1920x768"
+popup/item_7/id = 7
+popup/item_8/text = "1920x1080"
+popup/item_8/id = 8
+script = SubResource("GDScript_likc5")
+
+[node name="WindowMode" type="HBoxContainer" parent="VBoxContainer/TabContainer/Display/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Window Mode"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 25
+selected = 1
+item_count = 3
+popup/item_0/text = "Windowed"
+popup/item_0/id = 0
+popup/item_1/text = "Maximized"
+popup/item_1/id = 1
+popup/item_2/text = "Fullscreen"
+popup/item_2/id = 2
+script = SubResource("GDScript_eyhni")
+
+[node name="Resizable" type="HBoxContainer" parent="VBoxContainer/TabContainer/Display/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "Resizable"
+
+[node name="CheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 25
+text = "True"
+script = SubResource("GDScript_wyye3")
+
+[node name="Confirmation" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Confirmation"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Restore" type="Button" parent="VBoxContainer/Confirmation/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Restore defaults"
+script = SubResource("GDScript_ftovt")
+
+[node name="Apply" type="Button" parent="VBoxContainer/Confirmation/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Apply changes"
+script = SubResource("GDScript_uhf66")
+
+[connection signal="item_selected" from="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution/OptionButton" to="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
+[connection signal="toggled" from="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
+[connection signal="pressed" from="VBoxContainer/Confirmation/HBoxContainer/Restore" to="VBoxContainer/Confirmation/HBoxContainer/Restore" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Confirmation/HBoxContainer/Apply" to="VBoxContainer/Confirmation/HBoxContainer/Apply" method="_on_pressed"]

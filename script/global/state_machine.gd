@@ -2,12 +2,14 @@ extends Node
 
 var wpm_panel : WpmPanel
 var test_field : TestField
+var settings : Settings
 
 enum State {
 	NEW,
 	TYPING,
 	END,
 	RESET,
+	SETTINGS,
 }
 var cur_state: State = State.NEW
 
@@ -23,6 +25,8 @@ func change_state(new_state: State) -> void:
 			_handle_end()
 		State.RESET:
 			_handle_reset()
+		State.SETTINGS:
+			_handle_settings()
 
 func _handle_new() -> void:
 	#region do not touch--ff must be in order
@@ -34,6 +38,7 @@ func _handle_new() -> void:
 	
 	TimerManager.new_test()
 	wpm_panel.visible = false
+	settings.visible = false
 	test_field.visible = true
 
 func _handle_typing() -> void:
@@ -51,3 +56,11 @@ func _handle_reset() -> void:
 	TimerManager.stop()
 	ScoreManager.reset()
 	change_state(State.NEW)
+
+func _handle_settings() -> void:
+	TimerManager.stop()
+	ScoreManager.reset()
+	
+	test_field.visible = false
+	wpm_panel.visible = false
+	settings.visible = true

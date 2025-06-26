@@ -1,12 +1,12 @@
 extends PanelContainer
-class_name TestField
+class_name Settings
 
-func _ready() -> void:
+func _ready() -> void: 
 	adjust_display()
-	visible = true
-	StateMachine.test_field = self
+	#visible = false
+	StateMachine.settings = self
 
 func adjust_display() -> void:
 	UiManager.scale(self)
 	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 2
-	custom_minimum_size.y = SettingsManager.BASE_RESOLUTION.y / 5
+	custom_minimum_size.y = SettingsManager.BASE_RESOLUTION.y / 2

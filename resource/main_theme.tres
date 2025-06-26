@@ -1,7 +1,0 @@
-[gd_resource type="Theme" format=3 uid="uid://dx7nsid7ou66x"]
-
-[resource]
-TextFieldMargin/base_type = &"MarginContainer"
-TextFieldMargin/constants/margin_left = -200
-TextFieldMargin/constants/margin_right = -200
-TextFieldMargin/constants/margin_top = -75

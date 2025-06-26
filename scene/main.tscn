@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cv8i21q77mmvy"]
+[gd_scene load_steps=5 format=3 uid="uid://cv8i21q77mmvy"]
 
 [ext_resource type="Script" uid="uid://bw3typqq43j5s" path="res://script/main.gd" id="2_brvut"]
 [ext_resource type="PackedScene" uid="uid://c2v3vyv0582mg" path="res://scene/test_field.tscn" id="2_wp4xf"]
 [ext_resource type="PackedScene" uid="uid://cyqtvxallb714" path="res://scene/wpm_panel.tscn" id="3_brvut"]
+[ext_resource type="PackedScene" uid="uid://c4tnwp1e0j6wl" path="res://scene/settings.tscn" id="4_brvut"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -15,11 +16,17 @@ script = ExtResource("2_brvut")
 
 [node name="TestField" parent="." instance=ExtResource("2_wp4xf")]
 layout_mode = 1
+offset_left = -100.5
+offset_top = -120.0
+offset_right = 100.5
+offset_bottom = 120.0
 
 [node name="WpmPanel" parent="." instance=ExtResource("3_brvut")]
-visible = false
 layout_mode = 1
 offset_left = -192.0
 offset_top = -86.5
 offset_right = 192.0
 offset_bottom = 86.5
+
+[node name="Settings" parent="." instance=ExtResource("4_brvut")]
+layout_mode = 1
