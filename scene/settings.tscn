@@ -1,74 +1,49 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=11 format=3 uid="uid://c4tnwp1e0j6wl"]
 
 [ext_resource type="Script" uid="uid://dsjnry33o566h" path="res://script/settings.gd" id="1_likc5"]
+[ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/settings.tres" id="1_uhf66"]
+[ext_resource type="Script" uid="uid://bch8flkkrhxu6" path="res://script/settings_tab.gd" id="2_ok4lx"]
 
-[sub_resource type="GDScript" id="GDScript_ok4lx"]
-resource_name = "general_lines_shown"
+[sub_resource type="GDScript" id="GDScript_4pcrv"]
+resource_name = "font_size"
 script/source = "extends OptionButton
 
-func _ready() -> void: selected = SettingsManager.current_settings.general.lines_shown - 1
-func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.lines_shown = index + 1
+func _enter_tree() -> void:
+	for i in range(30, 82, 2):
+		add_item(str(i))
+
+func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.font_size = 30 + (2  * index)
 "
 
-[sub_resource type="GDScript" id="GDScript_likc5"]
-resource_name = "display_resolution"
+[sub_resource type="GDScript" id="GDScript_keur6"]
+resource_name = "font_scale"
 script/source = "extends OptionButton
 
-#func _ready() -> void:
-	#match SettingsManager.current_settings.display.resolution:
-		#Vector2i(1024, 720):
-			#selected = 0
-		#Vector2i(1024, 768):
-			#selected = 1
-		#Vector2i(1280, 720):
-			#selected = 2
-		#Vector2i(1280, 768):
-			#selected = 3
-		#Vector2i(1366, 720):
-			#selected = 4
-		#Vector2i(1366, 768):
-			#selected = 5
-		#Vector2i(1920, 720):
-			#selected = 6
-		#Vector2i(1920, 768):
-			#selected = 7
-		#Vector2i(1920, 1080):
-			#selected = 8
-#
-#func _on_item_selected(index: int) -> void:
-	#match index:
-		#0:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1024, 720)
-		#1:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1024, 768)
-		#2:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1280, 720)
-		#3:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1280, 768)
-		#4:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1366, 720)
-		#5:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1366, 768)
-		#6:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1920, 720)
-		#7:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1920, 768)
-		#8:
-			#SettingsManager.changed_settings.display.resolution = Vector2i(1920, 1080)
+func _enter_tree() -> void:
+	var cur: int = 50
+	for i in range(11):
+		add_item(str(cur) + &\"%\")
+		cur += 10
+
+func _on_item_selected(index: int) -> void:
+	var distance: float = 5 - index
+	SettingsManager.changed_settings.general.font_scale = 1.0 - (distance / 10.0)
+"
+
+[sub_resource type="GDScript" id="GDScript_ok4lx"]
+resource_name = "lines_shown"
+script/source = "extends OptionButton
+
+func _enter_tree() -> void:
+	for i in range(1, 7):
+		add_item(str(i))
+
+func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.lines_shown = index + 1
 "
 
 [sub_resource type="GDScript" id="GDScript_eyhni"]
 resource_name = "display_window_mode"
 script/source = "extends OptionButton
-
-func _ready() -> void:
-	match DisplayServer.window_get_mode():
-		DisplayServer.WindowMode.WINDOW_MODE_WINDOWED:
-			select(0)
-		DisplayServer.WindowMode.WINDOW_MODE_MAXIMIZED:
-			select(1)
-		DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN:
-			select(2)
 
 func _on_item_selected(index: int) -> void:
 	match index:
@@ -84,7 +59,6 @@ func _on_item_selected(index: int) -> void:
 resource_name = "display_resizable"
 script/source = "extends CheckBox
 
-func _ready() -> void: button_pressed = SettingsManager.current_settings.display.resizable
 func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
 "
 
@@ -92,14 +66,14 @@ func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.dis
 resource_name = "settings_confirmation_restore"
 script/source = "extends Button
 
-func _on_pressed() -> void: SettingsManager.restore_default_settings()
+func _on_pressed() -> void: SettingsManager.apply_settings(SettingsManager.SETTING_PRESET.DEFAULTS)
 "
 
 [sub_resource type="GDScript" id="GDScript_uhf66"]
 resource_name = "settings_confirmation_apply"
 script/source = "extends Button
 
-func _on_pressed() -> void: SettingsManager.apply_settings()
+func _on_pressed() -> void: SettingsManager.apply_settings(SettingsManager.SETTING_PRESET.CHANGED)
 "
 
 [node name="Settings" type="PanelContainer" groups=["adjustable_displays"]]
@@ -115,135 +89,92 @@ offset_right = 480.0
 offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_uhf66")
 script = ExtResource("1_likc5")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
 
-[node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 30
-current_tab = 1
+current_tab = 0
+script = ExtResource("2_ok4lx")
 
-[node name="General" type="MarginContainer" parent="VBoxContainer/TabContainer"]
-visible = false
+[node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/General"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General"]
 layout_mode = 2
 
-[node name="FontSize" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="FontSize" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
 text = "Font Size"
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 25
-item_count = 1
-popup/item_0/text = "8"
-popup/item_0/id = 0
+allow_reselect = true
+script = SubResource("GDScript_4pcrv")
 
-[node name="LinesShown" type="HBoxContainer" parent="VBoxContainer/TabContainer/General/VBoxContainer"]
+[node name="FontScale" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
+text = "Font Scale"
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale"]
+layout_mode = 2
+size_flags_horizontal = 3
+allow_reselect = true
+script = SubResource("GDScript_keur6")
+
+[node name="LinesShown" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Lines Shown"
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 25
-item_count = 6
-popup/item_0/text = "1"
-popup/item_0/id = 0
-popup/item_1/text = "2"
-popup/item_1/id = 1
-popup/item_2/text = "3"
-popup/item_2/id = 2
-popup/item_3/text = "4"
-popup/item_3/id = 3
-popup/item_4/text = "5"
-popup/item_4/id = 4
-popup/item_5/text = "6"
-popup/item_5/id = 5
+allow_reselect = true
 script = SubResource("GDScript_ok4lx")
 
-[node name="Display" type="MarginContainer" parent="VBoxContainer/TabContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
-metadata/_tab_index = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/TabContainer/Display"]
-layout_mode = 2
-
-[node name="Resolution" type="HBoxContainer" parent="VBoxContainer/TabContainer/Display/VBoxContainer"]
+[node name="Display" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display"]
+layout_mode = 2
+
+[node name="WindowMode" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
-text = "Resolution"
-
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 25
-item_count = 9
-popup/item_0/text = "1024x720"
-popup/item_0/id = 0
-popup/item_1/text = "1024x768"
-popup/item_1/id = 1
-popup/item_2/text = "1280x720"
-popup/item_2/id = 2
-popup/item_3/text = "1280x768"
-popup/item_3/id = 3
-popup/item_4/text = "1366x720"
-popup/item_4/id = 4
-popup/item_5/text = "1366x768"
-popup/item_5/id = 5
-popup/item_6/text = "1920x720"
-popup/item_6/id = 6
-popup/item_7/text = "1920x768"
-popup/item_7/id = 7
-popup/item_8/text = "1920x1080"
-popup/item_8/id = 8
-script = SubResource("GDScript_likc5")
-
-[node name="WindowMode" type="HBoxContainer" parent="VBoxContainer/TabContainer/Display/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
 text = "Window Mode"
 
-[node name="OptionButton" type="OptionButton" parent="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 25
 selected = 1
+allow_reselect = true
 item_count = 3
 popup/item_0/text = "Windowed"
 popup/item_0/id = 0
@@ -253,48 +184,46 @@ popup/item_2/text = "Fullscreen"
 popup/item_2/id = 2
 script = SubResource("GDScript_eyhni")
 
-[node name="Resizable" type="HBoxContainer" parent="VBoxContainer/TabContainer/Display/VBoxContainer"]
+[node name="Resizable" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
 text = "Resizable"
 
-[node name="CheckBox" type="CheckBox" parent="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 25
+action_mode = 0
 text = "True"
 script = SubResource("GDScript_wyye3")
 
-[node name="Confirmation" type="MarginContainer" parent="VBoxContainer"]
+[node name="Confirmation" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_bottom = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Confirmation"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/Confirmation"]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 2
 
-[node name="Restore" type="Button" parent="VBoxContainer/Confirmation/HBoxContainer"]
+[node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 25
 text = "Restore defaults"
 script = SubResource("GDScript_ftovt")
 
-[node name="Apply" type="Button" parent="VBoxContainer/Confirmation/HBoxContainer"]
+[node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 25
 text = "Apply changes"
 script = SubResource("GDScript_uhf66")
 
-[connection signal="item_selected" from="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
-[connection signal="item_selected" from="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution/OptionButton" to="VBoxContainer/TabContainer/Display/VBoxContainer/Resolution/OptionButton" method="_on_item_selected"]
-[connection signal="item_selected" from="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
-[connection signal="toggled" from="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
-[connection signal="pressed" from="VBoxContainer/Confirmation/HBoxContainer/Restore" to="VBoxContainer/Confirmation/HBoxContainer/Restore" method="_on_pressed"]
-[connection signal="pressed" from="VBoxContainer/Confirmation/HBoxContainer/Apply" to="VBoxContainer/Confirmation/HBoxContainer/Apply" method="_on_pressed"]
+[connection signal="visibility_changed" from="MarginContainer/VBoxContainer/TabContainer" to="MarginContainer/VBoxContainer/TabContainer" method="_on_visibility_changed"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" method="_on_pressed"]

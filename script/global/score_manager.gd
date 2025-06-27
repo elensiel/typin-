@@ -31,5 +31,5 @@ func reset() -> void:
 
 func update_label() -> void:
 	labels[0].text = str(get_net_wpm())
-	labels[1].text = str(snappedf(get_accuracy(), 0.01)) + "%"
-	labels[2].text = str(roundi(get_raw_speed())) + " WPM"
+	labels[1].text = str(snappedf(get_accuracy(), 0.01)) + &"%"
+	labels[2].text = str(roundi(get_raw_speed())) + &" WPM"

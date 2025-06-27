@@ -1,0 +1,11 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://dtvypwadk5qwv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f87wn"]
+
+[resource]
+Label/font_sizes/font_size = 30
+LineEdit/font_sizes/font_size = 30
+MarginContainer/constants/margin_left = 5
+MarginContainer/constants/margin_right = 5
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_f87wn")
+RichTextLabel/font_sizes/normal_font_size = 46

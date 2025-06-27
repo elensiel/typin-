@@ -1,0 +1,12 @@
+[gd_resource type="Theme" format=3 uid="uid://djxl4in888xtu"]
+
+[resource]
+Button/font_sizes/font_size = 30
+CheckBox/font_sizes/font_size = 30
+Label/font_sizes/font_size = 36
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10
+OptionButton/font_sizes/font_size = 30
+TabContainer/font_sizes/font_size = 36

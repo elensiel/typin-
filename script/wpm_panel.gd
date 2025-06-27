@@ -8,5 +8,6 @@ func _ready() -> void:
 
 func adjust_display() -> void:
 	UiManager.scale(self)
+	@warning_ignore_start("integer_division")
 	custom_minimum_size.x = (SettingsManager.BASE_RESOLUTION.x / 5) * 1.4
 	custom_minimum_size.y = 0

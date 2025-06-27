@@ -1,20 +1,20 @@
 [gd_scene load_steps=7 format=3 uid="uid://c2v3vyv0582mg"]
 
 [ext_resource type="Script" uid="uid://ciywdq68826ul" path="res://script/test_field.gd" id="1_bpgs5"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bpgs5"]
+[ext_resource type="Theme" uid="uid://dtvypwadk5qwv" path="res://resource/test_field.tres" id="1_p33gt"]
 
 [sub_resource type="GDScript" id="GDScript_2aj7w"]
 resource_name = "TestFieldTextField"
 script/source = "extends MarginContainer
 
+var test_field_theme := preload(\"res://resource/test_field.tres\")
+
 ## sets height relative to how much lines should be visible
 func _enter_tree() -> void: adjust_display()
 
 func adjust_display() -> void:
-	var label: RichTextLabel = $RichTextLabel
-	var font: Font = label.get_theme_font(\"normal_font_size\")
-	var font_size: int = label.get_theme_font_size(\"normal_font_size\")
+	var font: Font = test_field_theme.get_font(&\"normal_font_size\", &\"RichTextLabel\")
+	var font_size: int = test_field_theme.get_font_size(&\"normal_font_size\", &\"RichTextLabel\")
 	var height: float = font.get_height(font_size)
 	var target_lines: int = SettingsManager.changed_settings.general.lines_shown
 	
@@ -25,21 +25,21 @@ func adjust_display() -> void:
 resource_name = "TestFieldRichTextLabel"
 script/source = "extends RichTextLabel
 
-func _ready() -> void: TextManager.connect_label(self)
+func _enter_tree() -> void: TextManager.connect_label(self)
 "
 
 [sub_resource type="GDScript" id="GDScript_p33gt"]
 resource_name = "TestFieldLineEdit"
 script/source = "extends LineEdit
 
-func _ready() -> void: TypingManager.connect_line_edit(self)
+func _enter_tree() -> void: TypingManager.connect_line_edit(self)
 "
 
 [sub_resource type="GDScript" id="GDScript_3q0br"]
 resource_name = "TestFieldTimerLabel"
 script/source = "extends Label
 
-func _ready() -> void: TimerManager.connect_label(self)
+func _enter_tree() -> void: TimerManager.connect_label(self)
 "
 
 [node name="TestField" type="PanelContainer" groups=["adjustable_displays"]]
@@ -54,7 +54,7 @@ offset_right = 480.0
 offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxEmpty_bpgs5")
+theme = ExtResource("1_p33gt")
 script = ExtResource("1_bpgs5")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -63,14 +63,12 @@ layout_mode = 2
 [node name="Text" type="MarginContainer" parent="VBoxContainer" groups=["adjustable_displays"]]
 custom_minimum_size = Vector2(2.08189e-12, 186)
 layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_right = 5
+size_flags_vertical = 3
 script = SubResource("GDScript_2aj7w")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Text"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/normal_font_size = 45
 bbcode_enabled = true
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proid ent, sunt in culpa qui officia deserunt mollit anim id est laborum."
 scroll_active = false
@@ -86,13 +84,17 @@ size_flags_vertical = 10
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 10.0
-theme_override_font_sizes/font_size = 30
+placeholder_text = " "
+keep_editing_on_text_submit = true
+context_menu_enabled = false
+emoji_menu_enabled = false
+drag_and_drop_selection_enabled = false
+caret_blink = true
 script = SubResource("GDScript_p33gt")
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
 text = "01:00"
 horizontal_alignment = 1
 vertical_alignment = 1
