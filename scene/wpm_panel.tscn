@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyqtvxallb714"]
+[gd_scene load_steps=6 format=3 uid="uid://cyqtvxallb714"]
 
 [ext_resource type="Script" uid="uid://cu31yq6dqkyvw" path="res://script/wpm_panel.gd" id="1_88pst"]
+[ext_resource type="Theme" uid="uid://s5xotdih6b1o" path="res://resource/wpm_panel.tres" id="1_mcs0j"]
 
 [sub_resource type="GDScript" id="GDScript_88pst"]
 resource_name = "WpmPanelNetWpm"
@@ -36,27 +37,23 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_mcs0j")
 script = ExtResource("1_88pst")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
 
 [node name="NetWPM" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 5
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/NetWPM"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.5
-theme_override_font_sizes/font_size = 100
+theme_type_variation = &"HeaderLarge"
 text = "75"
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -65,7 +62,7 @@ script = SubResource("GDScript_88pst")
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/NetWPM"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 45
+theme_type_variation = &"HeaderSmall"
 text = "WPM"
 vertical_alignment = 1
 
@@ -87,13 +84,11 @@ alignment = 1
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/Accuracy"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 40
 text = "Accuracy:  "
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/Accuracy"]
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_font_sizes/font_size = 40
 text = "95%"
 script = SubResource("GDScript_mcs0j")
 
@@ -104,12 +99,10 @@ alignment = 1
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/RawSpeed"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 40
 text = "Raw Speed:  "
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer/RawSpeed"]
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_font_sizes/font_size = 40
 text = "95 WPM"
 script = SubResource("GDScript_00rrk")

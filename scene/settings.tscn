@@ -73,7 +73,7 @@ func _on_pressed() -> void: SettingsManager.apply_settings(SettingsManager.SETTI
 resource_name = "settings_confirmation_apply"
 script/source = "extends Button
 
-func _on_pressed() -> void: SettingsManager.apply_settings(SettingsManager.SETTING_PRESET.CHANGED)
+func _on_pressed() -> void: SettingsManager.apply_settings()
 "
 
 [node name="Settings" type="PanelContainer" groups=["adjustable_displays"]]

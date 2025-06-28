@@ -1,0 +1,11 @@
+[gd_resource type="Theme" format=3 uid="uid://s5xotdih6b1o"]
+
+[resource]
+HBoxContainer/constants/separation = 5
+HeaderLarge/font_sizes/font_size = 100
+HeaderSmall/font_sizes/font_size = 45
+Label/font_sizes/font_size = 40
+MarginContainer/constants/margin_bottom = 5
+MarginContainer/constants/margin_left = 20
+MarginContainer/constants/margin_right = 20
+MarginContainer/constants/margin_top = 5
