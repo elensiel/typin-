@@ -66,7 +66,7 @@ func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.dis
 resource_name = "settings_confirmation_restore"
 script/source = "extends Button
 
-func _on_pressed() -> void: SettingsManager.apply_settings(SettingsManager.SETTING_PRESET.DEFAULTS)
+func _on_pressed() -> void: SettingsManager.apply_settings(true)
 "
 
 [sub_resource type="GDScript" id="GDScript_uhf66"]
@@ -102,10 +102,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 1
 script = ExtResource("2_ok4lx")
 
 [node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -155,7 +156,6 @@ allow_reselect = true
 script = SubResource("GDScript_ok4lx")
 
 [node name="Display" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 

@@ -3,7 +3,7 @@ class_name Words
 
 const common_words: Array[String] = [
 	"the", "of", "to", "and", "a", "in", "is", "it", "you", "that",
-	"he", "was", "for", "on", "are", "as", "with", "his", "they", "I",
+	"he", "was", "for", "on", "are", "as", "with", "his", "they",
 	"at", "be", "this", "have", "from", "or", "one", "had", "by", "word",
 	"but", "not", "what", "all", "were", "we", "when", "your", "can", "said",
 	"there", "use", "an", "each", "which", "she", "do", "how", "their", "if",
@@ -13,7 +13,7 @@ const common_words: Array[String] = [
 	"my", "than", "first", "water", "been", "call", "who", "oil", "sit", "now",
 	"find", "long", "down", "day", "did", "get", "come", "made", "may", "part",
 	"over", "new", "sound", "take", "only", "little", "work", "know", "place", "years",
-	"live", "me", "back", "give", "most", "very", "after", "things", "our", "just",
+	"live", "me", "back", "give", "most", "very", "after", "our", "just",
 	"name", "good", "sentence", "man", "think", "say", "great", "where", "help", "through",
 	"much", "before", "line", "right", "too", "mean", "old", "any", "same", "tell",
 	"boy", "follow", "came", "want", "show", "also", "around", "farm", "three", "small",

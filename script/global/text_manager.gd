@@ -2,7 +2,6 @@ extends Node
 
 @onready var test_field_theme: Theme = preload("res://resource/test_field.tres")
 var label : RichTextLabel
-
 var cur_text : Array[String]
 
 func connect_label(node: RichTextLabel) -> void: label = node
@@ -18,7 +17,10 @@ func add_text() -> void:
 	
 	for i in range(50 * ratio):
 		var word: String = Words.common_words.pick_random()
-		cur_text.append(word)
+		if cur_text.size() >= 2 && word.match(cur_text[cur_text.size() - 1]):
+			continue
+		else:
+			cur_text.append(word)
 
 func new_text() -> void:
 	cur_text.clear()

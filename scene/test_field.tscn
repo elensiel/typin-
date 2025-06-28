@@ -6,11 +6,12 @@
 [sub_resource type="GDScript" id="GDScript_2aj7w"]
 resource_name = "TestFieldTextField"
 script/source = "extends MarginContainer
+class_name TextField
 
 var test_field_theme := preload(\"res://resource/test_field.tres\")
 
 ## sets height relative to how much lines should be visible
-func _enter_tree() -> void: adjust_display()
+func _ready() -> void: adjust_display()
 
 func adjust_display() -> void:
 	var font: Font = test_field_theme.get_font(&\"normal_font_size\", &\"RichTextLabel\")

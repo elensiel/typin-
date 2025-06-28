@@ -27,6 +27,7 @@ TimerManager="*res://script/global/timer_manager.gd"
 InputManager="*res://script/global/input_manager.gd"
 SettingsManager="*res://script/global/settings_manager.gd"
 UiManager="*res://script/global/ui_manager.gd"
+ThemeManager="*res://script/global/theme_manager.gd"
 
 [display]
 
