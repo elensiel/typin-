@@ -1,21 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2v3vyv0582mg"]
+[gd_scene load_steps=6 format=3 uid="uid://c2v3vyv0582mg"]
 
 [ext_resource type="Script" uid="uid://ciywdq68826ul" path="res://script/test_field.gd" id="1_bpgs5"]
-[ext_resource type="Theme" uid="uid://dtvypwadk5qwv" path="res://resource/test_field.tres" id="1_p33gt"]
 
 [sub_resource type="GDScript" id="GDScript_2aj7w"]
 resource_name = "TestFieldTextField"
 script/source = "extends MarginContainer
 class_name TextField
 
-var test_field_theme := preload(\"res://resource/test_field.tres\")
-
 ## sets height relative to how much lines should be visible
 func _ready() -> void: adjust_display()
 
 func adjust_display() -> void:
-	var font: Font = test_field_theme.get_font(&\"normal_font_size\", &\"RichTextLabel\")
-	var font_size: int = test_field_theme.get_font_size(&\"normal_font_size\", &\"RichTextLabel\")
+	var font: Font = ThemeManager.test_field.get_font(&\"normal_font_size\", &\"RichTextLabel\")
+	var font_size: int = ThemeManager.test_field.get_font_size(&\"normal_font_size\", &\"RichTextLabel\")
 	var height: float = font.get_height(font_size)
 	var target_lines: int = SettingsManager.changed_settings.general.lines_shown
 	
@@ -55,21 +52,19 @@ offset_right = 480.0
 offset_bottom = 108.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_p33gt")
 script = ExtResource("1_bpgs5")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
+size_flags_vertical = 4
 
 [node name="Text" type="MarginContainer" parent="VBoxContainer" groups=["adjustable_displays"]]
-custom_minimum_size = Vector2(2.08189e-12, 186)
 layout_mode = 2
 size_flags_vertical = 3
 script = SubResource("GDScript_2aj7w")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Text"]
 layout_mode = 2
-size_flags_vertical = 3
 bbcode_enabled = true
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proid ent, sunt in culpa qui officia deserunt mollit anim id est laborum."
 scroll_active = false

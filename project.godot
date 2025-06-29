@@ -42,6 +42,10 @@ window/vsync/vsync_mode=0
 
 adjustable_displays="nodes with adjust_display()"
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [input]
 
 tab={

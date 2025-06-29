@@ -32,6 +32,11 @@ func apply_settings(defaults: bool = false) -> void:
 		get_viewport().get_window().unresizable = !settings.display.resizable
 		print(&"SettingsManager: Resizable set to " + str(settings.display.window_mode))
 	
+	# GENERAL
+	# Font Size
+	if current_settings.general.font_size != settings.general.font_size:
+		ThemeManager.save_theme(defaults)
+	
 	# MATCHING NODES' VISUALS
 	for node in get_tree().get_nodes_in_group(&"adjustable_displays"):
 		if node.has_method(&"adjust_display"):

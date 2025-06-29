@@ -102,11 +102,10 @@ layout_mode = 2
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 1
+current_tab = 0
 script = ExtResource("2_ok4lx")
 
 [node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -128,6 +127,7 @@ allow_reselect = true
 script = SubResource("GDScript_4pcrv")
 
 [node name="FontScale" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale"]
@@ -156,6 +156,7 @@ allow_reselect = true
 script = SubResource("GDScript_ok4lx")
 
 [node name="Display" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
