@@ -7,17 +7,17 @@ var cur_text : Array[String]
 func connect_label(node: RichTextLabel) -> void: label = node
 
 func add_text() -> void:
-	var distance: int = 46 - test_field_theme.get_font_size(&"normal_font_size", &"RichTextLabel")
+	var distance: int = 46 - ThemeManager.test_field.get_font_size(&"normal_font_size", &"RichTextLabel")
 	var ratio: float = 1.0
 	
 	if distance < 46:
-		ratio += float(distance) / 46
+		ratio += (float(distance) / 46) * 2
 	elif distance > 46:
 		ratio -= float(distance) / 46
 	
-	for i in range(50 * ratio):
+	for i in range(50 * ratio * SettingsManager.current_settings.general.lines_shown):
 		var word: String = Words.common_words.pick_random()
-		if cur_text.size() >= 2 && word.match(cur_text[cur_text.size() - 1]):
+		if cur_text.size() >= 1 && word.match(cur_text[cur_text.size() - 1]):
 			continue
 		else:
 			cur_text.append(word)

@@ -60,7 +60,7 @@ func _next_word() -> void:
 	line_edit.text = ""
 	
 	# add 50 more words on 70% completion
-	if ptr > (TextManager.cur_text.size() * 0.60):
+	if ptr > (TextManager.cur_text.size() * 0.5):
 		TextManager.add_text()
 	
 	# text stuff
