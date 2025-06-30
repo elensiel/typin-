@@ -1,67 +1,51 @@
 [gd_scene load_steps=6 format=3 uid="uid://c2v3vyv0582mg"]
 
-[ext_resource type="Script" uid="uid://ciywdq68826ul" path="res://script/test_field.gd" id="1_bpgs5"]
+[ext_resource type="Script" uid="uid://bw222lfh4rhfm" path="res://script/test_field_panel.gd" id="1_bpgs5"]
+[ext_resource type="Theme" uid="uid://bs7j3ots6pcm5" path="res://resource/test_field_panel.tres" id="1_hdrhf"]
 
-[sub_resource type="GDScript" id="GDScript_2aj7w"]
-resource_name = "TestFieldTextField"
-script/source = "extends MarginContainer
-class_name TextField
-
-## sets height relative to how much lines should be visible
-func _ready() -> void: adjust_display()
-
-func adjust_display() -> void:
-	var font: Font = ThemeManager.test_field.get_font(&\"normal_font_size\", &\"RichTextLabel\")
-	var font_size: int = ThemeManager.test_field.get_font_size(&\"normal_font_size\", &\"RichTextLabel\")
-	var height: float = font.get_height(font_size)
-	var target_lines: int = SettingsManager.changed_settings.general.lines_shown
-	
-	custom_minimum_size.y = height * target_lines
-"
-
-[sub_resource type="GDScript" id="GDScript_bpgs5"]
-resource_name = "TestFieldRichTextLabel"
+[sub_resource type="GDScript" id="GDScript_hdrhf"]
+resource_name = "rich_text_label"
 script/source = "extends RichTextLabel
 
 func _enter_tree() -> void: TextManager.connect_label(self)
 "
 
-[sub_resource type="GDScript" id="GDScript_p33gt"]
-resource_name = "TestFieldLineEdit"
+[sub_resource type="GDScript" id="GDScript_ypg6d"]
+resource_name = "line_edit"
 script/source = "extends LineEdit
 
 func _enter_tree() -> void: TypingManager.connect_line_edit(self)
 "
 
-[sub_resource type="GDScript" id="GDScript_3q0br"]
-resource_name = "TestFieldTimerLabel"
+[sub_resource type="GDScript" id="GDScript_0ok4i"]
+resource_name = "timer_label"
 script/source = "extends Label
 
 func _enter_tree() -> void: TimerManager.connect_label(self)
 "
 
-[node name="TestField" type="PanelContainer" groups=["adjustable_displays"]]
+[node name="TestField" type="PanelContainer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -480.0
-offset_top = -108.0
-offset_right = 480.0
-offset_bottom = 108.0
+offset_left = -101.0
+offset_top = -27.0
+offset_right = 101.0
+offset_bottom = 27.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_hdrhf")
 script = ExtResource("1_bpgs5")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="Text" type="MarginContainer" parent="VBoxContainer" groups=["adjustable_displays"]]
+[node name="Text" type="MarginContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-script = SubResource("GDScript_2aj7w")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer/Text"]
 layout_mode = 2
@@ -70,7 +54,7 @@ text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
 scroll_active = false
 deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
-script = SubResource("GDScript_bpgs5")
+script = SubResource("GDScript_hdrhf")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -86,12 +70,12 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 drag_and_drop_selection_enabled = false
 caret_blink = true
-script = SubResource("GDScript_p33gt")
+script = SubResource("GDScript_ypg6d")
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="TimerLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "01:00"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = SubResource("GDScript_3q0br")
+script = SubResource("GDScript_0ok4i")

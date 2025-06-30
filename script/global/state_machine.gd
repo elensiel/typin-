@@ -1,34 +1,30 @@
 extends Node
 
-var wpm_panel : WpmPanel
-var test_field : TestField
-var settings : Settings
-
 enum State {
 	NEW,
 	TYPING,
 	END,
 	RESET,
-	SETTINGS,
+	SETTINGS
 }
-var cur_state: State = State.NEW
+var current_state: State = State.NEW
 
 func change_state(new_state: State) -> void:
-	cur_state = new_state
+	current_state = new_state
 	
-	match cur_state:
+	match current_state:
 		State.NEW:
-			_handle_new()
+			handle_new()
 		State.TYPING:
-			_handle_typing()
+			handle_typing()
 		State.END:
-			_handle_end()
+			handle_end()
 		State.RESET:
-			_handle_reset()
+			handle_reset()
 		State.SETTINGS:
-			_handle_settings()
+			handle_settings()
 
-func _handle_new() -> void:
+func handle_new() -> void:
 	#region do not touch--ff must be in order
 	TextManager.new_text()
 	TypingManager.new_test()
@@ -37,30 +33,30 @@ func _handle_new() -> void:
 	#endregion
 	
 	TimerManager.new_test()
-	wpm_panel.visible = false
-	settings.visible = false
-	test_field.visible = true
+	NodeReferences.settings_panel.visible = false
+	NodeReferences.wpm_panel.visible = false
+	NodeReferences.test_field_panel.visible = true
 
-func _handle_typing() -> void:
+func handle_typing() -> void:
 	TimerManager.start()
 
-func _handle_end() -> void:
+func handle_end() -> void:
 	TypingManager.stop_test()
 	TimerManager.stop()
 	ScoreManager.update_label()
 	
-	test_field.visible = false
-	wpm_panel.visible = true
+	NodeReferences.test_field_panel.visible = false
+	NodeReferences.wpm_panel.visible = true
 
-func _handle_reset() -> void:
+func handle_reset() -> void:
 	TimerManager.stop()
 	ScoreManager.reset()
 	change_state(State.NEW)
 
-func _handle_settings() -> void:
+func handle_settings() -> void:
 	TimerManager.stop()
 	ScoreManager.reset()
 	
-	test_field.visible = false
-	wpm_panel.visible = false
-	settings.visible = true
+	NodeReferences.test_field_panel.visible = false
+	NodeReferences.wpm_panel.visible = false
+	NodeReferences.settings_panel.visible = true

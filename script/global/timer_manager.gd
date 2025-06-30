@@ -6,7 +6,7 @@ var label : Label
 var minute: int = 1
 var second: int = 0
 
-func _ready() -> void: 
+func _enter_tree() -> void:
 	timer.connect("timeout", Callable.create(self, "_on_timer_timeout"))
 	add_child(timer)
 
@@ -24,8 +24,7 @@ func new_test() -> void:
 	second = 0
 	_update_label()
 
-func start() -> void:
-	timer.start()
+func start() -> void: timer.start()
 
 func stop() -> void:
 	timer.stop()

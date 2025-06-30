@@ -1,31 +1,29 @@
 [gd_scene load_steps=6 format=3 uid="uid://cyqtvxallb714"]
 
-[ext_resource type="Script" uid="uid://cu31yq6dqkyvw" path="res://script/wpm_panel.gd" id="1_88pst"]
-[ext_resource type="Theme" uid="uid://s5xotdih6b1o" path="res://resource/wpm_panel.tres" id="1_mcs0j"]
-
-[sub_resource type="GDScript" id="GDScript_88pst"]
-resource_name = "WpmPanelNetWpm"
-script/source = "extends Label
-
-func _ready() -> void: ScoreManager.labels[0] = self
-"
+[ext_resource type="Script" uid="uid://cr486wp2ohx3w" path="res://script/wpm_panel.gd" id="1_88pst"]
+[ext_resource type="Theme" uid="uid://d6hdubd7wr0y" path="res://resource/wpm_panel.tres" id="1_mcs0j"]
 
 [sub_resource type="GDScript" id="GDScript_mcs0j"]
-resource_name = "WpmPanelAccuracy"
+resource_name = "net_wpm"
 script/source = "extends Label
 
-func _ready() -> void: ScoreManager.labels[1] = self
+func _enter_tree() -> void: ScoreManager.labels[0] = self
 "
 
 [sub_resource type="GDScript" id="GDScript_00rrk"]
-resource_name = "WpmPanelRawSpeed"
+resource_name = "accuracy"
 script/source = "extends Label
 
-func _ready() -> void: ScoreManager.labels[2] = self
+func _enter_tree() -> void: ScoreManager.labels[1] = self
 "
 
-[node name="WpmPanel" type="PanelContainer" groups=["adjustable_displays"]]
-custom_minimum_size = Vector2(384, 0)
+[sub_resource type="GDScript" id="GDScript_r0gr0"]
+resource_name = "raw_speed"
+script/source = "extends Label
+
+func _enter_tree() -> void: ScoreManager.labels[2] = self"
+
+[node name="Wpm" type="PanelContainer"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -57,7 +55,7 @@ theme_type_variation = &"HeaderLarge"
 text = "75"
 horizontal_alignment = 2
 vertical_alignment = 1
-script = SubResource("GDScript_88pst")
+script = SubResource("GDScript_mcs0j")
 
 [node name="Label2" type="Label" parent="MarginContainer/VBoxContainer/NetWPM"]
 layout_mode = 2
@@ -90,7 +88,7 @@ text = "Accuracy:  "
 layout_mode = 2
 size_flags_horizontal = 10
 text = "95%"
-script = SubResource("GDScript_mcs0j")
+script = SubResource("GDScript_00rrk")
 
 [node name="RawSpeed" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -105,4 +103,4 @@ text = "Raw Speed:  "
 layout_mode = 2
 size_flags_horizontal = 10
 text = "95 WPM"
-script = SubResource("GDScript_00rrk")
+script = SubResource("GDScript_r0gr0")

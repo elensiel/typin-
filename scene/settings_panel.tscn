@@ -1,49 +1,54 @@
-[gd_scene load_steps=11 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=10 format=3 uid="uid://c4tnwp1e0j6wl"]
 
-[ext_resource type="Script" uid="uid://dsjnry33o566h" path="res://script/settings.gd" id="1_likc5"]
-[ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/settings.tres" id="1_uhf66"]
-[ext_resource type="Script" uid="uid://bch8flkkrhxu6" path="res://script/settings_tab.gd" id="2_ok4lx"]
+[ext_resource type="Script" uid="uid://c6idkxlo2fwsr" path="res://script/settings_panel.gd" id="1_likc5"]
+[ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/settings_panel.tres" id="1_rb3pu"]
 
-[sub_resource type="GDScript" id="GDScript_4pcrv"]
+[sub_resource type="GDScript" id="GDScript_rb3pu"]
 resource_name = "font_size"
 script/source = "extends OptionButton
 
 func _enter_tree() -> void:
+	owner.font_size = self
+	
 	for i in range(30, 82, 2):
 		add_item(str(i))
 
 func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.font_size = 30 + (2  * index)
 "
 
-[sub_resource type="GDScript" id="GDScript_keur6"]
+[sub_resource type="GDScript" id="GDScript_ub00n"]
 resource_name = "font_scale"
 script/source = "extends OptionButton
 
 func _enter_tree() -> void:
-	var cur: int = 50
-	for i in range(11):
-		add_item(str(cur) + &\"%\")
-		cur += 10
+	#owner.font_scale = self
+	
+	for i in range(50, 160, 10):
+		add_item(str(i) + &\"%\")
 
 func _on_item_selected(index: int) -> void:
 	var distance: float = 5 - index
 	SettingsManager.changed_settings.general.font_scale = 1.0 - (distance / 10.0)
 "
 
-[sub_resource type="GDScript" id="GDScript_ok4lx"]
+[sub_resource type="GDScript" id="GDScript_w58jy"]
 resource_name = "lines_shown"
 script/source = "extends OptionButton
 
 func _enter_tree() -> void:
+	owner.lines_shown = self
+	
 	for i in range(1, 7):
 		add_item(str(i))
 
 func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.lines_shown = index + 1
 "
 
-[sub_resource type="GDScript" id="GDScript_eyhni"]
-resource_name = "display_window_mode"
+[sub_resource type="GDScript" id="GDScript_anfas"]
+resource_name = "window_mode"
 script/source = "extends OptionButton
+
+func _enter_tree() -> void: owner.window_mode = self
 
 func _on_item_selected(index: int) -> void:
 	match index:
@@ -55,28 +60,30 @@ func _on_item_selected(index: int) -> void:
 			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
 "
 
-[sub_resource type="GDScript" id="GDScript_wyye3"]
-resource_name = "display_resizable"
+[sub_resource type="GDScript" id="GDScript_roxve"]
+resource_name = "resizable"
 script/source = "extends CheckBox
+
+func _enter_tree() -> void: owner.resizable = self
 
 func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
 "
 
-[sub_resource type="GDScript" id="GDScript_ftovt"]
-resource_name = "settings_confirmation_restore"
+[sub_resource type="GDScript" id="GDScript_fjya3"]
+resource_name = "restore"
 script/source = "extends Button
 
 func _on_pressed() -> void: SettingsManager.apply_settings(true)
 "
 
-[sub_resource type="GDScript" id="GDScript_uhf66"]
-resource_name = "settings_confirmation_apply"
+[sub_resource type="GDScript" id="GDScript_upj7t"]
+resource_name = "apply"
 script/source = "extends Button
 
 func _on_pressed() -> void: SettingsManager.apply_settings()
 "
 
-[node name="Settings" type="PanelContainer" groups=["adjustable_displays"]]
+[node name="Settings" type="PanelContainer"]
 custom_minimum_size = Vector2(960, 540)
 anchors_preset = 8
 anchor_left = 0.5
@@ -89,7 +96,7 @@ offset_right = 480.0
 offset_bottom = 270.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_uhf66")
+theme = ExtResource("1_rb3pu")
 script = ExtResource("1_likc5")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
@@ -103,7 +110,6 @@ custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
-script = ExtResource("2_ok4lx")
 
 [node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
@@ -124,7 +130,7 @@ text = "Font Size"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_4pcrv")
+script = SubResource("GDScript_rb3pu")
 
 [node name="FontScale" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 visible = false
@@ -139,7 +145,7 @@ text = "Font Scale"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_keur6")
+script = SubResource("GDScript_ub00n")
 
 [node name="LinesShown" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
@@ -153,7 +159,7 @@ text = "Lines Shown"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_ok4lx")
+script = SubResource("GDScript_w58jy")
 
 [node name="Display" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -183,7 +189,7 @@ popup/item_1/text = "Maximized"
 popup/item_1/id = 1
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 2
-script = SubResource("GDScript_eyhni")
+script = SubResource("GDScript_anfas")
 
 [node name="Resizable" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer"]
 layout_mode = 2
@@ -198,7 +204,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 action_mode = 0
 text = "True"
-script = SubResource("GDScript_wyye3")
+script = SubResource("GDScript_roxve")
 
 [node name="Confirmation" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -213,12 +219,12 @@ alignment = 2
 [node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 text = "Restore defaults"
-script = SubResource("GDScript_ftovt")
+script = SubResource("GDScript_fjya3")
 
 [node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 text = "Apply changes"
-script = SubResource("GDScript_uhf66")
+script = SubResource("GDScript_upj7t")
 
 [connection signal="visibility_changed" from="MarginContainer/VBoxContainer/TabContainer" to="MarginContainer/VBoxContainer/TabContainer" method="_on_visibility_changed"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
