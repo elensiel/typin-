@@ -6,10 +6,12 @@ var font_scale
 var lines_shown
 var window_mode
 var resizable
+var restart : Array[Button]
+
+func _init() -> void: NodeReferences.settings_panel = self
 
 func _enter_tree() -> void: 
 	print("Node: Setting up " + str(self))
-	NodeReferences.settings_panel = self
 	
 	UiManager.set_scale(self)
 	UiManager.set_custom_minimum_size(
@@ -33,3 +35,15 @@ func update_selection() -> void:
 	# Window Mode
 	window_mode.selected = DisplayServer.window_get_mode()
 	resizable.button_pressed = SettingsManager.current_settings.display.resizable
+	
+	# KEYBINDINGS
+	if SettingsManager.current_settings.keybindings.restart_key_off:
+		restart[0].button_pressed = true
+	else:
+		match SettingsManager.current_settings.keybindings.restart_key:
+			InputManager.ESC:
+				restart[1].button_pressed = true
+			InputManager.TAB:
+				restart[2].button_pressed = true
+			InputManager.ENTER:
+				restart[3].button_pressed = true

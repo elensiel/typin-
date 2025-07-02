@@ -4,7 +4,7 @@ enum State {
 	NEW,
 	TYPING,
 	END,
-	RESET,
+	RESTART,
 	SETTINGS
 }
 var current_state: State = State.NEW
@@ -19,8 +19,8 @@ func change_state(new_state: State) -> void:
 			handle_typing()
 		State.END:
 			handle_end()
-		State.RESET:
-			handle_reset()
+		State.RESTART:
+			handle_restart()
 		State.SETTINGS:
 			handle_settings()
 
@@ -33,12 +33,17 @@ func handle_new() -> void:
 	#endregion
 	
 	TimerManager.new_test()
+	
 	NodeReferences.settings_panel.visible = false
 	NodeReferences.wpm_panel.visible = false
+	
+	NodeReferences.ui_container.show_ui()
 	NodeReferences.test_field_panel.visible = true
 
 func handle_typing() -> void:
 	TimerManager.start()
+	
+	NodeReferences.ui_container.hide_ui()
 
 func handle_end() -> void:
 	TypingManager.stop_test()
@@ -46,9 +51,11 @@ func handle_end() -> void:
 	ScoreManager.update_label()
 	
 	NodeReferences.test_field_panel.visible = false
+	
 	NodeReferences.wpm_panel.visible = true
+	NodeReferences.ui_container.show_ui()
 
-func handle_reset() -> void:
+func handle_restart() -> void:
 	TimerManager.stop()
 	ScoreManager.reset()
 	change_state(State.NEW)
@@ -59,4 +66,6 @@ func handle_settings() -> void:
 	
 	NodeReferences.test_field_panel.visible = false
 	NodeReferences.wpm_panel.visible = false
+	NodeReferences.ui_container.hide_ui()
+	
 	NodeReferences.settings_panel.visible = true

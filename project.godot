@@ -20,8 +20,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 NodeReferences="*res://script/global/node_references.gd"
-InputManager="*res://script/global/input_manager.gd"
 SettingsManager="*res://script/global/settings_manager.gd"
+InputManager="*res://script/global/input_manager.gd"
 StateMachine="*res://script/global/state_machine.gd"
 TextManager="*res://script/global/text_manager.gd"
 TypingManager="*res://script/global/typing_manager.gd"

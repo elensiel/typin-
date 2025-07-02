@@ -11,6 +11,10 @@ const DEFAULT_SETTINGS: Dictionary[String, Dictionary] = {
 		"window_mode" : DisplayServer.WindowMode.WINDOW_MODE_MAXIMIZED,
 		"resizable" : true,
 	},
+	"keybindings" : {
+		"restart_key" : InputManager.TAB,
+		"restart_key_off" : true,
+	},
 }
 var FILE_PATH: StringName = get_user_directory() + "settings.cfg"
 
@@ -39,6 +43,17 @@ func apply_settings(defaults: bool = false) -> void:
 	# Lines Shown
 	if settings.general.lines_shown != current_settings.general.lines_shown:
 		NodeReferences.test_field_panel.queue_redraw()
+	
+	# KEYBINDINGS
+	if settings.keybindings.restart_key_off != current_settings.keybindings.restart_key_off:
+		InputManager.restart_key_off = settings.keybindings.restart_key_off
+		if InputManager.restart_key_off:
+			NodeReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_ALL
+		else:
+			NodeReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_NONE
+	
+	if settings.keybindings.restart_key != current_settings.keybindings.restart_key:
+		InputManager.restart_key = settings.keybindings.restart_test
 	
 	current_settings = settings.duplicate(true)
 	
@@ -79,6 +94,20 @@ func load_settings() -> Dictionary[String, Dictionary]:
 			loaded_data[section] = {}
 			for key in config.get_section_keys(section):
 				loaded_data[section][key] = config.get_value(section, key)
+		
+		# append on size changes in DEFAULT_SETTINGS
+		var has_new_settings: bool = false
+		for section in DEFAULT_SETTINGS:
+			if not loaded_data.has(section):
+				loaded_data[section] = {}
+			for key in DEFAULT_SETTINGS[section]:
+				if not loaded_data[section].has(key):
+					loaded_data[section][key] = DEFAULT_SETTINGS[section][key]
+					has_new_settings = true
+		
+		if has_new_settings: 
+			save_settings(loaded_data)
+		
 		return loaded_data
 	else:
 		printerr("SettingsManager: Failed to load settings (Error: " + error_string(error) + ")")

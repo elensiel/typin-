@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=13 format=3 uid="uid://c4tnwp1e0j6wl"]
 
 [ext_resource type="Script" uid="uid://c6idkxlo2fwsr" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/settings_panel.tres" id="1_rb3pu"]
@@ -69,6 +69,77 @@ func _enter_tree() -> void: owner.resizable = self
 func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
 "
 
+[sub_resource type="GDScript" id="GDScript_2xvam"]
+resource_name = "restart_test_buttons"
+script/source = "extends HBoxContainer
+
+@onready var off: Button = $Off
+@onready var esc: Button = $Esc
+@onready var tab: Button = $Tab
+@onready var enter: Button = $Enter
+
+func _enter_tree() -> void:
+	for child in get_children():
+		owner.restart.append(child)
+
+func _on_off_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		SettingsManager.changed_settings.keybindings.restart_key_off = toggled_on
+		tab.button_pressed = !toggled_on
+		tab.button_pressed = !toggled_on
+		enter.button_pressed = !toggled_on
+
+func _on_esc_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		SettingsManager.changed_settings.keybindings.restart_key = InputManager.ESC
+		SettingsManager.changed_settings.keybindings.restart_key_off = !toggled_on
+		off.button_pressed = !toggled_on
+		tab.button_pressed = !toggled_on
+		enter.button_pressed = !toggled_on
+
+func _on_tab_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		SettingsManager.changed_settings.keybindings.restart_key = InputManager.TAB
+		SettingsManager.changed_settings.keybindings.restart_key_off = !toggled_on
+		off.button_pressed = !toggled_on
+		esc.button_pressed = !toggled_on
+		enter.button_pressed = !toggled_on
+
+func _on_enter_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		SettingsManager.changed_settings.keybindings.restart_key = InputManager.ENTER
+		SettingsManager.changed_settings.keybindings.restart_key_off = !toggled_on
+		off.button_pressed = !toggled_on
+		esc.button_pressed = !toggled_on
+		tab.button_pressed = !toggled_on
+"
+
+[sub_resource type="GDScript" id="GDScript_jyo05"]
+resource_name = "open_settings_buttons"
+script/source = "extends HBoxContainer
+
+@onready var esc: Button = $Esc
+@onready var ctrl_shift_p: Button = $CtrlShiftP
+
+func _on_esc_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		SettingsManager.changed_settings.keybindings.open_settings = InputManager.ESC
+		ctrl_shift_p.button_pressed = !toggled_on
+
+func _on_tab_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		SettingsManager.changed_settings.keybindings.open_settings = InputManager.CTRL_SHIFT_P
+		esc.button_pressed = !toggled_on
+"
+
+[sub_resource type="GDScript" id="GDScript_k4fqs"]
+resource_name = "back_button"
+script/source = "extends Button
+
+
+func _on_pressed() -> void: StateMachine.change_state(StateMachine.State.NEW)
+"
+
 [sub_resource type="GDScript" id="GDScript_fjya3"]
 resource_name = "restore"
 script/source = "extends Button
@@ -109,9 +180,10 @@ layout_mode = 2
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 2
 
 [node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -206,6 +278,84 @@ action_mode = 0
 text = "True"
 script = SubResource("GDScript_roxve")
 
+[node name="Keybindings" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RestartTest" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest"]
+layout_mode = 2
+text = "Restart Test"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest"]
+layout_mode = 2
+theme_override_constants/separation = 10
+script = SubResource("GDScript_2xvam")
+
+[node name="Off" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "OFF "
+
+[node name="Esc" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "ESC"
+
+[node name="Tab" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "TAB"
+
+[node name="Enter" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "ENTER"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
+layout_mode = 2
+
+[node name="OpenSettings" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings"]
+layout_mode = 2
+text = "Open Settings "
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings"]
+layout_mode = 2
+theme_override_constants/separation = 10
+script = SubResource("GDScript_jyo05")
+
+[node name="Esc" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "ESC"
+
+[node name="CtrlShiftP" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "CTRL+SHIFT+P"
+
 [node name="Confirmation" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_top = 5
@@ -215,6 +365,12 @@ theme_override_constants/margin_bottom = 0
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 2
+
+[node name="Back" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Back"
+script = SubResource("GDScript_k4fqs")
 
 [node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
@@ -232,5 +388,12 @@ script = SubResource("GDScript_upj7t")
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Off" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_off_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Esc" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_esc_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Tab" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_tab_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Enter" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_enter_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer/Esc" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer" method="_on_esc_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer/CtrlShiftP" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer" method="_on_tab_toggled"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" method="_on_pressed"]

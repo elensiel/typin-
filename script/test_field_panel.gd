@@ -7,7 +7,8 @@ func _draw() -> void:
 	var height: float = font.get_height(font_size)
 	var target_lines: int = SettingsManager.current_settings.general.lines_shown
 	
-	$VBoxContainer/Text.custom_minimum_size.y = height * target_lines
+	var node := $VBoxContainer/Text
+	node.custom_minimum_size.y = height * target_lines
 
 func _enter_tree() -> void:
 	print("Node: Setting up " + str(self))
