@@ -1,28 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2v3vyv0582mg"]
+[gd_scene load_steps=3 format=3 uid="uid://c2v3vyv0582mg"]
 
-[ext_resource type="Script" uid="uid://bw222lfh4rhfm" path="res://script/test_field_panel.gd" id="1_bpgs5"]
-[ext_resource type="Theme" uid="uid://bbp0upa0lmrep" path="res://resource/test_field_panel.tres" id="1_hdrhf"]
-
-[sub_resource type="GDScript" id="GDScript_hdrhf"]
-resource_name = "rich_text_label"
-script/source = "extends RichTextLabel
-
-func _enter_tree() -> void: TextManager.connect_label(self)
-"
-
-[sub_resource type="GDScript" id="GDScript_ypg6d"]
-resource_name = "line_edit"
-script/source = "extends LineEdit
-
-func _enter_tree() -> void: TypingManager.connect_line_edit(self)
-"
-
-[sub_resource type="GDScript" id="GDScript_0ok4i"]
-resource_name = "timer_label"
-script/source = "extends Label
-
-func _enter_tree() -> void: TimerManager.connect_label(self)
-"
+[ext_resource type="Script" uid="uid://bhjacmb13fvr0" path="res://script/test_field_panel.gd" id="1_bpgs5"]
+[ext_resource type="Theme" uid="uid://bbp0upa0lmrep" path="res://resource/themes/test_field_panel.tres" id="1_hdrhf"]
 
 [node name="TestField" type="PanelContainer"]
 anchors_preset = 8
@@ -54,7 +33,6 @@ text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
 scroll_active = false
 deselect_on_focus_loss_enabled = false
 drag_and_drop_selection_enabled = false
-script = SubResource("GDScript_hdrhf")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -70,7 +48,6 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 drag_and_drop_selection_enabled = false
 caret_blink = true
-script = SubResource("GDScript_ypg6d")
 
 [node name="TimerLabel" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
@@ -78,4 +55,3 @@ size_flags_horizontal = 3
 text = "01:00"
 horizontal_alignment = 1
 vertical_alignment = 1
-script = SubResource("GDScript_0ok4i")

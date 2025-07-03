@@ -36,4 +36,8 @@ func update_text() -> void:
 
 func scroll_update() -> void:
 	var cur_line: int = label.get_character_line(TypingManager.cur_char_idx)
-	label.scroll_to_line(cur_line - 1) # -1 for the whitespace
+	
+	if SettingsManager.current_settings.general.lines_shown >= 2:
+		label.scroll_to_line(cur_line - 1) # -1 for the whitespace
+	else:
+		label.scroll_to_line(cur_line)

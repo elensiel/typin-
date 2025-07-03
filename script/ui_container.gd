@@ -1,26 +1,25 @@
 extends MarginContainer
+class_name UiContainer
 
-@onready var restart_button: Button = $Tip/Restart
-
-func _init(): NodeReferences.ui_container = self
+func _init() -> void: ObjectReferences.ui_container = self
 
 func hide_ui() -> void:
-	for child in get_children():
-		child.visible = false
+	$Settings.visible = false
 	
-	for child in $Tip.get_children():
-		child.visible = false
+	$Tip/RestartTip.text = ""
+	$Tip/QuickSettingsTip.text = ""
 	
-	if InputManager.restart_key_off && StateMachine.current_state == StateMachine.State.TYPING:
-		$Tip.visible = true
-		$Tip/Restart.visible = true
+	if StateMachine.current_state == StateMachine.State.TYPING:
+		if SettingsManager.current_settings.keybindings.restart_key_off:
+			ObjectReferences.restart_test_button.visible = true
+	elif StateMachine.current_state == StateMachine.State.SETTINGS:
+		ObjectReferences.restart_test_button.visible = false
 
 func show_ui() -> void:
-	for child in get_children():
-		child.visible = true
+	$Settings.visible = true
 	
-	for child in $Tip.get_children():
-		child.visible = true
+	#for child in $Tip.get_children():
+		#child.visible = true
 	
-	if !InputManager.restart_key_off:
-		$Tip/Restart.visible = false
+	if !SettingsManager.current_settings.keybindings.restart_key_off:
+		ObjectReferences.restart_test_button.visible = false

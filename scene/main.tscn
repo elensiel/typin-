@@ -1,10 +1,23 @@
 [gd_scene load_steps=9 format=3 uid="uid://cv8i21q77mmvy"]
 
-[ext_resource type="Theme" uid="uid://cph8r3n7my5ds" path="res://resource/main.tres" id="1_wp4xf"]
-[ext_resource type="Script" uid="uid://coxhhkemrgysa" path="res://script/main.gd" id="2_brvut"]
-[ext_resource type="Script" uid="uid://dx3yco7ghg6ac" path="res://script/ui_container.gd" id="3_0ha60"]
+[ext_resource type="Theme" uid="uid://cph8r3n7my5ds" path="res://resource/themes/main.tres" id="1_wp4xf"]
+[ext_resource type="Script" uid="uid://cjpbn7qt6pvrt" path="res://script/ui_container.gd" id="3_0ha60"]
 [ext_resource type="Texture2D" uid="uid://bh0ekvpqnxvss" path="res://sprite/Gear.svg" id="3_brvut"]
 [ext_resource type="Texture2D" uid="uid://o5wy1u6psmng" path="res://sprite/Repeat-Right.svg" id="5_0ha60"]
+
+[sub_resource type="GDScript" id="GDScript_brvut"]
+resource_name = "main"
+script/source = "extends Control
+
+func _init() -> void: ObjectReferences.main = self
+
+func _enter_tree() -> void:
+	var test_field_panel: PanelContainer = preload(\"res://scene/test_field_panel.tscn\").instantiate()
+	var wpm_panel: PanelContainer = preload(\"res://scene/wpm_panel.tscn\").instantiate()
+	
+	add_child(test_field_panel)
+	add_child(wpm_panel)
+"
 
 [sub_resource type="GDScript" id="GDScript_4j5ol"]
 resource_name = "settings_button"
@@ -13,9 +26,11 @@ script/source = "extends Button
 func _on_pressed() -> void: StateMachine.change_state(StateMachine.State.SETTINGS)
 "
 
-[sub_resource type="GDScript" id="GDScript_p1hux"]
+[sub_resource type="GDScript" id="GDScript_0ha60"]
 resource_name = "restart_button"
 script/source = "extends Button
+
+func _init() -> void: ObjectReferences.restart_test_button = self
 
 func _enter_tree() -> void:
 	if SettingsManager.current_settings.keybindings.restart_key_off:
@@ -36,7 +51,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_wp4xf")
-script = ExtResource("2_brvut")
+script = SubResource("GDScript_brvut")
 
 [node name="UiContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -74,7 +89,7 @@ action_mode = 0
 icon = ExtResource("5_0ha60")
 flat = true
 icon_alignment = 1
-script = SubResource("GDScript_p1hux")
+script = SubResource("GDScript_0ha60")
 
 [node name="HSeparator" type="HSeparator" parent="UiContainer/Tip"]
 layout_mode = 2
@@ -83,14 +98,14 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_0ha60")
 
 [node name="RestartTip" type="Label" parent="UiContainer/Tip"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_type_variation = &"HeaderLarge"
-text = "Press Tab to restart test"
 horizontal_alignment = 1
 
 [node name="QuickSettingsTip" type="Label" parent="UiContainer/Tip"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_type_variation = &"HeaderLarge"
-text = "Press Esc to open settings"
 horizontal_alignment = 1
 
 [connection signal="pressed" from="UiContainer/Settings" to="UiContainer/Settings" method="_on_pressed"]

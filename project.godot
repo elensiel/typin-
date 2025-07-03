@@ -19,15 +19,14 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-NodeReferences="*res://script/global/node_references.gd"
+ObjectReferences="*res://script/global/object_references.gd"
 SettingsManager="*res://script/global/settings_manager.gd"
 InputManager="*res://script/global/input_manager.gd"
 StateMachine="*res://script/global/state_machine.gd"
 TextManager="*res://script/global/text_manager.gd"
 TypingManager="*res://script/global/typing_manager.gd"
-ScoreManager="*res://script/global/score_manager.gd"
 TimerManager="*res://script/global/timer_manager.gd"
-UiManager="*res://script/global/ui_manager.gd"
+ScoreManager="*res://script/global/score_manager.gd"
 
 [display]
 

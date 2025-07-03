@@ -1,27 +1,28 @@
 [gd_scene load_steps=6 format=3 uid="uid://cyqtvxallb714"]
 
-[ext_resource type="Script" uid="uid://cr486wp2ohx3w" path="res://script/wpm_panel.gd" id="1_88pst"]
-[ext_resource type="Theme" uid="uid://d6hdubd7wr0y" path="res://resource/wpm_panel.tres" id="1_mcs0j"]
+[ext_resource type="Script" uid="uid://co6d0sgx0vjjb" path="res://script/wpm_panel.gd" id="1_88pst"]
+[ext_resource type="Theme" uid="uid://d6hdubd7wr0y" path="res://resource/themes/wpm_panel.tres" id="1_mcs0j"]
 
 [sub_resource type="GDScript" id="GDScript_mcs0j"]
-resource_name = "net_wpm"
+resource_name = "net_wpm_label"
 script/source = "extends Label
 
-func _enter_tree() -> void: ScoreManager.labels[0] = self
+func _init() -> void: ScoreManager.labels[0] = self
 "
 
 [sub_resource type="GDScript" id="GDScript_00rrk"]
-resource_name = "accuracy"
+resource_name = "accuracy_label"
 script/source = "extends Label
 
-func _enter_tree() -> void: ScoreManager.labels[1] = self
+func _init() -> void: ScoreManager.labels[1] = self
 "
 
 [sub_resource type="GDScript" id="GDScript_r0gr0"]
-resource_name = "raw_speed"
+resource_name = "raw_speed_label"
 script/source = "extends Label
 
-func _enter_tree() -> void: ScoreManager.labels[2] = self"
+func _init() -> void: ScoreManager.labels[2] = self
+"
 
 [node name="Wpm" type="PanelContainer"]
 anchors_preset = 8

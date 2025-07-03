@@ -1,13 +1,47 @@
-[gd_scene load_steps=13 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=17 format=3 uid="uid://c4tnwp1e0j6wl"]
 
-[ext_resource type="Script" uid="uid://c6idkxlo2fwsr" path="res://script/settings_panel.gd" id="1_likc5"]
-[ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/settings_panel.tres" id="1_rb3pu"]
+[ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
+[ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
+[ext_resource type="FontFile" uid="uid://buafm3mljga3p" path="res://resource/fonts/CourierPrime-Regular.ttf" id="3_fjya3"]
+[ext_resource type="FontFile" uid="uid://cidjl7sciail7" path="res://resource/fonts/IBMPlexMono-Regular.ttf" id="4_upj7t"]
+[ext_resource type="FontFile" uid="uid://dubsuc0k345rq" path="res://resource/fonts/Inconsolata-Regular.ttf" id="5_2xvam"]
+[ext_resource type="FontFile" uid="uid://dayt5pkn3kjjq" path="res://resource/fonts/RobotoMono-Regular.ttf" id="6_jyo05"]
+[ext_resource type="FontFile" uid="uid://rw15vimc2axs" path="res://resource/fonts/SourceCodePro-Regular.ttf" id="7_k4fqs"]
 
-[sub_resource type="GDScript" id="GDScript_rb3pu"]
+[sub_resource type="GDScript" id="GDScript_fjya3"]
+resource_name = "font"
+script/source = "extends VBoxContainer
+
+func _ready() -> void:
+	var font_buttons : Array[Button]
+	
+	# appending every buttons
+	for child in $Line1.get_children():
+		font_buttons.append(child)
+	for child in $Line2.get_children():
+		font_buttons.append(child)
+	owner.font_buttons = font_buttons
+	
+	# connecting every buttons
+	for button in font_buttons:
+		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
+
+func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
+	if toggled_on:
+		for button in owner.font_buttons:
+			if button != emitting_button and button.button_pressed:
+				button.button_pressed = false
+		
+		SettingsManager.changed_settings.general.font = emitting_button.get_theme_font(&\"font\")
+"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fjya3"]
+
+[sub_resource type="GDScript" id="GDScript_upj7t"]
 resource_name = "font_size"
 script/source = "extends OptionButton
 
-func _enter_tree() -> void:
+func _enter_tree() -> void: 
 	owner.font_size = self
 	
 	for i in range(30, 82, 2):
@@ -16,26 +50,11 @@ func _enter_tree() -> void:
 func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.font_size = 30 + (2  * index)
 "
 
-[sub_resource type="GDScript" id="GDScript_ub00n"]
-resource_name = "font_scale"
-script/source = "extends OptionButton
-
-func _enter_tree() -> void:
-	#owner.font_scale = self
-	
-	for i in range(50, 160, 10):
-		add_item(str(i) + &\"%\")
-
-func _on_item_selected(index: int) -> void:
-	var distance: float = 5 - index
-	SettingsManager.changed_settings.general.font_scale = 1.0 - (distance / 10.0)
-"
-
-[sub_resource type="GDScript" id="GDScript_w58jy"]
+[sub_resource type="GDScript" id="GDScript_rb3pu"]
 resource_name = "lines_shown"
 script/source = "extends OptionButton
 
-func _enter_tree() -> void:
+func _enter_tree() -> void: 
 	owner.lines_shown = self
 	
 	for i in range(1, 7):
@@ -44,7 +63,7 @@ func _enter_tree() -> void:
 func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.lines_shown = index + 1
 "
 
-[sub_resource type="GDScript" id="GDScript_anfas"]
+[sub_resource type="GDScript" id="GDScript_2xvam"]
 resource_name = "window_mode"
 script/source = "extends OptionButton
 
@@ -60,7 +79,7 @@ func _on_item_selected(index: int) -> void:
 			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
 "
 
-[sub_resource type="GDScript" id="GDScript_roxve"]
+[sub_resource type="GDScript" id="GDScript_jyo05"]
 resource_name = "resizable"
 script/source = "extends CheckBox
 
@@ -69,86 +88,24 @@ func _enter_tree() -> void: owner.resizable = self
 func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
 "
 
-[sub_resource type="GDScript" id="GDScript_2xvam"]
-resource_name = "restart_test_buttons"
-script/source = "extends HBoxContainer
-
-@onready var off: Button = $Off
-@onready var esc: Button = $Esc
-@onready var tab: Button = $Tab
-@onready var enter: Button = $Enter
-
-func _enter_tree() -> void:
-	for child in get_children():
-		owner.restart.append(child)
-
-func _on_off_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		SettingsManager.changed_settings.keybindings.restart_key_off = toggled_on
-		tab.button_pressed = !toggled_on
-		tab.button_pressed = !toggled_on
-		enter.button_pressed = !toggled_on
-
-func _on_esc_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		SettingsManager.changed_settings.keybindings.restart_key = InputManager.ESC
-		SettingsManager.changed_settings.keybindings.restart_key_off = !toggled_on
-		off.button_pressed = !toggled_on
-		tab.button_pressed = !toggled_on
-		enter.button_pressed = !toggled_on
-
-func _on_tab_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		SettingsManager.changed_settings.keybindings.restart_key = InputManager.TAB
-		SettingsManager.changed_settings.keybindings.restart_key_off = !toggled_on
-		off.button_pressed = !toggled_on
-		esc.button_pressed = !toggled_on
-		enter.button_pressed = !toggled_on
-
-func _on_enter_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		SettingsManager.changed_settings.keybindings.restart_key = InputManager.ENTER
-		SettingsManager.changed_settings.keybindings.restart_key_off = !toggled_on
-		off.button_pressed = !toggled_on
-		esc.button_pressed = !toggled_on
-		tab.button_pressed = !toggled_on
-"
-
-[sub_resource type="GDScript" id="GDScript_jyo05"]
-resource_name = "open_settings_buttons"
-script/source = "extends HBoxContainer
-
-@onready var esc: Button = $Esc
-@onready var ctrl_shift_p: Button = $CtrlShiftP
-
-func _on_esc_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		SettingsManager.changed_settings.keybindings.open_settings = InputManager.ESC
-		ctrl_shift_p.button_pressed = !toggled_on
-
-func _on_tab_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		SettingsManager.changed_settings.keybindings.open_settings = InputManager.CTRL_SHIFT_P
-		esc.button_pressed = !toggled_on
-"
-
-[sub_resource type="GDScript" id="GDScript_k4fqs"]
+[sub_resource type="GDScript" id="GDScript_ub00n"]
 resource_name = "back_button"
 script/source = "extends Button
 
-
-func _on_pressed() -> void: StateMachine.change_state(StateMachine.State.NEW)
+func _on_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.NEW)
+	owner.queue_free()
 "
 
-[sub_resource type="GDScript" id="GDScript_fjya3"]
-resource_name = "restore"
+[sub_resource type="GDScript" id="GDScript_k4fqs"]
+resource_name = "restore_button"
 script/source = "extends Button
 
 func _on_pressed() -> void: SettingsManager.apply_settings(true)
 "
 
-[sub_resource type="GDScript" id="GDScript_upj7t"]
-resource_name = "apply"
+[sub_resource type="GDScript" id="GDScript_w58jy"]
+resource_name = "apply_button"
 script/source = "extends Button
 
 func _on_pressed() -> void: SettingsManager.apply_settings()
@@ -180,15 +137,81 @@ layout_mode = 2
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 2
+current_tab = 0
 
 [node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General"]
 layout_mode = 2
+
+[node name="Font" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+script = SubResource("GDScript_fjya3")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Font"
+
+[node name="Line1" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="Default" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line1"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "Default"
+
+[node name="CourierPrime" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("3_fjya3")
+toggle_mode = true
+action_mode = 0
+text = "Courier Prime"
+
+[node name="IBMPlexMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("4_upj7t")
+toggle_mode = true
+action_mode = 0
+text = "IBM Plex Mono"
+
+[node name="Line2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="Inconsolata" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_2xvam")
+toggle_mode = true
+action_mode = 0
+text = "Inconsolata"
+
+[node name="RobotoMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("6_jyo05")
+toggle_mode = true
+action_mode = 0
+text = "Roboto Mono"
+
+[node name="SourceCodePro" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_k4fqs")
+toggle_mode = true
+action_mode = 0
+text = "Source Code Pro"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_fjya3")
 
 [node name="FontSize" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
@@ -202,7 +225,7 @@ text = "Font Size"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_rb3pu")
+script = SubResource("GDScript_upj7t")
 
 [node name="FontScale" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 visible = false
@@ -217,7 +240,6 @@ text = "Font Scale"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_ub00n")
 
 [node name="LinesShown" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
@@ -231,7 +253,7 @@ text = "Lines Shown"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_w58jy")
+script = SubResource("GDScript_rb3pu")
 
 [node name="Display" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
@@ -261,7 +283,7 @@ popup/item_1/text = "Maximized"
 popup/item_1/id = 1
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 2
-script = SubResource("GDScript_anfas")
+script = SubResource("GDScript_2xvam")
 
 [node name="Resizable" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer"]
 layout_mode = 2
@@ -276,9 +298,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 action_mode = 0
 text = "True"
-script = SubResource("GDScript_roxve")
+script = SubResource("GDScript_jyo05")
 
 [node name="Keybindings" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 2
 
@@ -296,7 +319,6 @@ text = "Restart Test"
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest"]
 layout_mode = 2
 theme_override_constants/separation = 10
-script = SubResource("GDScript_2xvam")
 
 [node name="Off" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
 layout_mode = 2
@@ -340,7 +362,6 @@ text = "Open Settings "
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings"]
 layout_mode = 2
 theme_override_constants/separation = 10
-script = SubResource("GDScript_jyo05")
 
 [node name="Esc" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer"]
 layout_mode = 2
@@ -369,29 +390,25 @@ alignment = 2
 [node name="Back" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
+action_mode = 0
 text = "Back"
-script = SubResource("GDScript_k4fqs")
+script = SubResource("GDScript_ub00n")
 
 [node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 text = "Restore defaults"
-script = SubResource("GDScript_fjya3")
+script = SubResource("GDScript_k4fqs")
 
 [node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 text = "Apply changes"
-script = SubResource("GDScript_upj7t")
+script = SubResource("GDScript_w58jy")
 
-[connection signal="visibility_changed" from="MarginContainer/VBoxContainer/TabContainer" to="MarginContainer/VBoxContainer/TabContainer" method="_on_visibility_changed"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Off" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_off_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Esc" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_esc_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Tab" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_tab_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer/Enter" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer" method="_on_enter_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer/Esc" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer" method="_on_esc_toggled"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer/CtrlShiftP" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer" method="_on_tab_toggled"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" method="_on_pressed"]

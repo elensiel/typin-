@@ -3,8 +3,8 @@ extends Node
 const BASE_RESOLUTION := Vector2i(1920, 1080)
 const DEFAULT_SETTINGS: Dictionary[String, Dictionary] = {
 	"general" : {
+		"font" : null,
 		"font_size" : 46,
-		"font_scale" : 1.0,
 		"lines_shown" : 3,
 	},
 	"display" : {
@@ -34,23 +34,27 @@ func apply_settings(defaults: bool = false) -> void:
 		DisplayServer.window_set_mode(settings.display.resizable)
 	
 	# GENERAL
+	# Font
+	if settings.general.font != current_settings.general.font:
+		ObjectReferences.test_field_panel.theme.set_font(&"normal_font", &"RichTextLabel", settings.general.font)
+	
 	# Font Size
 	if settings.general.font_size != current_settings.general.font_size:
-		var test_field_theme: Theme = NodeReferences.test_field_panel.theme
+		var test_field_theme: Theme = ObjectReferences.test_field_panel.theme
 		test_field_theme.set_font_size(&"normal_font_size", &"RichTextLabel", settings.general.font_size)
 		ResourceSaver.save(test_field_theme, "res://resource/test_field_panel.tres")
 	
 	# Lines Shown
 	if settings.general.lines_shown != current_settings.general.lines_shown:
-		NodeReferences.test_field_panel.queue_redraw()
+		ObjectReferences.test_field_panel.queue_redraw()
 	
 	# KEYBINDINGS
 	if settings.keybindings.restart_key_off != current_settings.keybindings.restart_key_off:
 		InputManager.restart_key_off = settings.keybindings.restart_key_off
 		if InputManager.restart_key_off:
-			NodeReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_ALL
+			ObjectReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_ALL
 		else:
-			NodeReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_NONE
+			ObjectReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_NONE
 	
 	if settings.keybindings.restart_key != current_settings.keybindings.restart_key:
 		InputManager.restart_key = settings.keybindings.restart_test
@@ -58,7 +62,7 @@ func apply_settings(defaults: bool = false) -> void:
 	current_settings = settings.duplicate(true)
 	
 	if defaults:
-		NodeReferences.settings_panel.update_selection()
+		ObjectReferences.settings_panel.update_selection()
 	
 	save_settings(settings)
 
@@ -84,6 +88,7 @@ func get_user_directory() -> StringName:
 		DirAccess.make_dir_absolute(directory)
 	return directory
 
+## loads settings from 'FILE_PATH'
 func load_settings() -> Dictionary[String, Dictionary]:
 	var config := ConfigFile.new()
 	var error := config.load(FILE_PATH)

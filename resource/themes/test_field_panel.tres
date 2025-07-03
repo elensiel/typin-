@@ -1,6 +1,6 @@
-[gd_resource type="Theme" load_steps=3 format=3]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://bbp0upa0lmrep"]
 
-[ext_resource type="FontFile" path="res://resource/fonts/CourierPrime-Regular.ttf" id="1_xdbw5"]
+[ext_resource type="FontFile" uid="uid://buafm3mljga3p" path="res://resource/fonts/CourierPrime-Regular.ttf" id="1_xdbw5"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f87wn"]
 
@@ -10,5 +10,5 @@ LineEdit/font_sizes/font_size = 30
 MarginContainer/constants/margin_left = 5
 MarginContainer/constants/margin_right = 5
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_f87wn")
-RichTextLabel/font_sizes/normal_font_size = 60
+RichTextLabel/font_sizes/normal_font_size = 46
 RichTextLabel/fonts/normal_font = ExtResource("1_xdbw5")
