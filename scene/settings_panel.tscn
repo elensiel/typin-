@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=18 format=3 uid="uid://c4tnwp1e0j6wl"]
 
 [ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
@@ -86,6 +86,39 @@ script/source = "extends CheckBox
 func _enter_tree() -> void: owner.resizable = self
 
 func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
+"
+
+[sub_resource type="GDScript" id="GDScript_vlppf"]
+resource_name = "restart_key_buttons"
+script/source = "extends VBoxContainer
+
+func _ready() -> void:
+	var buttons : Array[Button]
+	
+	for button in $HBoxContainer.get_children():
+		buttons.append(button)
+	owner.restart_buttons = buttons
+	
+	for button in buttons:
+		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
+
+func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
+	if toggled_on:
+		for button in owner.restart_buttons:
+			if button != emitting_button and button.button_pressed:
+				button.button_pressed = false
+		
+		if emitting_button.name.match(\"Off\"):
+			SettingsManager.changed_settings.keybindings.restart_key_off = true
+		else:
+			SettingsManager.changed_settings.keybindings.restart_key_off = false
+			match emitting_button.name:
+				&\"Esc\":
+					SettingsManager.changed_settings.keybindings.restart_key = InputManager.ESC
+				&\"Tab\":
+					SettingsManager.changed_settings.keybindings.restart_key = InputManager.TAB
+				&\"Enter\":
+					SettingsManager.changed_settings.keybindings.restart_key = InputManager.ENTER
 "
 
 [sub_resource type="GDScript" id="GDScript_ub00n"]
@@ -311,6 +344,7 @@ theme_override_constants/separation = 10
 
 [node name="RestartTest" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
 layout_mode = 2
+script = SubResource("GDScript_vlppf")
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest"]
 layout_mode = 2
@@ -349,6 +383,7 @@ action_mode = 0
 text = "ENTER"
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="OpenSettings" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]

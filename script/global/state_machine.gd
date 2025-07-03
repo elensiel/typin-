@@ -20,6 +20,8 @@ func change_state(new_state: State) -> void:
 			handle_end()
 		State.SETTINGS:
 			handle_settings()
+	
+	handle_visibility()
 
 func handle_new() -> void:
 	#region do not touch--ff must be in order
@@ -32,26 +34,14 @@ func handle_new() -> void:
 	#endregion
 	TimerManager.new_test()
 	ObjectReferences.settings_panel = null
-	
-	ObjectReferences.wpm_panel.visible = false
-	
-	ObjectReferences.ui_container.show_ui()
-	ObjectReferences.test_field_panel.visible = true
-	
 
 func handle_typing() -> void:
 	TimerManager.start()
-	ObjectReferences.ui_container.hide_ui()
 
 func handle_end() -> void:
 	TypingManager.stop_test()
 	TimerManager.stop()
 	ScoreManager.update_label()
-	
-	ObjectReferences.test_field_panel.visible = false
-	
-	ObjectReferences.wpm_panel.visible = true
-	ObjectReferences.ui_container.show_ui()
 
 func handle_settings() -> void:
 	TimerManager.stop()
@@ -59,7 +49,8 @@ func handle_settings() -> void:
 	
 	var instance := ObjectReferences.SETTINGS_PANEL_SCENE.instantiate()
 	ObjectReferences.main.add_child(instance)
-	
-	ObjectReferences.test_field_panel.visible = false
-	ObjectReferences.wpm_panel.visible = false
-	ObjectReferences.ui_container.hide_ui()
+
+func handle_visibility() -> void:
+	ObjectReferences.test_field_panel.visible = current_state == State.NEW || current_state == State.TYPING
+	ObjectReferences.wpm_panel.visible = current_state == State.END
+	ObjectReferences.ui_container.update_ui()

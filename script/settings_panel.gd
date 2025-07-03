@@ -7,7 +7,7 @@ var font_scale
 var lines_shown
 var window_mode
 var resizable
-var restart : Array[Button]
+var restart_buttons : Array[Button]
 
 func _enter_tree() -> void: 
 	print("Node: Setting up " + str(self))
@@ -48,13 +48,13 @@ func update_selection() -> void:
 	resizable.button_pressed = SettingsManager.current_settings.display.resizable
 	
 	# KEYBINDINGS
-	#if SettingsManager.current_settings.keybindings.restart_key_off:
-		#restart[0].button_pressed = true
-	#else:
-		#match SettingsManager.current_settings.keybindings.restart_key:
-			#InputManager.ESC:
-				#restart[1].button_pressed = true
-			#InputManager.TAB:
-				#restart[2].button_pressed = true
-			#InputManager.ENTER:
-				#restart[3].button_pressed = true
+	if SettingsManager.current_settings.keybindings.restart_key_off:
+		restart_buttons[0].button_pressed = true
+	else:
+		match SettingsManager.current_settings.keybindings.restart_key:
+			InputManager.ESC:
+				restart_buttons[1].button_pressed = true
+			InputManager.TAB:
+				restart_buttons[2].button_pressed = true
+			InputManager.ENTER:
+				restart_buttons[3].button_pressed = true

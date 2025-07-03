@@ -31,7 +31,7 @@ func _input(event: InputEvent) -> void:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_action_pressed(TAB):
+	if SettingsManager.current_settings.keybindings.restart_key_off && event.is_action_pressed(TAB):
 		if StateMachine.current_state == StateMachine.State.END:
 			ObjectReferences.restart_test_button.grab_focus()
 

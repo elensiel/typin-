@@ -52,9 +52,9 @@ func apply_settings(defaults: bool = false) -> void:
 	if settings.keybindings.restart_key_off != current_settings.keybindings.restart_key_off:
 		InputManager.restart_key_off = settings.keybindings.restart_key_off
 		if InputManager.restart_key_off:
-			ObjectReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_ALL
+			ObjectReferences.restart_test_button.focus_mode = Button.FocusMode.FOCUS_ALL
 		else:
-			ObjectReferences.ui_container.restart_button.focus_mode = Button.FocusMode.FOCUS_NONE
+			ObjectReferences.restart_test_button.focus_mode = Button.FocusMode.FOCUS_NONE
 	
 	if settings.keybindings.restart_key != current_settings.keybindings.restart_key:
 		InputManager.restart_key = settings.keybindings.restart_test

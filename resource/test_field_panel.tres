@@ -10,5 +10,5 @@ LineEdit/font_sizes/font_size = 30
 MarginContainer/constants/margin_left = 5
 MarginContainer/constants/margin_right = 5
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_f87wn")
-RichTextLabel/font_sizes/normal_font_size = 60
+RichTextLabel/font_sizes/normal_font_size = 80
 RichTextLabel/fonts/normal_font = ExtResource("1_xdbw5")
