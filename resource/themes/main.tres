@@ -1,6 +1,8 @@
 [gd_resource type="Theme" format=3 uid="uid://cph8r3n7my5ds"]
 
 [resource]
+Tip/base_type = &"RichTextLabel"
+Tip/font_sizes/normal_font_size = 30
 UiContainer/base_type = &"MarginContainer"
 UiContainer/constants/margin_bottom = 100
 UiContainer/constants/margin_left = 100

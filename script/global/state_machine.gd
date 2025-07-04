@@ -3,6 +3,7 @@ extends Node
 enum State {
 	NEW,
 	TYPING,
+	INTERRUPTED,
 	END,
 	SETTINGS,
 }
@@ -16,6 +17,9 @@ func change_state(new_state: State) -> void:
 			handle_new()
 		State.TYPING:
 			handle_typing()
+		State.INTERRUPTED:
+			#handle_interrupted()
+			pass
 		State.END:
 			handle_end()
 		State.SETTINGS:
@@ -33,10 +37,13 @@ func handle_new() -> void:
 	TextManager.scroll_update()
 	#endregion
 	TimerManager.new_test()
-	ObjectReferences.settings_panel = null
+	
+	if ObjectReferences.settings_panel != null:
+		ObjectReferences.settings_panel.queue_free()
 
-func handle_typing() -> void:
-	TimerManager.start()
+func handle_typing() -> void: TimerManager.start()
+
+#func handle_interrupted() -> void:
 
 func handle_end() -> void:
 	TypingManager.stop_test()
@@ -51,6 +58,6 @@ func handle_settings() -> void:
 	ObjectReferences.main.add_child(instance)
 
 func handle_visibility() -> void:
-	ObjectReferences.test_field_panel.visible = current_state == State.NEW || current_state == State.TYPING
+	ObjectReferences.test_field_panel.visible = (current_state == State.NEW) || (current_state == State.TYPING) || (current_state == State.INTERRUPTED)
 	ObjectReferences.wpm_panel.visible = current_state == State.END
 	ObjectReferences.ui_container.update_ui()

@@ -9,13 +9,14 @@ var window_mode
 var resizable
 var restart_buttons : Array[Button]
 
+func _init() -> void: ObjectReferences.settings_panel = self
+
 func _enter_tree() -> void: 
 	print("Node: Setting up " + str(self))
-	ObjectReferences.settings_panel = self
-	
-	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.75
-	custom_minimum_size.y = SettingsManager.BASE_RESOLUTION.y / 1.75
+	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.25
+	custom_minimum_size.y = SettingsManager.BASE_RESOLUTION.y / 1.25
 
+## match selected items to current settings
 func _ready() -> void: update_selection()
 
 ## revert changed settings to current settings
@@ -33,7 +34,6 @@ func update_selection() -> void:
 			break
 	
 	font_size.selected = (SettingsManager.current_settings.general.font_size - 30) / 2
-	#font_scale.selected = roundi(5.0 - (10.0 * (1.0 - SettingsManager.current_settings.general.font_scale)))
 	lines_shown.selected = SettingsManager.current_settings.general.lines_shown - 1
 	
 	# DISPLAY

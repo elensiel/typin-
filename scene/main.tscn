@@ -96,10 +96,13 @@ layout_mode = 2
 theme_override_constants/separation = 50
 theme_override_styles/separator = SubResource("StyleBoxEmpty_0ha60")
 
-[node name="RestartTip" type="Label" parent="UiContainer/Tip"]
+[node name="RestartTip" type="RichTextLabel" parent="UiContainer/Tip"]
+custom_minimum_size = Vector2(1920, 0)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_type_variation = &"HeaderLarge"
+theme_type_variation = &"Tip"
+bbcode_enabled = true
+fit_content = true
 horizontal_alignment = 1
 
 [node name="QuickSettingsTip" type="Label" parent="UiContainer/Tip"]

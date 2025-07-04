@@ -19,6 +19,8 @@ func _enter_tree() -> void:
 	TypingManager.connect_line_edit($VBoxContainer/HBoxContainer/LineEdit)
 	
 	theme.set_font(&"normal_font", &"RichTextLabel", SettingsManager.current_settings.general.font)
+	theme.set_font_size(&"normal_font_size", &"RichTextLabel", SettingsManager.current_settings.general.font_size)
+	
 	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.50
 	custom_minimum_size.y =  SettingsManager.BASE_RESOLUTION.y / 1.75
 	

@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=23 format=3 uid="uid://c4tnwp1e0j6wl"]
 
 [ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
@@ -7,6 +7,11 @@
 [ext_resource type="FontFile" uid="uid://dubsuc0k345rq" path="res://resource/fonts/Inconsolata-Regular.ttf" id="5_2xvam"]
 [ext_resource type="FontFile" uid="uid://dayt5pkn3kjjq" path="res://resource/fonts/RobotoMono-Regular.ttf" id="6_jyo05"]
 [ext_resource type="FontFile" uid="uid://rw15vimc2axs" path="res://resource/fonts/SourceCodePro-Regular.ttf" id="7_k4fqs"]
+[ext_resource type="FontFile" uid="uid://dqnkpa8cuoij6" path="res://resource/fonts/CascadiaCode-Regular.ttf" id="8_vlppf"]
+[ext_resource type="FontFile" uid="uid://5n1x7hxpbmuy" path="res://resource/fonts/JetBrainsMono-Regular.ttf" id="9_wr3al"]
+[ext_resource type="FontFile" uid="uid://c54h076o7fnyy" path="res://resource/fonts/Lato-Regular.ttf" id="10_iwgq4"]
+[ext_resource type="FontFile" uid="uid://byjypdf3bacy3" path="res://resource/fonts/LibertinusMono-Regular.ttf" id="11_0bj2m"]
+[ext_resource type="FontFile" uid="uid://d33m5s1qshv4p" path="res://resource/fonts/Ubuntu-Regular.ttf" id="12_t382g"]
 
 [sub_resource type="GDScript" id="GDScript_fjya3"]
 resource_name = "font"
@@ -16,10 +21,9 @@ func _ready() -> void:
 	var font_buttons : Array[Button]
 	
 	# appending every buttons
-	for child in $Line1.get_children():
-		font_buttons.append(child)
-	for child in $Line2.get_children():
-		font_buttons.append(child)
+	for line in get_children():
+		for button in line.get_children():
+			font_buttons.append(button)
 	owner.font_buttons = font_buttons
 	
 	# connecting every buttons
@@ -37,7 +41,7 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fjya3"]
 
-[sub_resource type="GDScript" id="GDScript_upj7t"]
+[sub_resource type="GDScript" id="GDScript_wr3al"]
 resource_name = "font_size"
 script/source = "extends OptionButton
 
@@ -105,7 +109,7 @@ func _ready() -> void:
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
 		for button in owner.restart_buttons:
-			if button != emitting_button and button.button_pressed:
+			if button.button_pressed and button != emitting_button:
 				button.button_pressed = false
 		
 		if emitting_button.name.match(\"Off\"):
@@ -113,11 +117,11 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 		else:
 			SettingsManager.changed_settings.keybindings.restart_key_off = false
 			match emitting_button.name:
-				&\"Esc\":
+				\"Esc\":
 					SettingsManager.changed_settings.keybindings.restart_key = InputManager.ESC
-				&\"Tab\":
+				\"Tab\":
 					SettingsManager.changed_settings.keybindings.restart_key = InputManager.TAB
-				&\"Enter\":
+				\"Enter\":
 					SettingsManager.changed_settings.keybindings.restart_key = InputManager.ENTER
 "
 
@@ -125,9 +129,7 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 resource_name = "back_button"
 script/source = "extends Button
 
-func _on_pressed() -> void:
-	StateMachine.change_state(StateMachine.State.NEW)
-	owner.queue_free()
+func _on_pressed() -> void: StateMachine.change_state(StateMachine.State.NEW)
 "
 
 [sub_resource type="GDScript" id="GDScript_k4fqs"]
@@ -241,6 +243,52 @@ toggle_mode = true
 action_mode = 0
 text = "Source Code Pro"
 
+[node name="Line3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="CascadiaCode" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("8_vlppf")
+toggle_mode = true
+action_mode = 0
+text = "Cascadia Code"
+
+[node name="JetBrainsMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("9_wr3al")
+toggle_mode = true
+action_mode = 0
+text = "JetBrains Mono"
+
+[node name="Lato" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("10_iwgq4")
+toggle_mode = true
+action_mode = 0
+text = "Lato"
+
+[node name="Line4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="LibertinusMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("11_0bj2m")
+toggle_mode = true
+action_mode = 0
+text = "Libertinus Mono"
+
+[node name="Ubuntu" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("12_t382g")
+toggle_mode = true
+action_mode = 0
+text = "Ubuntu"
+
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -252,27 +300,13 @@ layout_mode = 2
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Font Size"
+text = "Font Scale"
 
 [node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
-script = SubResource("GDScript_upj7t")
-
-[node name="FontScale" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
-visible = false
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Font Scale"
-
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale"]
-layout_mode = 2
-size_flags_horizontal = 3
-allow_reselect = true
+script = SubResource("GDScript_wr3al")
 
 [node name="LinesShown" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
 layout_mode = 2
@@ -440,7 +474,6 @@ text = "Apply changes"
 script = SubResource("GDScript_w58jy")
 
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontScale/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]

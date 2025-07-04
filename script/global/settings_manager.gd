@@ -42,7 +42,7 @@ func apply_settings(defaults: bool = false) -> void:
 	if settings.general.font_size != current_settings.general.font_size:
 		var test_field_theme: Theme = ObjectReferences.test_field_panel.theme
 		test_field_theme.set_font_size(&"normal_font_size", &"RichTextLabel", settings.general.font_size)
-		ResourceSaver.save(test_field_theme, "res://resource/test_field_panel.tres")
+		ResourceSaver.save(test_field_theme, "res://resource/themes/test_field_panel.tres")
 	
 	# Lines Shown
 	if settings.general.lines_shown != current_settings.general.lines_shown:
@@ -57,7 +57,7 @@ func apply_settings(defaults: bool = false) -> void:
 			ObjectReferences.restart_test_button.focus_mode = Button.FocusMode.FOCUS_NONE
 	
 	if settings.keybindings.restart_key != current_settings.keybindings.restart_key:
-		InputManager.restart_key = settings.keybindings.restart_test
+		InputManager.restart_key = settings.keybindings.restart_key
 	
 	current_settings = settings.duplicate(true)
 	

@@ -16,19 +16,19 @@ func _input(event: InputEvent) -> void:
 			if !restart_key_off:
 				StateMachine.change_state(StateMachine.State.NEW)
 				call_deferred(&"focus_line_edit")
-	elif event.is_action_pressed(ESC):
-		if StateMachine.current_state == StateMachine.State.SETTINGS:
-			ObjectReferences.settings_panel.queue_free()
-			StateMachine.change_state(StateMachine.State.NEW)
+	elif event.is_action_pressed(ESC) && StateMachine.current_state == StateMachine.State.SETTINGS:
+		StateMachine.change_state(StateMachine.State.NEW)
 		call_deferred(&"focus_line_edit")
-	elif event.is_action_pressed(CTRL_SHIFT_P):
-		if StateMachine.current_state != StateMachine.State.SETTINGS:
-			StateMachine.change_state(StateMachine.State.SETTINGS)
+	elif event.is_action_pressed(CTRL_SHIFT_P) && StateMachine.current_state != StateMachine.State.SETTINGS:
+		StateMachine.change_state(StateMachine.State.SETTINGS)
 	
 	# show cursor visibility when there is mouse motion
-	if Input.mouse_mode == Input.MOUSE_MODE_HIDDEN:
-		if event is InputEventMouseMotion:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if Input.mouse_mode == Input.MOUSE_MODE_HIDDEN && event is InputEventMouseMotion:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		
+		# interruption while typing
+		if StateMachine.current_state == StateMachine.State.TYPING:
+			StateMachine.change_state(StateMachine.State.INTERRUPTED)
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if SettingsManager.current_settings.keybindings.restart_key_off && event.is_action_pressed(TAB):
