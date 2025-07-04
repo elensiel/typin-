@@ -5,7 +5,7 @@ func _draw() -> void:
 	var font: Font = theme.get_font(&"normal_font", &"RichTextLabel")
 	var font_size: int = theme.get_font_size(&"normal_font_size", &"RichTextLabel")
 	var height: float = font.get_height(font_size)
-	var target_lines: int = SettingsManager.current_settings.general.lines_shown
+	var target_lines: int = SettingsManager.current_settings.appearance.visible_lines
 	
 	var node := $VBoxContainer/Text
 	node.custom_minimum_size.y = height * target_lines
@@ -18,8 +18,8 @@ func _enter_tree() -> void:
 	TimerManager.connect_label($VBoxContainer/HBoxContainer/TimerLabel)
 	TypingManager.connect_line_edit($VBoxContainer/HBoxContainer/LineEdit)
 	
-	theme.set_font(&"normal_font", &"RichTextLabel", SettingsManager.current_settings.general.font)
-	theme.set_font_size(&"normal_font_size", &"RichTextLabel", SettingsManager.current_settings.general.font_size)
+	theme.set_font(&"normal_font", &"RichTextLabel", SettingsManager.current_settings.appearance.font)
+	theme.set_font_size(&"normal_font_size", &"RichTextLabel", SettingsManager.current_settings.appearance.font_size)
 	
 	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.50
 	custom_minimum_size.y =  SettingsManager.BASE_RESOLUTION.y / 1.75

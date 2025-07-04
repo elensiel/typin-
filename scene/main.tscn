@@ -33,7 +33,7 @@ script/source = "extends Button
 func _init() -> void: ObjectReferences.restart_test_button = self
 
 func _enter_tree() -> void:
-	if SettingsManager.current_settings.keybindings.restart_key_off:
+	if SettingsManager.current_settings.general.quick_restart_off:
 		focus_mode = Control.FOCUS_ALL
 	else:
 		focus_mode = Control.FOCUS_NONE

@@ -10,7 +10,7 @@ func connect_label(node: RichTextLabel) -> void:
 func add_text() -> void:
 	var initial_size: int = current_text.size()
 	var minimum_font_size: int = 30
-	var current_font_size: int = SettingsManager.current_settings.general.font_size
+	var current_font_size: int = SettingsManager.current_settings.appearance.font_size
 	var distance: int = current_font_size - minimum_font_size
 	var modifier: int = 5 + roundi(float(distance) / 5)
 	
@@ -37,7 +37,7 @@ func update_text() -> void:
 func scroll_update() -> void:
 	var cur_line: int = label.get_character_line(TypingManager.cur_char_idx)
 	
-	if SettingsManager.current_settings.general.lines_shown >= 3:
+	if SettingsManager.current_settings.appearance.visible_lines >= 3:
 		cur_line -= 1 # for whitespace
 	
 	label.scroll_to_line(cur_line)

@@ -9,13 +9,13 @@ func update_ui() -> void:
 	
 	var restart_tip := $Tip/RestartTip 
 	
-	if SettingsManager.current_settings.keybindings.restart_key_off:
+	if SettingsManager.current_settings.general.quick_restart_off:
 		ObjectReferences.restart_test_button.visible = StateMachine.current_state != StateMachine.State.SETTINGS
 		restart_tip.text = &"Press Tab + Enter to restart"
 	else:
-		ObjectReferences.restart_test_button.visible = SettingsManager.current_settings.keybindings.restart_key_off
+		ObjectReferences.restart_test_button.visible = SettingsManager.current_settings.general.quick_restart_off
 		
-		match SettingsManager.current_settings.keybindings.restart_key:
+		match SettingsManager.current_settings.general.quick_restart:
 			InputManager.TAB:
 				restart_tip.text = &"Press Tab to restart"
 			InputManager.ESC:

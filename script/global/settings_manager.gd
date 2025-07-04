@@ -3,17 +3,21 @@ extends Node
 const BASE_RESOLUTION := Vector2i(1920, 1080)
 const DEFAULT_SETTINGS: Dictionary[String, Dictionary] = {
 	"general" : {
-		"font" : null,
-		"font_size" : 46,
-		"lines_shown" : 3,
-	},
-	"display" : {
 		"window_mode" : DisplayServer.WindowMode.WINDOW_MODE_MAXIMIZED,
 		"resizable" : true,
+		"quick_restart" : InputManager.TAB,
+		"quick_restart_off" : true,
 	},
-	"keybindings" : {
-		"restart_key" : InputManager.TAB,
-		"restart_key_off" : true,
+	"appearance" : {
+		"font" : null,
+		"font_size" : 46,
+		"visible_lines" : 3,
+	},
+	"theme" : {
+		
+	},
+	"qol" : {
+		"settings_last_tab_opened" : 0,
 	},
 }
 var FILE_PATH: StringName = get_user_directory() + "settings.cfg"
@@ -26,38 +30,38 @@ func apply_settings(defaults: bool = false) -> void:
 	
 	# DISPLAY
 	# Window Mode
-	if settings.display.window_mode != current_settings.display.window_mode:
-		DisplayServer.window_set_mode(settings.display.window_mode)
+	if settings.general.window_mode != current_settings.general.window_mode:
+		DisplayServer.window_set_mode(settings.general.window_mode)
 	
 	# Resizable
-	if settings.display.resizable != current_settings.display.resizable:
-		DisplayServer.window_set_mode(settings.display.resizable)
+	if settings.general.resizable != current_settings.general.resizable:
+		DisplayServer.window_set_mode(settings.general.resizable)
 	
 	# GENERAL
 	# Font
-	if settings.general.font != current_settings.general.font:
-		ObjectReferences.test_field_panel.theme.set_font(&"normal_font", &"RichTextLabel", settings.general.font)
+	if settings.appearance.font != current_settings.appearance.font:
+		ObjectReferences.test_field_panel.theme.set_font(&"normal_font", &"RichTextLabel", settings.appearance.font)
 	
 	# Font Size
-	if settings.general.font_size != current_settings.general.font_size:
+	if settings.appearance.font_size != current_settings.appearance.font_size:
 		var test_field_theme: Theme = ObjectReferences.test_field_panel.theme
-		test_field_theme.set_font_size(&"normal_font_size", &"RichTextLabel", settings.general.font_size)
+		test_field_theme.set_font_size(&"normal_font_size", &"RichTextLabel", settings.appearance.font_size)
 		ResourceSaver.save(test_field_theme, "res://resource/themes/test_field_panel.tres")
 	
 	# Lines Shown
-	if settings.general.lines_shown != current_settings.general.lines_shown:
+	if settings.appearance.visible_lines != current_settings.appearance.visible_lines:
 		ObjectReferences.test_field_panel.queue_redraw()
 	
 	# KEYBINDINGS
-	if settings.keybindings.restart_key_off != current_settings.keybindings.restart_key_off:
-		InputManager.restart_key_off = settings.keybindings.restart_key_off
+	if settings.general.quick_restart_off != current_settings.general.quick_restart_off:
+		InputManager.restart_key_off = settings.general.quick_restart_off
 		if InputManager.restart_key_off:
 			ObjectReferences.restart_test_button.focus_mode = Button.FocusMode.FOCUS_ALL
 		else:
 			ObjectReferences.restart_test_button.focus_mode = Button.FocusMode.FOCUS_NONE
 	
-	if settings.keybindings.restart_key != current_settings.keybindings.restart_key:
-		InputManager.restart_key = settings.keybindings.restart_key
+	if settings.general.quick_restart != current_settings.general.quick_restart:
+		InputManager.restart_key = settings.general.restart_key
 	
 	current_settings = settings.duplicate(true)
 	
@@ -77,9 +81,8 @@ func create_new_settings() -> void:
 	
 	var error := config.save(FILE_PATH)
 	if error == OK:
-		print("SettingsManager: Settings created successfully to: " + FILE_PATH)
-	else:
-		printerr("SettingsManager: Failed to save new settings file (Error: " + error_string(error) + ")")
+		return print("SettingsManager: Settings created successfully to: " + FILE_PATH)
+	printerr("SettingsManager: Failed to save new settings file (Error: " + error_string(error) + ")")
 
 ## returns the user's data directory while ensuring it exists
 func get_user_directory() -> StringName:
@@ -100,20 +103,10 @@ func load_settings() -> Dictionary[String, Dictionary]:
 			for key in config.get_section_keys(section):
 				loaded_data[section][key] = config.get_value(section, key)
 		
-		# append on size changes in DEFAULT_SETTINGS
-		var has_new_settings: bool = false
-		for section in DEFAULT_SETTINGS:
-			if not loaded_data.has(section):
-				loaded_data[section] = {}
-			for key in DEFAULT_SETTINGS[section]:
-				if not loaded_data[section].has(key):
-					loaded_data[section][key] = DEFAULT_SETTINGS[section][key]
-					has_new_settings = true
-		
-		if has_new_settings: 
-			save_settings(loaded_data)
-		
-		return loaded_data
+		var synced_result = sync_settings(loaded_data)
+		if synced_result.has_changes: 
+			save_settings(synced_result.data)
+		return synced_result.data
 	else:
 		printerr("SettingsManager: Failed to load settings (Error: " + error_string(error) + ")")
 		if error == ERR_FILE_NOT_FOUND:
@@ -130,6 +123,39 @@ func save_settings(settings: Dictionary[String, Dictionary]) -> void:
 	
 	var error := config.save(FILE_PATH)
 	if error == OK:
-		print("SettingsManager: Settings saved successfully to: " + FILE_PATH)
-	else:
-		printerr("SettingsManager Error: Failed to save settings (Error: " + error_string(error) + &") to: " + FILE_PATH)
+		return print("SettingsManager: Settings saved successfully to: " + FILE_PATH)
+	printerr("SettingsManager Error: Failed to save settings (Error: " + error_string(error) + &") to: " + FILE_PATH)
+
+## add settings that does not exist on the current config and delete that are not present in the defaults
+func sync_settings(loaded_data: Dictionary[String, Dictionary]) -> Dictionary:
+	var has_changes: bool = false
+
+	# --- Deletion Logic ---
+	var sections_to_delete: Array = []
+	for section in loaded_data:
+		if not DEFAULT_SETTINGS.has(section):
+			sections_to_delete.append(section)
+			has_changes = true
+		else:
+			var keys_to_delete: Array = []
+			for key in loaded_data[section]:
+				if not DEFAULT_SETTINGS[section].has(key):
+					keys_to_delete.append(key)
+					has_changes = true
+			
+			for key in keys_to_delete:
+				loaded_data[section].erase(key)
+	for section in sections_to_delete:
+		loaded_data.erase(section)
+
+	# --- Addition/Update Logic ---
+	for section in DEFAULT_SETTINGS:
+		if not loaded_data.has(section):
+			loaded_data[section] = {}
+			has_changes = true
+		for key in DEFAULT_SETTINGS[section]:
+			if not loaded_data[section].has(key):
+				loaded_data[section][key] = DEFAULT_SETTINGS[section][key]
+				has_changes = true
+
+	return { "data": loaded_data, "has_changes": has_changes }

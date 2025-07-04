@@ -39,8 +39,7 @@ func _on_timer_timeout() -> void:
 	
 	if second < 0:
 		if minute <= 0:
-			StateMachine.change_state(StateMachine.State.END)
-			return
+			return StateMachine.change_state(StateMachine.State.END)
 		else:
 			minute -= 1
 		

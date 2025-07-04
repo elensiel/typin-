@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=22 format=3 uid="uid://c4tnwp1e0j6wl"]
 
 [ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
@@ -13,7 +13,91 @@
 [ext_resource type="FontFile" uid="uid://byjypdf3bacy3" path="res://resource/fonts/LibertinusMono-Regular.ttf" id="11_0bj2m"]
 [ext_resource type="FontFile" uid="uid://d33m5s1qshv4p" path="res://resource/fonts/Ubuntu-Regular.ttf" id="12_t382g"]
 
-[sub_resource type="GDScript" id="GDScript_fjya3"]
+[sub_resource type="GDScript" id="GDScript_vlppf"]
+resource_name = "window_mode"
+script/source = "extends OptionButton
+
+func _enter_tree() -> void: owner.window_mode = self
+
+func _on_item_selected(index: int) -> void:
+	match index:
+		0:
+			SettingsManager.changed_settings.general.window_mode = DisplayServer.WINDOW_MODE_WINDOWED
+		1:
+			SettingsManager.changed_settings.general.window_mode = DisplayServer.WINDOW_MODE_MAXIMIZED
+		2:
+			SettingsManager.changed_settings.general.window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
+"
+
+[sub_resource type="GDScript" id="GDScript_wr3al"]
+resource_name = "resizable"
+script/source = "extends CheckBox
+
+func _enter_tree() -> void: owner.resizable = self
+
+func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.general.resizable = toggled_on
+"
+
+[sub_resource type="GDScript" id="GDScript_iwgq4"]
+resource_name = "restart_key_buttons"
+script/source = "extends VBoxContainer
+
+func _ready() -> void:
+	var buttons : Array[Button]
+	
+	for button in $HBoxContainer.get_children():
+		buttons.append(button)
+	owner.restart_buttons = buttons
+	
+	for button in buttons:
+		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
+
+func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
+	if toggled_on:
+		for button in owner.restart_buttons:
+			if button.button_pressed and button != emitting_button:
+				button.button_pressed = false
+		
+		if emitting_button.name.match(\"Off\"):
+			SettingsManager.changed_settings.general.quick_restart_off = true
+		else:
+			SettingsManager.changed_settings.general.quick_restart_off = false
+			match emitting_button.name:
+				\"Esc\":
+					SettingsManager.changed_settings.general.quick_restart = InputManager.ESC
+				\"Tab\":
+					SettingsManager.changed_settings.general.quick_restart = InputManager.TAB
+				\"Enter\":
+					SettingsManager.changed_settings.general.quick_restart = InputManager.ENTER
+"
+
+[sub_resource type="GDScript" id="GDScript_0bj2m"]
+resource_name = "font_size"
+script/source = "extends OptionButton
+
+func _enter_tree() -> void: 
+	owner.font_size = self
+	
+	for i in range(30, 82, 2):
+		add_item(str(i))
+
+func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.appearance.font_size = 30 + (2  * index)
+"
+
+[sub_resource type="GDScript" id="GDScript_t382g"]
+resource_name = "lines_shown"
+script/source = "extends OptionButton
+
+func _enter_tree() -> void: 
+	owner.lines_shown = self
+	
+	for i in range(1, 7):
+		add_item(str(i))
+
+func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.appearance.visible_lines = index + 1
+"
+
+[sub_resource type="GDScript" id="GDScript_xk1fi"]
 resource_name = "font"
 script/source = "extends VBoxContainer
 
@@ -36,110 +120,24 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 			if button != emitting_button and button.button_pressed:
 				button.button_pressed = false
 		
-		SettingsManager.changed_settings.general.font = emitting_button.get_theme_font(&\"font\")
+		SettingsManager.changed_settings.appearance.font = emitting_button.get_theme_font(&\"font\")
 "
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fjya3"]
-
-[sub_resource type="GDScript" id="GDScript_wr3al"]
-resource_name = "font_size"
-script/source = "extends OptionButton
-
-func _enter_tree() -> void: 
-	owner.font_size = self
-	
-	for i in range(30, 82, 2):
-		add_item(str(i))
-
-func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.font_size = 30 + (2  * index)
-"
-
-[sub_resource type="GDScript" id="GDScript_rb3pu"]
-resource_name = "lines_shown"
-script/source = "extends OptionButton
-
-func _enter_tree() -> void: 
-	owner.lines_shown = self
-	
-	for i in range(1, 7):
-		add_item(str(i))
-
-func _on_item_selected(index: int) -> void: SettingsManager.changed_settings.general.lines_shown = index + 1
-"
-
-[sub_resource type="GDScript" id="GDScript_2xvam"]
-resource_name = "window_mode"
-script/source = "extends OptionButton
-
-func _enter_tree() -> void: owner.window_mode = self
-
-func _on_item_selected(index: int) -> void:
-	match index:
-		0:
-			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_WINDOWED
-		1:
-			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_MAXIMIZED
-		2:
-			SettingsManager.changed_settings.display.window_mode = DisplayServer.WINDOW_MODE_FULLSCREEN
-"
-
-[sub_resource type="GDScript" id="GDScript_jyo05"]
-resource_name = "resizable"
-script/source = "extends CheckBox
-
-func _enter_tree() -> void: owner.resizable = self
-
-func _on_toggled(toggled_on: bool) -> void: SettingsManager.changed_settings.display.resizable = toggled_on
-"
-
-[sub_resource type="GDScript" id="GDScript_vlppf"]
-resource_name = "restart_key_buttons"
-script/source = "extends VBoxContainer
-
-func _ready() -> void:
-	var buttons : Array[Button]
-	
-	for button in $HBoxContainer.get_children():
-		buttons.append(button)
-	owner.restart_buttons = buttons
-	
-	for button in buttons:
-		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
-
-func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
-	if toggled_on:
-		for button in owner.restart_buttons:
-			if button.button_pressed and button != emitting_button:
-				button.button_pressed = false
-		
-		if emitting_button.name.match(\"Off\"):
-			SettingsManager.changed_settings.keybindings.restart_key_off = true
-		else:
-			SettingsManager.changed_settings.keybindings.restart_key_off = false
-			match emitting_button.name:
-				\"Esc\":
-					SettingsManager.changed_settings.keybindings.restart_key = InputManager.ESC
-				\"Tab\":
-					SettingsManager.changed_settings.keybindings.restart_key = InputManager.TAB
-				\"Enter\":
-					SettingsManager.changed_settings.keybindings.restart_key = InputManager.ENTER
-"
-
-[sub_resource type="GDScript" id="GDScript_ub00n"]
+[sub_resource type="GDScript" id="GDScript_urpkm"]
 resource_name = "back_button"
 script/source = "extends Button
 
 func _on_pressed() -> void: StateMachine.change_state(StateMachine.State.NEW)
 "
 
-[sub_resource type="GDScript" id="GDScript_k4fqs"]
+[sub_resource type="GDScript" id="GDScript_2ll5a"]
 resource_name = "restore_button"
 script/source = "extends Button
 
 func _on_pressed() -> void: SettingsManager.apply_settings(true)
 "
 
-[sub_resource type="GDScript" id="GDScript_w58jy"]
+[sub_resource type="GDScript" id="GDScript_srv4f"]
 resource_name = "apply_button"
 script/source = "extends Button
 
@@ -169,176 +167,31 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_vertical = 3
 current_tab = 0
 
-[node name="General" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+[node name="General" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General"]
-layout_mode = 2
-
-[node name="Font" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
-layout_mode = 2
-script = SubResource("GDScript_fjya3")
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/General"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Font"
+size_flags_vertical = 3
 
-[node name="Line1" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer"]
 layout_mode = 2
 
-[node name="Default" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line1"]
-layout_mode = 2
-size_flags_horizontal = 3
-toggle_mode = true
-action_mode = 0
-text = "Default"
-
-[node name="CourierPrime" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line1"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("3_fjya3")
-toggle_mode = true
-action_mode = 0
-text = "Courier Prime"
-
-[node name="IBMPlexMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line1"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("4_upj7t")
-toggle_mode = true
-action_mode = 0
-text = "IBM Plex Mono"
-
-[node name="Line2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
+[node name="WindowMode" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Inconsolata" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line2"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("5_2xvam")
-toggle_mode = true
-action_mode = 0
-text = "Inconsolata"
-
-[node name="RobotoMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line2"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("6_jyo05")
-toggle_mode = true
-action_mode = 0
-text = "Roboto Mono"
-
-[node name="SourceCodePro" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line2"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("7_k4fqs")
-toggle_mode = true
-action_mode = 0
-text = "Source Code Pro"
-
-[node name="Line3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
-layout_mode = 2
-
-[node name="CascadiaCode" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line3"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("8_vlppf")
-toggle_mode = true
-action_mode = 0
-text = "Cascadia Code"
-
-[node name="JetBrainsMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line3"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("9_wr3al")
-toggle_mode = true
-action_mode = 0
-text = "JetBrains Mono"
-
-[node name="Lato" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line3"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("10_iwgq4")
-toggle_mode = true
-action_mode = 0
-text = "Lato"
-
-[node name="Line4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font"]
-layout_mode = 2
-
-[node name="LibertinusMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line4"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("11_0bj2m")
-toggle_mode = true
-action_mode = 0
-text = "Libertinus Mono"
-
-[node name="Ubuntu" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/Font/Line4"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_fonts/font = ExtResource("12_t382g")
-toggle_mode = true
-action_mode = 0
-text = "Ubuntu"
-
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-theme_override_styles/separator = SubResource("StyleBoxEmpty_fjya3")
-
-[node name="FontSize" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Font Scale"
-
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize"]
-layout_mode = 2
-size_flags_horizontal = 3
-allow_reselect = true
-script = SubResource("GDScript_wr3al")
-
-[node name="LinesShown" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Lines Shown"
-
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown"]
-layout_mode = 2
-size_flags_horizontal = 3
-allow_reselect = true
-script = SubResource("GDScript_rb3pu")
-
-[node name="Display" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display"]
-layout_mode = 2
-
-[node name="WindowMode" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/WindowMode"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Window Mode"
 
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode"]
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/WindowMode"]
 layout_mode = 2
 size_flags_horizontal = 3
 selected = 1
@@ -350,101 +203,224 @@ popup/item_1/text = "Maximized"
 popup/item_1/id = 1
 popup/item_2/text = "Fullscreen"
 popup/item_2/id = 2
-script = SubResource("GDScript_2xvam")
+script = SubResource("GDScript_vlppf")
 
-[node name="Resizable" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer"]
+[node name="Resizable" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Resizable"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Resizable"
+text = "Window Resizable"
 
-[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable"]
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Resizable"]
 layout_mode = 2
 size_flags_horizontal = 3
 action_mode = 0
 text = "True"
-script = SubResource("GDScript_jyo05")
+script = SubResource("GDScript_wr3al")
 
-[node name="Keybindings" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
+[node name="RestartTest" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer"]
 layout_mode = 2
-metadata/_tab_index = 2
+script = SubResource("GDScript_iwgq4")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/RestartTest"]
 layout_mode = 2
-theme_override_constants/separation = 10
+text = "Quick Restart"
 
-[node name="RestartTest" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
-layout_mode = 2
-script = SubResource("GDScript_vlppf")
-
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest"]
-layout_mode = 2
-text = "Restart Test"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/RestartTest"]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Off" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+[node name="Off" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/RestartTest/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
 text = "OFF "
 
-[node name="Esc" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+[node name="Esc" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/RestartTest/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
 text = "ESC"
 
-[node name="Tab" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+[node name="Tab" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/RestartTest/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
 text = "TAB"
 
-[node name="Enter" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/RestartTest/HBoxContainer"]
+[node name="Enter" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/RestartTest/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
 text = "ENTER"
 
-[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
+[node name="Appearance" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
-[node name="OpenSettings" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer"]
-visible = false
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings"]
+[node name="FontSize" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Open Settings "
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings"]
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/FontSize"]
 layout_mode = 2
-theme_override_constants/separation = 10
+size_flags_horizontal = 3
+text = "Font Size"
 
-[node name="Esc" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer"]
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/FontSize"]
+layout_mode = 2
+size_flags_horizontal = 3
+allow_reselect = true
+script = SubResource("GDScript_0bj2m")
+
+[node name="VisibleLines" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/VisibleLines"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Visible Lines"
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/VisibleLines"]
+layout_mode = 2
+size_flags_horizontal = 3
+allow_reselect = true
+script = SubResource("GDScript_t382g")
+
+[node name="Font" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer"]
+layout_mode = 2
+script = SubResource("GDScript_xk1fi")
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Font"
+
+[node name="Line1" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="Default" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line1"]
 layout_mode = 2
 size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
-text = "ESC"
+text = "Default"
 
-[node name="CtrlShiftP" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer"]
+[node name="CourierPrime" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line1"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("3_fjya3")
 toggle_mode = true
 action_mode = 0
-text = "CTRL+SHIFT+P"
+text = "Courier Prime"
+
+[node name="IBMPlexMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("4_upj7t")
+toggle_mode = true
+action_mode = 0
+text = "IBM Plex Mono"
+
+[node name="Line2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="Inconsolata" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_2xvam")
+toggle_mode = true
+action_mode = 0
+text = "Inconsolata"
+
+[node name="RobotoMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("6_jyo05")
+toggle_mode = true
+action_mode = 0
+text = "Roboto Mono"
+
+[node name="SourceCodePro" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_k4fqs")
+toggle_mode = true
+action_mode = 0
+text = "Source Code Pro"
+
+[node name="Line3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="CascadiaCode" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("8_vlppf")
+toggle_mode = true
+action_mode = 0
+text = "Cascadia Code"
+
+[node name="JetBrainsMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("9_wr3al")
+toggle_mode = true
+action_mode = 0
+text = "JetBrains Mono"
+
+[node name="Lato" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("10_iwgq4")
+toggle_mode = true
+action_mode = 0
+text = "Lato"
+
+[node name="Line4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font"]
+layout_mode = 2
+
+[node name="LibertinusMono" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("11_0bj2m")
+toggle_mode = true
+action_mode = 0
+text = "Libertinus Mono"
+
+[node name="Ubuntu" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("12_t382g")
+toggle_mode = true
+action_mode = 0
+text = "Ubuntu"
+
+[node name="Theme" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Theme"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Theme/MarginContainer"]
+layout_mode = 2
 
 [node name="Confirmation" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -461,24 +437,22 @@ layout_mode = 2
 size_flags_horizontal = 2
 action_mode = 0
 text = "Back"
-script = SubResource("GDScript_ub00n")
+script = SubResource("GDScript_urpkm")
 
 [node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 text = "Restore defaults"
-script = SubResource("GDScript_k4fqs")
+script = SubResource("GDScript_2ll5a")
 
 [node name="Apply" type="Button" parent="MarginContainer/VBoxContainer/Confirmation/HBoxContainer"]
 layout_mode = 2
 text = "Apply changes"
-script = SubResource("GDScript_w58jy")
+script = SubResource("GDScript_srv4f")
 
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/VBoxContainer/LinesShown/OptionButton" method="_on_item_selected"]
-[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/Display/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer/Esc" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer" method="_on_esc_toggled"]
-[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer/CtrlShiftP" to="MarginContainer/VBoxContainer/TabContainer/Keybindings/VBoxContainer/OpenSettings/HBoxContainer" method="_on_tab_toggled"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/WindowMode/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/VisibleLines/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/VisibleLines/OptionButton" method="_on_item_selected"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" method="_on_pressed"]

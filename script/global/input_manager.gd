@@ -5,8 +5,8 @@ const TAB := &"tab"
 const ENTER := &"enter"
 const CTRL_SHIFT_P := &"CS-p"
 
-var restart_key: StringName = SettingsManager.current_settings.keybindings.restart_key
-var restart_key_off: bool = SettingsManager.current_settings.keybindings.restart_key_off
+var restart_key: StringName = SettingsManager.current_settings.general.quick_restart
+var restart_key_off: bool = SettingsManager.current_settings.general.quick_restart_off
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(restart_key):
@@ -31,7 +31,7 @@ func _input(event: InputEvent) -> void:
 			StateMachine.change_state(StateMachine.State.INTERRUPTED)
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if SettingsManager.current_settings.keybindings.restart_key_off && event.is_action_pressed(TAB):
+	if SettingsManager.current_settings.general.quick_restart_off && event.is_action_pressed(TAB):
 		if StateMachine.current_state == StateMachine.State.END:
 			ObjectReferences.restart_test_button.grab_focus()
 

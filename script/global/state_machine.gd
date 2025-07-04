@@ -18,7 +18,6 @@ func change_state(new_state: State) -> void:
 		State.TYPING:
 			handle_typing()
 		State.INTERRUPTED:
-			#handle_interrupted()
 			pass
 		State.END:
 			handle_end()
@@ -40,10 +39,9 @@ func handle_new() -> void:
 	
 	if ObjectReferences.settings_panel != null:
 		ObjectReferences.settings_panel.queue_free()
+		ObjectReferences.settings_panel = null
 
 func handle_typing() -> void: TimerManager.start()
-
-#func handle_interrupted() -> void:
 
 func handle_end() -> void:
 	TypingManager.stop_test()
