@@ -11,4 +11,5 @@ var ui_container : UiContainer
 var wpm_panel : WpmPanel
 var restart_test_button : Button
 var main : Control
+var main_panel : Panel
 #endregion

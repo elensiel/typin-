@@ -9,12 +9,13 @@ var window_mode
 var resizable
 var restart_buttons : Array[Button]
 
-func _init() -> void: ObjectReferences.settings_panel = self
+func _init() -> void: 
+	ObjectReferences.settings_panel = self
+	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.75
+	custom_minimum_size.y = SettingsManager.BASE_RESOLUTION.y / 1.75
 
 func _enter_tree() -> void: 
 	print("Node: Setting up " + str(self))
-	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.75
-	custom_minimum_size.y = SettingsManager.BASE_RESOLUTION.y / 1.75
 	
 	var tab_container := $MarginContainer/VBoxContainer/TabContainer
 	tab_container.get_child(SettingsManager.current_settings.qol.settings_last_tab_opened).visible = true

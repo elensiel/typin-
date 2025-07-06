@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c2v3vyv0582mg"]
 
 [ext_resource type="Script" uid="uid://bhjacmb13fvr0" path="res://script/test_field_panel.gd" id="1_bpgs5"]
-[ext_resource type="Theme" uid="uid://lggf67j12cbt" path="res://resource/themes/test_field_panel.tres" id="1_hdrhf"]
+[ext_resource type="Theme" uid="uid://bjge8km2ldshd" path="res://resource/themes/test_field_panel.tres" id="1_hdrhf"]
 
 [node name="TestField" type="PanelContainer"]
 anchors_preset = 8

@@ -10,19 +10,16 @@ func _draw() -> void:
 	var node := $VBoxContainer/Text
 	node.custom_minimum_size.y = height * target_lines
 
-func _init() -> void: ObjectReferences.test_field_panel = self
+func _init() -> void: 
+	ObjectReferences.test_field_panel = self
+	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.50
+	custom_minimum_size.y =  SettingsManager.BASE_RESOLUTION.y / 1.75
 
 func _enter_tree() -> void: 
 	print("Node: Setting up " + str(self))
 	TextManager.connect_label($VBoxContainer/Text/RichTextLabel)
 	TimerManager.connect_label($VBoxContainer/HBoxContainer/TimerLabel)
 	TypingManager.connect_line_edit($VBoxContainer/HBoxContainer/LineEdit)
-	
-	theme.set_font(&"normal_font", &"RichTextLabel", SettingsManager.current_settings.appearance.font)
-	theme.set_font_size(&"normal_font_size", &"RichTextLabel", SettingsManager.current_settings.appearance.font_size)
-	
-	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.50
-	custom_minimum_size.y =  SettingsManager.BASE_RESOLUTION.y / 1.75
 	
 	visible = true
 

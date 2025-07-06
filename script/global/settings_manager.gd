@@ -38,15 +38,9 @@ func apply_settings(defaults: bool = false) -> void:
 		DisplayServer.window_set_mode(settings.general.resizable)
 	
 	# GENERAL
-	# Font
-	if settings.appearance.font != current_settings.appearance.font:
-		ObjectReferences.test_field_panel.theme.set_font(&"normal_font", &"RichTextLabel", settings.appearance.font)
-	
-	# Font Size
-	if settings.appearance.font_size != current_settings.appearance.font_size:
-		var test_field_theme: Theme = ObjectReferences.test_field_panel.theme
-		test_field_theme.set_font_size(&"normal_font_size", &"RichTextLabel", settings.appearance.font_size)
-		ResourceSaver.save(test_field_theme, "res://resource/themes/test_field_panel.tres")
+	# Font & Font Size
+	if (settings.appearance.font != current_settings.appearance.font) || (settings.appearance.font_size != current_settings.appearance.font_size):
+		ThemeManager.update_theme(defaults)
 	
 	# Lines Shown
 	if settings.appearance.visible_lines != current_settings.appearance.visible_lines:

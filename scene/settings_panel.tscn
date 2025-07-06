@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://c4tnwp1e0j6wl"]
+[gd_scene load_steps=28 format=3 uid="uid://c4tnwp1e0j6wl"]
 
 [ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
@@ -123,6 +123,54 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 		SettingsManager.changed_settings.appearance.font = emitting_button.get_theme_font(&\"font\")
 "
 
+[sub_resource type="SystemFont" id="SystemFont_vlppf"]
+subpixel_positioning = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nvpma"]
+bg_color = Color(0.956863, 0.262745, 0.211765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bbf6r"]
+bg_color = Color(0.0745098, 0.0745098, 0.0745098, 1)
+
+[sub_resource type="Theme" id="Theme_vlppf"]
+Button/styles/normal = SubResource("StyleBoxFlat_nvpma")
+Panel/styles/panel = SubResource("StyleBoxFlat_bbf6r")
+
+[sub_resource type="GDScript" id="GDScript_skdsi"]
+resource_name = "siel"
+script/source = "extends Button
+
+func _on_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		var colors: Array[Color] = [
+			
+		]
+"
+
+[sub_resource type="GDScript" id="GDScript_l8mnh"]
+resource_name = "volcanic_ash"
+script/source = "extends Button
+
+func _on_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		var colors: Array[Color] = [
+			Color(0.071, 0.071, 0.071),
+			Color(0.129, 0.129, 0.129),
+			Color(0.878, 0.878, 0.878),
+			Color(0.62, 0.62, 0.62),
+			Color(1.0, 0.596, 0.0),
+			Color(0.957, 0.263, 0.212)
+		]
+		
+		
+		var main_theme: Theme = ObjectReferences.main.theme
+		main_theme.set_stylebox(&\"panel\", &\"Panel\", StyleBoxFlat.new())
+		main_theme.get_stylebox(&\"panel\", &\"Panel\").bg_color = colors[0]
+		
+		var settings_theme: Theme = ObjectReferences.settings_panel.theme
+		settings_theme.set_color(&\"font_color\", &\"Button\", colors[4])
+"
+
 [sub_resource type="GDScript" id="GDScript_urpkm"]
 resource_name = "back_button"
 script/source = "extends Button
@@ -169,9 +217,10 @@ layout_mode = 2
 [node name="TabContainer" type="TabContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-current_tab = 0
+current_tab = 2
 
 [node name="General" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -316,6 +365,7 @@ layout_mode = 2
 [node name="Default" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/Font/Line1"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_fonts/font = SubResource("SystemFont_vlppf")
 toggle_mode = true
 action_mode = 0
 text = "Default"
@@ -409,18 +459,39 @@ toggle_mode = true
 action_mode = 0
 text = "Ubuntu"
 
-[node name="Theme" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
-visible = false
+[node name="Color Scheme" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TabContainer"]
 layout_mode = 2
 metadata/_tab_index = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Theme"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/TabContainer/Color Scheme"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Theme/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer"]
 layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="siel" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_vlppf")
+toggle_mode = true
+action_mode = 0
+text = "siel"
+script = SubResource("GDScript_skdsi")
+
+[node name="VolcanicAsh" type="Button" parent="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_vlppf")
+toggle_mode = true
+action_mode = 0
+text = "Volcanic Ash"
+script = SubResource("GDScript_l8mnh")
 
 [node name="Confirmation" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -453,6 +524,8 @@ script = SubResource("GDScript_srv4f")
 [connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Resizable/CheckBox" to="MarginContainer/VBoxContainer/TabContainer/General/MarginContainer/VBoxContainer/Resizable/CheckBox" method="_on_toggled"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/FontSize/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/VisibleLines/OptionButton" to="MarginContainer/VBoxContainer/TabContainer/Appearance/MarginContainer/VBoxContainer/VisibleLines/OptionButton" method="_on_item_selected"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer/HBoxContainer/siel" to="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer/HBoxContainer/siel" method="_on_toggled"]
+[connection signal="toggled" from="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer/HBoxContainer/VolcanicAsh" to="MarginContainer/VBoxContainer/TabContainer/Color Scheme/MarginContainer/VBoxContainer/HBoxContainer/VolcanicAsh" method="_on_toggled"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Back" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Restore" method="_on_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" to="MarginContainer/VBoxContainer/Confirmation/HBoxContainer/Apply" method="_on_pressed"]
