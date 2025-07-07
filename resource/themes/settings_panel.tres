@@ -1,12 +1,25 @@
-[gd_resource type="Theme" format=3 uid="uid://djxl4in888xtu"]
+[gd_resource type="Theme" load_steps=6 format=3 uid="uid://djxl4in888xtu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sq05t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gleie"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iau8u"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mppo7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gvf1v"]
 
 [resource]
-Button/font_sizes/font_size = 30
-CheckBox/font_sizes/font_size = 30
-Label/font_sizes/font_size = 36
-MarginContainer/constants/margin_bottom = 10
-MarginContainer/constants/margin_left = 10
-MarginContainer/constants/margin_right = 10
-MarginContainer/constants/margin_top = 10
-OptionButton/font_sizes/font_size = 30
-TabContainer/font_sizes/font_size = 36
+Button/font_sizes/font_size = 35
+ButtonTab/base_type = &"Button"
+ButtonTab/font_sizes/font_size = 35
+ButtonTab/styles/focus = SubResource("StyleBoxEmpty_sq05t")
+ButtonTab/styles/hover = SubResource("StyleBoxEmpty_gleie")
+ButtonTab/styles/hover_pressed = SubResource("StyleBoxEmpty_iau8u")
+ButtonTab/styles/normal = SubResource("StyleBoxEmpty_mppo7")
+ButtonTab/styles/pressed = SubResource("StyleBoxEmpty_gvf1v")
+CheckBox/font_sizes/font_size = 35
+HeaderMedium/font_sizes/font_size = 40
+MarginContainer/constants/margin_bottom = 50
+MarginContainer/constants/margin_top = 50
