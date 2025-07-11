@@ -54,7 +54,6 @@ func handle_settings() -> void:
 	
 	var instance := ObjectReferences.SETTINGS_PANEL_SCENE.instantiate()
 	ObjectReferences.main.add_child(instance)
-	ThemeManager.update_theme()
 
 func handle_visibility() -> void:
 	ObjectReferences.test_field_panel.visible = (current_state == State.NEW) || (current_state == State.TYPING) || (current_state == State.INTERRUPTED)

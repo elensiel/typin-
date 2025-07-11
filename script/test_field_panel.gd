@@ -24,3 +24,5 @@ func _enter_tree() -> void:
 	visible = true
 
 func _ready() -> void: StateMachine.change_state(StateMachine.State.NEW)
+
+func get_line_edit() -> LineEdit: return $VBoxContainer/HBoxContainer/LineEdit

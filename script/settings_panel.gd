@@ -6,6 +6,10 @@ var tab_contents : Array[MarginContainer]
 var window_mode : OptionButton
 var resizable_buttons : Array[Button]
 var quick_restart_buttons : Array[Button]
+var font_size : OptionButton
+var visible_lines : OptionButton
+var font_buttons : Array[Button]
+var typing_field_buttons : Array[Button]
 
 func _init() -> void:
 	ObjectReferences.settings_panel = self
@@ -17,6 +21,9 @@ func _enter_tree() -> void: print("Node: Setting up " + str(self))
 func _ready() -> void:
 	update_selection()
 	tab_buttons[0].button_pressed = true
+	ThemeManager.sync_settings_panel()
+
+func _exit_tree() -> void: SettingsManager.save_settings()
 
 func update_selection() -> void:
 	# GENERAL
@@ -44,3 +51,20 @@ func update_selection() -> void:
 				quick_restart_buttons[2].button_pressed = true
 			InputManager.ENTER:
 				quick_restart_buttons[3].button_pressed = true
+	
+	# APPEARANCE
+	# font size
+	font_size.selected = (SettingsManager.current_settings.appearance.font_size - 30) / 4
+	visible_lines.selected = SettingsManager.current_settings.appearance.visible_lines - 1
+	
+	# font
+	if SettingsManager.current_settings.appearance.font:
+		for button in font_buttons:
+			if SettingsManager.current_settings.appearance.font == button.get_theme_font(&"font"):
+				button.button_pressed = true
+				break
+	else:
+		font_buttons[0].button_pressed = true
+	
+	typing_field_buttons[0].button_pressed = SettingsManager.current_settings.appearance.visible_typing_field
+	typing_field_buttons[1].button_pressed = !SettingsManager.current_settings.appearance.visible_typing_field

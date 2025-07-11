@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://tbtbxawnm2ne"]
+[gd_scene load_steps=25 format=3 uid="uid://tbtbxawnm2ne"]
 
 [ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
@@ -118,6 +118,7 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 				button.button_pressed = false 
 		
 		InputManager.restart_key_off = emitting_button.name.match(&\"Off\")
+		SettingsManager.current_settings.general.quick_restart_off = InputManager.restart_key_off
 		if !InputManager.restart_key_off:
 			match emitting_button.name:
 				&\"Esc\":
@@ -126,10 +127,137 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 					InputManager.restart_key = InputManager.TAB
 				&\"Enter\":
 					InputManager.restart_key = InputManager.ENTER
+		SettingsManager.current_settings.general.quick_restart = InputManager.restart_key
+"
+
+[sub_resource type="GDScript" id="GDScript_xk1fi"]
+resource_name = "font_size"
+script/source = "extends OptionButton
+
+func _enter_tree() -> void:
+	owner.font_size = self
+	
+	var interval: int = 4
+	
+	for i in range(30, 82, interval):
+		add_item(str(i))
+
+func _on_item_selected(index: int) -> void:
+	var interval: int = 4
+	
+	var current: int = SettingsManager.current_settings.appearance.font_size
+	var new: int = 30 + (interval  * index)
+	
+	if current != new:
+		ThemeManager.set_font_size(new)
+"
+
+[sub_resource type="GDScript" id="GDScript_urpkm"]
+resource_name = "visible_lines"
+script/source = "extends OptionButton
+
+func _enter_tree() -> void:
+	owner.visible_lines = self
+	
+	for i in range(1, 7):
+		add_item(str(i))
+
+func _on_item_selected(index: int) -> void:
+	var current: int = SettingsManager.current_settings.appearance.visible_lines
+	var new: int = index + 1
+	
+	if current != new:
+		SettingsManager.current_settings.appearance.visible_lines = new
+		ObjectReferences.test_field_panel.queue_redraw()
+"
+
+[sub_resource type="GDScript" id="GDScript_2ll5a"]
+resource_name = "font"
+script/source = "extends VBoxContainer
+
+func _enter_tree() -> void:
+	var font_buttons : Array[Button]
+	
+	# appending every buttons
+	for line in get_children():
+		for button in line.get_children():
+			font_buttons.append(button)
+	owner.font_buttons = font_buttons
+	
+	# connecting every buttons
+	for button in font_buttons:
+		button.toggled.connect(Callable.create(self, &\"_on_toggled\").bind(button))
+
+func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
+	if toggled_on:
+		for button in owner.font_buttons:
+			if button.button_pressed and button != emitting_button:
+				button.button_pressed = false
+		
+		var current: Font = SettingsManager.current_settings.appearance.font
+		var new: Font = emitting_button.get_theme_font(&\"font\")
+		
+		if current != new:
+			ThemeManager.set_font(new)
 "
 
 [sub_resource type="SystemFont" id="SystemFont_uinb1"]
 subpixel_positioning = 0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vlppf"]
+
+[sub_resource type="GDScript" id="GDScript_skdsi"]
+resource_name = "visible_typing_field"
+script/source = "extends HBoxContainer
+
+func _enter_tree() -> void:
+	var children : = get_children()
+	var buttons: Array[Button] = [children[1], children[2]]
+	
+	owner.typing_field_buttons = buttons
+	
+	for button in buttons:
+		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
+
+func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
+	if toggled_on:
+		for button in owner.typing_field_buttons:
+			if button.button_pressed and button != emitting_button:
+				button.button_pressed = false
+		
+		var test_theme: Theme = ObjectReferences.test_field_panel.theme
+		var styles: Array[StringName] = [&\"normal\", &\"focus\"]
+		
+		if !emitting_button.name.match(&\"Yes\"):
+			for style in styles:
+				test_theme.set_stylebox(style, &\"LineEdit\", StyleBoxEmpty.new())
+		else:
+			for style in styles:
+				if test_theme.get_stylebox(style, &\"LineEdit\") != null:
+					test_theme.clear_stylebox(style, &\"LineEdit\")
+		
+		SettingsManager.current_settings.appearance.visible_typing_field = emitting_button.name.match(&\"Yes\")
+"
+
+[sub_resource type="GDScript" id="GDScript_srv4f"]
+resource_name = "siel"
+script/source = "extends Button
+
+func _on_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		var colors: Dictionary = {
+			\"name\" : name,
+			\"background\" : Color.BLACK,
+			\"main_text\" : Color.WHITE,
+			\"outline_selection\" : Color.DIM_GRAY,
+			\"typed_correct\" : &\"dimgray\",
+			\"typed_error\" : &\"peru\",
+			\"submit_correct\" : &\"gray\",
+			\"submit_error\" : &\"dimgray\",
+		}
+		
+		ThemeManager.set_color_scheme(colors)
+"
 
 [node name="SettingsPanel" type="MarginContainer"]
 anchors_preset = 15
@@ -178,6 +306,7 @@ action_mode = 0
 text = "color scheme"
 
 [node name="General" type="MarginContainer" parent="TabContents"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 0
 
@@ -279,13 +408,31 @@ action_mode = 0
 text = "enter"
 
 [node name="Appearance" type="MarginContainer" parent="TabContents"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TabContents/Appearance"]
 layout_mode = 2
+
+[node name="TextFieldHeader" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="TabContents/Appearance/VBoxContainer/TextFieldHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="TabContents/Appearance/VBoxContainer/TextFieldHeader"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLarge"
+text = " text field "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="TabContents/Appearance/VBoxContainer/TextFieldHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="FontSize" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
 layout_mode = 2
@@ -300,6 +447,7 @@ text = "font size"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
+script = SubResource("GDScript_xk1fi")
 
 [node name="VisibleLines" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
 layout_mode = 2
@@ -314,9 +462,11 @@ text = "visible lines"
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
+script = SubResource("GDScript_urpkm")
 
 [node name="Font" type="VBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
 layout_mode = 2
+script = SubResource("GDScript_2ll5a")
 
 [node name="Label" type="Label" parent="TabContents/Appearance/VBoxContainer/Font"]
 layout_mode = 2
@@ -424,6 +574,55 @@ toggle_mode = true
 action_mode = 0
 text = "Ubuntu"
 
+[node name="HSeparator" type="HSeparator" parent="TabContents/Appearance/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+theme_override_styles/separator = SubResource("StyleBoxEmpty_vlppf")
+
+[node name="TypingFieldHeader" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="TabContents/Appearance/VBoxContainer/TypingFieldHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="TabContents/Appearance/VBoxContainer/TypingFieldHeader"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_type_variation = &"HeaderLarge"
+text = " typing field "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="TabContents/Appearance/VBoxContainer/TypingFieldHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VisibleTypingField" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
+layout_mode = 2
+script = SubResource("GDScript_skdsi")
+
+[node name="Label" type="Label" parent="TabContents/Appearance/VBoxContainer/VisibleTypingField"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.01
+theme_type_variation = &"HeaderMedium"
+text = "visible typing field"
+
+[node name="Yes" type="Button" parent="TabContents/Appearance/VBoxContainer/VisibleTypingField"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "yes"
+
+[node name="No" type="Button" parent="TabContents/Appearance/VBoxContainer/VisibleTypingField"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+action_mode = 0
+text = "no"
+
 [node name="ColorScheme" type="MarginContainer" parent="TabContents"]
 visible = false
 layout_mode = 2
@@ -449,8 +648,10 @@ size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
 text = "siel"
+script = SubResource("GDScript_srv4f")
 
 [connection signal="item_selected" from="TabContents/General/VBoxContainer/WindowMode/OptionButton" to="TabContents/General/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="TabContents/Appearance/VBoxContainer/FontSize/OptionButton" to="TabContents/Appearance/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="TabContents/Appearance/VBoxContainer/VisibleLines/OptionButton" to="TabContents/Appearance/VBoxContainer/VisibleLines/OptionButton" method="_on_item_selected"]
 [connection signal="toggled" from="TabContents/ColorScheme/VBoxContainer/HBoxContainer/default" to="TabContents/ColorScheme/VBoxContainer/HBoxContainer/default" method="_on_toggled"]
+[connection signal="toggled" from="TabContents/ColorScheme/VBoxContainer/HBoxContainer/siel" to="TabContents/ColorScheme/VBoxContainer/HBoxContainer/siel" method="_on_toggled"]

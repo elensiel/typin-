@@ -3,6 +3,14 @@ class_name UiContainer
 
 func _init() -> void: ObjectReferences.ui_container = self
 
+func _ready() -> void:
+	if SettingsManager.current_settings.color_scheme.main_text:
+		set_icon_mod(SettingsManager.current_settings.color_scheme.main_text)
+
+func set_icon_mod(color: Color) -> void:
+	$Settings.self_modulate = color
+	$Tip/Restart.self_modulate = color
+
 func update_ui() -> void:
 	var settings_button := $Settings
 	settings_button.visible = (StateMachine.current_state == StateMachine.State.NEW) || (StateMachine.current_state == StateMachine.State.END) || (StateMachine.current_state == StateMachine.State.INTERRUPTED)

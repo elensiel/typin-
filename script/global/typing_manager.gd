@@ -9,12 +9,15 @@ var cur_typed_len: int = 0
 
 #region color values
 # typing color
-var correct_typed_color := &"dimgray"
-var wrong_typed_color := &"darkred"
+var correct_typed_color: StringName = SettingsManager.current_settings.color_scheme.typed_correct
+var wrong_typed_color: StringName = SettingsManager.current_settings.color_scheme.typed_error
+#var wrong_typed_color := &"darkred"
 
 # word submitted
-var correct_word_color := &"seagreen"
-var wrong_word_color := &"darkred"
+#var correct_word_color := &"seagreen"
+var correct_word_color: StringName = SettingsManager.current_settings.color_scheme.submit_correct
+var wrong_word_color: StringName = SettingsManager.current_settings.color_scheme.submit_error
+#var wrong_word_color := &"darkred"
 #endregion
 
 func connect_line_edit(node: LineEdit) -> void:

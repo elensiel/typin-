@@ -19,7 +19,9 @@ func _enter_tree() -> void:
 	add_child(test_field_panel)
 	add_child(wpm_panel)
 
-func _ready() -> void: ThemeManager.update_theme()
+func _ready() -> void: 
+	ThemeManager.load_theme()
+	ThemeManager.sync_main()
 "
 
 [sub_resource type="GDScript" id="GDScript_4j5ol"]

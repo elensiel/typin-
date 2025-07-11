@@ -1,11 +1,17 @@
-[gd_resource type="Theme" format=3 uid="uid://d6hdubd7wr0y"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://d6hdubd7wr0y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_la3kh"]
 
 [resource]
 HBoxContainer/constants/separation = 5
 HeaderLarge/font_sizes/font_size = 100
+HeaderLarge/fonts/font = null
 HeaderSmall/font_sizes/font_size = 45
+HeaderSmall/fonts/font = null
 Label/font_sizes/font_size = 40
+Label/fonts/font = null
 MarginContainer/constants/margin_bottom = 5
 MarginContainer/constants/margin_left = 20
 MarginContainer/constants/margin_right = 20
 MarginContainer/constants/margin_top = 5
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_la3kh")

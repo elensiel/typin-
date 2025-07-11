@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://djxl4in888xtu"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://djxl4in888xtu"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sq05t"]
 
@@ -10,6 +10,9 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gvf1v"]
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_gleie"]
+thickness = 5
+
 [resource]
 Button/font_sizes/font_size = 35
 ButtonTab/base_type = &"Button"
@@ -20,6 +23,8 @@ ButtonTab/styles/hover_pressed = SubResource("StyleBoxEmpty_iau8u")
 ButtonTab/styles/normal = SubResource("StyleBoxEmpty_mppo7")
 ButtonTab/styles/pressed = SubResource("StyleBoxEmpty_gvf1v")
 CheckBox/font_sizes/font_size = 35
+HSeparator/styles/separator = SubResource("StyleBoxLine_gleie")
+HeaderLarge/font_sizes/font_size = 50
 HeaderMedium/font_sizes/font_size = 40
 MarginContainer/constants/margin_bottom = 50
 MarginContainer/constants/margin_top = 50
