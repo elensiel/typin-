@@ -1,7 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://tbtbxawnm2ne"]
+[gd_scene load_steps=24 format=3 uid="uid://tbtbxawnm2ne"]
 
-[ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="1_likc5"]
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
+[ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="2_vlppf"]
 [ext_resource type="FontFile" uid="uid://buafm3mljga3p" path="res://resource/fonts/CourierPrime-Regular.ttf" id="3_fjya3"]
 [ext_resource type="FontFile" uid="uid://cidjl7sciail7" path="res://resource/fonts/IBMPlexMono-Regular.ttf" id="4_upj7t"]
 [ext_resource type="FontFile" uid="uid://dubsuc0k345rq" path="res://resource/fonts/Inconsolata-Regular.ttf" id="5_2xvam"]
@@ -13,45 +13,50 @@
 [ext_resource type="FontFile" uid="uid://byjypdf3bacy3" path="res://resource/fonts/LibertinusMono-Regular.ttf" id="11_0bj2m"]
 [ext_resource type="FontFile" uid="uid://d33m5s1qshv4p" path="res://resource/fonts/Ubuntu-Regular.ttf" id="12_t382g"]
 
-[sub_resource type="GDScript" id="GDScript_wr3al"]
+[sub_resource type="GDScript" id="GDScript_vlppf"]
 resource_name = "tab_contents"
 script/source = "extends VBoxContainer
 
 func _enter_tree() -> void:
 	for child in get_children():
-		if !child.name.match(&\"ButtonTabs\"):
-			owner.tab_contents.append(child)
+		if child.is_class(\"MarginContainer\"):
+			$ButtonTabs.tab_contents.append(child)
 "
 
-[sub_resource type="GDScript" id="GDScript_vlppf"]
+[sub_resource type="GDScript" id="GDScript_wr3al"]
 resource_name = "button_tabs"
 script/source = "extends HBoxContainer
 
+const OUTLINE_SIZE: int = 20
+
+var tab_buttons : Array[Button]
+var tab_contents : Array[MarginContainer]
+
 func _enter_tree() -> void:
-	var buttons : Array[Button]
-	
 	for button in get_children():
-		buttons.append(button)
-	owner.tab_buttons = buttons
+		tab_buttons.append(button)
 	
-	for button in buttons:
-		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
+	for button in tab_buttons:
+		button.toggled.connect(Callable.create(self, &\"_on_toggled\").bind(button))
+
+func _ready() -> void:
+	tab_buttons[0].button_pressed = true
 
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
-		for i in owner.tab_buttons.size():
-			var tab_button: Button = owner.tab_buttons[i]
-			var tab_content: MarginContainer = owner.tab_contents[i]
+		for i in tab_buttons.size():
+			var tab_button: Button = tab_buttons[i]
+			var tab_content: MarginContainer = tab_contents[i]
 			
 			if tab_button.button_pressed and tab_button != emitting_button:
 				tab_button.button_pressed = false
 			
 			tab_content.visible = tab_button.button_pressed
-			update_outline(tab_button.button_pressed, tab_button)
+			_update_outline(tab_button.button_pressed, tab_button)
 
-func update_outline(enabled: bool, button: Button) -> void:
-	if enabled:
-		return button.add_theme_constant_override(&\"outline_size\", 20)
+func _update_outline(enabled: bool, button: Button) -> void:
+	if enabled: 
+		return button.add_theme_constant_override(&\"outline_size\", OUTLINE_SIZE)
 	button.remove_theme_constant_override(&\"outline_size\")
 "
 
@@ -59,108 +64,131 @@ func update_outline(enabled: bool, button: Button) -> void:
 resource_name = "window_mode"
 script/source = "extends OptionButton
 
-func _enter_tree() -> void: owner.window_mode = self
+var current_window_mode: int = SettingsManager.current_settings.general.window_mode
+
+func update_selection() -> void:
+	for item in item_count:
+		var window_mode: int = get_item_id(item)
+		if current_window_mode == window_mode:
+			current_window_mode = window_mode
+			selected = item
+			break
 
 func _on_item_selected(_index: int) -> void: 
 	var id := get_selected_id()
 	
-	if DisplayServer.window_get_mode() != id:
+	if current_window_mode != id:
 		DisplayServer.window_set_mode(id)
+		current_window_mode = DisplayServer.window_get_mode()
+		SettingsManager.current_settings.general.window_mode = current_window_mode
 		
-		for button in owner.resizable_buttons:
-			button.disabled = id == 3
+		%WindowResizable.update_selection() # update resizable disabled flag
 "
 
 [sub_resource type="GDScript" id="GDScript_0bj2m"]
 resource_name = "resizable"
 script/source = "extends HBoxContainer
 
-func _enter_tree() -> void:
-	var children : = get_children()
-	var buttons: Array[Button] = [children[1], children[2]]
-	
-	owner.resizable_buttons = buttons
-	
-	for button in buttons:
-		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
-
-func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
-	if toggled_on:
-		for button in owner.resizable_buttons:
-			if button.button_pressed and button != emitting_button:
-				button.button_pressed = false
-		
-		if emitting_button.name.match(&\"Yes\"):
-			get_viewport().get_window().unresizable = false
-		else:
-			get_viewport().get_window().unresizable = true
-"
-
-[sub_resource type="GDScript" id="GDScript_t382g"]
-resource_name = "quick_restart_button"
-script/source = "extends VBoxContainer
+var buttons : Array[Button]
 
 func _enter_tree() -> void:
-	var buttons : Array[Button]
-	
-	for child in $HBoxContainer.get_children():
-		if !child.name.match(&\"Label\"):
-			buttons.append(child)
-	owner.quick_restart_buttons = buttons
+	buttons = [$Yes, $No]
 	
 	for button in buttons:
 		button.toggled.connect(Callable.create(self, &\"_on_toggled\").bind(button))
 
+func update_selection() -> void:
+	var current_window_mode: int = DisplayServer.window_get_mode()
+	
+	buttons[0].disabled = current_window_mode == DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN
+	buttons[1].disabled = current_window_mode == DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN
+	
+	buttons[0].button_pressed = SettingsManager.current_settings.general.resizable
+	buttons[1].button_pressed = !SettingsManager.current_settings.general.resizable
+
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
-		for button in owner.quick_restart_buttons:
+		for button in buttons:
+			if button.button_pressed and button != emitting_button:
+				button.button_pressed = false
+		
+		SettingsManager.current_settings.general.resizable = emitting_button.name.match(&\"Yes\")
+		get_viewport().get_window().unresizable = !SettingsManager.current_settings.general.resizable
+"
+
+[sub_resource type="GDScript" id="GDScript_t382g"]
+resource_name = "quick_restart"
+script/source = "extends VBoxContainer
+
+var buttons : Array[Button]
+
+func _enter_tree() -> void:
+	buttons = [
+		$HBoxContainer/Off, 
+		$HBoxContainer/Esc, 
+		$HBoxContainer/Tab, 
+		$HBoxContainer/Enter
+	]
+	
+	for button in buttons:
+		button.toggled.connect(Callable.create(self, &\"_on_toggled\").bind(button))
+
+func update_selection() -> void:
+	buttons[0].button_pressed = !SettingsManager.current_settings.general.quick_restart_active
+	if !buttons[0].button_pressed:
+		for button in buttons:
+			if button.name == SettingsManager.current_settings.general.quick_restart:
+				button.button_pressed = true
+				break
+
+func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
+	if toggled_on:
+		for button in buttons:
 			if button.button_pressed and button != emitting_button:
 				button.button_pressed = false 
 		
-		InputManager.restart_key_off = emitting_button.name.match(&\"Off\")
-		SettingsManager.current_settings.general.quick_restart_off = InputManager.restart_key_off
-		if !InputManager.restart_key_off:
-			match emitting_button.name:
-				&\"Esc\":
-					InputManager.restart_key = InputManager.ESC
-				&\"Tab\":
-					InputManager.restart_key = InputManager.TAB
-				&\"Enter\":
-					InputManager.restart_key = InputManager.ENTER
-		SettingsManager.current_settings.general.quick_restart = InputManager.restart_key
+		InputManager.quick_restart_key_active = !emitting_button.name.match(&\"Off\")
+		SettingsManager.current_settings.general.quick_restart_active = InputManager.quick_restart_key_active
+		
+		if InputManager.quick_restart_key_active:
+			InputManager.quick_restart_key = emitting_button.name
+			SettingsManager.current_settings.general.quick_restart = InputManager.quick_restart_key
 "
 
 [sub_resource type="GDScript" id="GDScript_xk1fi"]
 resource_name = "font_size"
 script/source = "extends OptionButton
 
+const INTERVAL: int = 4
+const MINIMUM_FONT_SIZE: int = 30
+const MAXIMUM_FONT_SIZE: int = 82
+
 func _enter_tree() -> void:
-	owner.font_size = self
-	
-	var interval: int = 4
-	
-	for i in range(30, 82, interval):
+	for i in range(MINIMUM_FONT_SIZE, MAXIMUM_FONT_SIZE, INTERVAL):
 		add_item(str(i))
 
+func update_selection() -> void:
+	selected = (SettingsManager.current_settings.appearance.font_size - MINIMUM_FONT_SIZE) / INTERVAL
+
 func _on_item_selected(index: int) -> void:
-	var interval: int = 4
-	
 	var current: int = SettingsManager.current_settings.appearance.font_size
-	var new: int = 30 + (interval  * index)
+	var new: int = MINIMUM_FONT_SIZE + (INTERVAL  * index)
 	
-	if current != new:
-		ThemeManager.set_font_size(new)
+	if current != new: ThemeManager.set_font_size(new)
 "
 
 [sub_resource type="GDScript" id="GDScript_urpkm"]
 resource_name = "visible_lines"
 script/source = "extends OptionButton
 
+const MAXIMUM_LINES: int = 6
+
 func _enter_tree() -> void:
-	owner.visible_lines = self
-	
-	for i in range(1, 7):
+	for i in range(1, MAXIMUM_LINES + 1):
 		add_item(str(i))
+
+func update_selection() -> void:
+	selected = SettingsManager.current_settings.appearance.visible_lines - 1
 
 func _on_item_selected(index: int) -> void:
 	var current: int = SettingsManager.current_settings.appearance.visible_lines
@@ -175,30 +203,35 @@ func _on_item_selected(index: int) -> void:
 resource_name = "font"
 script/source = "extends VBoxContainer
 
+var font_buttons : Array[Button]
+
 func _enter_tree() -> void:
-	var font_buttons : Array[Button]
-	
 	# appending every buttons
 	for line in get_children():
 		for button in line.get_children():
 			font_buttons.append(button)
-	owner.font_buttons = font_buttons
 	
 	# connecting every buttons
 	for button in font_buttons:
 		button.toggled.connect(Callable.create(self, &\"_on_toggled\").bind(button))
 
+func update_selection() -> void:
+	if SettingsManager.current_settings.appearance.font:
+		for button in font_buttons:
+			if SettingsManager.current_settings.appearance.font == button.get_theme_font(&\"font\"):
+				button.button_pressed = true
+				break
+
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
-		for button in owner.font_buttons:
+		for button in font_buttons:
 			if button.button_pressed and button != emitting_button:
 				button.button_pressed = false
 		
 		var current: Font = SettingsManager.current_settings.appearance.font
 		var new: Font = emitting_button.get_theme_font(&\"font\")
 		
-		if current != new:
-			ThemeManager.set_font(new)
+		if current != new: ThemeManager.set_font(new)
 "
 
 [sub_resource type="SystemFont" id="SystemFont_uinb1"]
@@ -206,57 +239,28 @@ subpixel_positioning = 0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vlppf"]
 
-[sub_resource type="GDScript" id="GDScript_skdsi"]
+[sub_resource type="GDScript" id="GDScript_srv4f"]
 resource_name = "visible_typing_field"
 script/source = "extends HBoxContainer
 
+var buttons : Array[Button]
+
 func _enter_tree() -> void:
-	var children : = get_children()
-	var buttons: Array[Button] = [children[1], children[2]]
-	
-	owner.typing_field_buttons = buttons
-	
+	buttons = [$Yes, $No]
 	for button in buttons:
 		button.toggled.connect(Callable.create(self, \"_on_toggled\").bind(button))
 
+func update_selection() -> void:
+	buttons[0].button_pressed = SettingsManager.current_settings.appearance.visible_typing_field
+	buttons[1].button_pressed = !SettingsManager.current_settings.appearance.visible_typing_field
+
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
-		for button in owner.typing_field_buttons:
+		for button in buttons:
 			if button.button_pressed and button != emitting_button:
 				button.button_pressed = false
 		
-		var test_theme: Theme = ObjectReferences.test_field_panel.theme
-		var styles: Array[StringName] = [&\"normal\", &\"focus\"]
-		
-		if !emitting_button.name.match(&\"Yes\"):
-			for style in styles:
-				test_theme.set_stylebox(style, &\"LineEdit\", StyleBoxEmpty.new())
-		else:
-			for style in styles:
-				if test_theme.get_stylebox(style, &\"LineEdit\") != null:
-					test_theme.clear_stylebox(style, &\"LineEdit\")
-		
-		SettingsManager.current_settings.appearance.visible_typing_field = emitting_button.name.match(&\"Yes\")
-"
-
-[sub_resource type="GDScript" id="GDScript_srv4f"]
-resource_name = "siel"
-script/source = "extends Button
-
-func _on_toggled(toggled_on: bool) -> void:
-	if toggled_on:
-		var colors: Dictionary = {
-			\"name\" : name,
-			\"background\" : Color.BLACK,
-			\"main_text\" : Color.WHITE,
-			\"outline_selection\" : Color.DIM_GRAY,
-			\"typed_correct\" : &\"dimgray\",
-			\"typed_error\" : &\"peru\",
-			\"submit_correct\" : &\"gray\",
-			\"submit_error\" : &\"dimgray\",
-		}
-		
-		ThemeManager.set_color_scheme(colors)
+		ThemeManager.set_line_edit_visibility(emitting_button.name.match(&\"Yes\"))
 "
 
 [node name="SettingsPanel" type="MarginContainer"]
@@ -270,15 +274,15 @@ theme_override_constants/margin_left = 400
 theme_override_constants/margin_top = 25
 theme_override_constants/margin_right = 400
 theme_override_constants/margin_bottom = 25
-script = ExtResource("1_likc5")
+script = ExtResource("2_vlppf")
 
 [node name="TabContents" type="VBoxContainer" parent="."]
 layout_mode = 2
-script = SubResource("GDScript_wr3al")
+script = SubResource("GDScript_vlppf")
 
 [node name="ButtonTabs" type="HBoxContainer" parent="TabContents"]
 layout_mode = 2
-script = SubResource("GDScript_vlppf")
+script = SubResource("GDScript_wr3al")
 
 [node name="General" type="Button" parent="TabContents/ButtonTabs"]
 layout_mode = 2
@@ -297,16 +301,7 @@ action_mode = 0
 text = "appearance
 "
 
-[node name="ColorScheme" type="Button" parent="TabContents/ButtonTabs"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"ButtonTab"
-toggle_mode = true
-action_mode = 0
-text = "color scheme"
-
 [node name="General" type="MarginContainer" parent="TabContents"]
-visible = false
 layout_mode = 2
 size_flags_vertical = 0
 
@@ -323,7 +318,7 @@ size_flags_horizontal = 3
 theme_type_variation = &"HeaderMedium"
 text = "window mode"
 
-[node name="OptionButton" type="OptionButton" parent="TabContents/General/VBoxContainer/WindowMode"]
+[node name="OptionButton" type="OptionButton" parent="TabContents/General/VBoxContainer/WindowMode" groups=["option_handler"]]
 layout_mode = 2
 size_flags_horizontal = 3
 action_mode = 1
@@ -339,7 +334,8 @@ popup/item_2/text = "fullscreen"
 popup/item_2/id = 3
 script = SubResource("GDScript_iwgq4")
 
-[node name="WindowResizable" type="HBoxContainer" parent="TabContents/General/VBoxContainer"]
+[node name="WindowResizable" type="HBoxContainer" parent="TabContents/General/VBoxContainer" groups=["option_handler"]]
+unique_name_in_owner = true
 layout_mode = 2
 script = SubResource("GDScript_0bj2m")
 
@@ -364,7 +360,7 @@ toggle_mode = true
 action_mode = 0
 text = "no"
 
-[node name="RestartTest" type="VBoxContainer" parent="TabContents/General/VBoxContainer"]
+[node name="RestartTest" type="VBoxContainer" parent="TabContents/General/VBoxContainer" groups=["option_handler"]]
 layout_mode = 2
 script = SubResource("GDScript_t382g")
 
@@ -408,6 +404,7 @@ action_mode = 0
 text = "enter"
 
 [node name="Appearance" type="MarginContainer" parent="TabContents"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
@@ -443,7 +440,7 @@ size_flags_horizontal = 3
 theme_type_variation = &"HeaderMedium"
 text = "font size"
 
-[node name="OptionButton" type="OptionButton" parent="TabContents/Appearance/VBoxContainer/FontSize"]
+[node name="OptionButton" type="OptionButton" parent="TabContents/Appearance/VBoxContainer/FontSize" groups=["option_handler"]]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
@@ -458,13 +455,13 @@ size_flags_horizontal = 3
 theme_type_variation = &"HeaderMedium"
 text = "visible lines"
 
-[node name="OptionButton" type="OptionButton" parent="TabContents/Appearance/VBoxContainer/VisibleLines"]
+[node name="OptionButton" type="OptionButton" parent="TabContents/Appearance/VBoxContainer/VisibleLines" groups=["option_handler"]]
 layout_mode = 2
 size_flags_horizontal = 3
 allow_reselect = true
 script = SubResource("GDScript_urpkm")
 
-[node name="Font" type="VBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
+[node name="Font" type="VBoxContainer" parent="TabContents/Appearance/VBoxContainer" groups=["option_handler"]]
 layout_mode = 2
 script = SubResource("GDScript_2ll5a")
 
@@ -598,9 +595,9 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VisibleTypingField" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer"]
+[node name="VisibleTypingField" type="HBoxContainer" parent="TabContents/Appearance/VBoxContainer" groups=["option_handler"]]
 layout_mode = 2
-script = SubResource("GDScript_skdsi")
+script = SubResource("GDScript_srv4f")
 
 [node name="Label" type="Label" parent="TabContents/Appearance/VBoxContainer/VisibleTypingField"]
 layout_mode = 2
@@ -623,35 +620,6 @@ toggle_mode = true
 action_mode = 0
 text = "no"
 
-[node name="ColorScheme" type="MarginContainer" parent="TabContents"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="TabContents/ColorScheme"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="TabContents/ColorScheme/VBoxContainer"]
-layout_mode = 2
-
-[node name="default" type="Button" parent="TabContents/ColorScheme/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-toggle_mode = true
-action_mode = 0
-text = "default"
-
-[node name="siel" type="Button" parent="TabContents/ColorScheme/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-toggle_mode = true
-action_mode = 0
-text = "siel"
-script = SubResource("GDScript_srv4f")
-
 [connection signal="item_selected" from="TabContents/General/VBoxContainer/WindowMode/OptionButton" to="TabContents/General/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="TabContents/Appearance/VBoxContainer/FontSize/OptionButton" to="TabContents/Appearance/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="TabContents/Appearance/VBoxContainer/VisibleLines/OptionButton" to="TabContents/Appearance/VBoxContainer/VisibleLines/OptionButton" method="_on_item_selected"]
-[connection signal="toggled" from="TabContents/ColorScheme/VBoxContainer/HBoxContainer/default" to="TabContents/ColorScheme/VBoxContainer/HBoxContainer/default" method="_on_toggled"]
-[connection signal="toggled" from="TabContents/ColorScheme/VBoxContainer/HBoxContainer/siel" to="TabContents/ColorScheme/VBoxContainer/HBoxContainer/siel" method="_on_toggled"]

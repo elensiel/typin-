@@ -1,35 +1,40 @@
 extends MarginContainer
 class_name UiContainer
 
-func _init() -> void: ObjectReferences.ui_container = self
+@onready var settings_button: Button = $Settings
+@onready var restart_button: Button = $Tip/Restart
+@onready var restart_tip: RichTextLabel = $Tip/RestartTip
 
-func _ready() -> void:
-	if SettingsManager.current_settings.color_scheme.main_text:
-		set_icon_mod(SettingsManager.current_settings.color_scheme.main_text)
 
-func set_icon_mod(color: Color) -> void:
-	$Settings.self_modulate = color
-	$Tip/Restart.self_modulate = color
+func _init() -> void:
+	ObjectReferences.ui_container = self
+
+#func _ready() -> void:
+	#if SettingsManager.current_settings.color_scheme.main_text:
+		#set_icon_mod(SettingsManager.current_settings.color_scheme.main_text)
+#
+#func set_icon_mod(color: Color) -> void:
+	#$Settings.self_modulate = color
+	#$Tip/Restart.self_modulate = color
 
 func update_ui() -> void:
-	var settings_button := $Settings
-	settings_button.visible = (StateMachine.current_state == StateMachine.State.NEW) || (StateMachine.current_state == StateMachine.State.END) || (StateMachine.current_state == StateMachine.State.INTERRUPTED)
+	settings_button.visible = (
+		StateMachine.current_state == StateMachine.State.NEW ||
+		StateMachine.current_state == StateMachine.State.INTERRUPTED ||
+		StateMachine.current_state == StateMachine.State.DONE
+	)
 	
-	var restart_tip := $Tip/RestartTip 
-	
-	if SettingsManager.current_settings.general.quick_restart_off:
-		ObjectReferences.restart_test_button.visible = StateMachine.current_state != StateMachine.State.SETTINGS
+	if !SettingsManager.current_settings.general.quick_restart_active:
+		restart_button.visible = StateMachine.current_state != StateMachine.State.SETTINGS
 		restart_tip.text = &"Press Tab + Enter to restart"
 	else:
-		ObjectReferences.restart_test_button.visible = SettingsManager.current_settings.general.quick_restart_off
-		
-		match SettingsManager.current_settings.general.quick_restart:
-			InputManager.TAB:
-				restart_tip.text = &"Press Tab to restart"
-			InputManager.ESC:
-				restart_tip.text = &"Press Esc to restart"
-			InputManager.ENTER:
-				restart_tip.text = &"Press Enter to restart"
+		restart_button.visible = false
+		restart_tip.text = &"Press " + InputManager.quick_restart_key + &" to restart"
 	
-	if !settings_button.visible:
-		restart_tip.text = &""
+	if !settings_button.visible: restart_tip.text = &""
+
+func _on_settings_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.SETTINGS)
+
+func _on_restart_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.NEW)

@@ -4,12 +4,11 @@ extends Node
 const SETTINGS_PANEL_SCENE := preload("res://scene/settings_panel.tscn")
 #endregion
 
-#region node references
-var settings_panel : SettingsPanel
-var test_field_panel : TestFieldPanel
+#region node referencs
+var main : Main
+var test_field_panel : PanelContainer
+var wpm_panel : PanelContainer
+var settings_panel : MarginContainer
 var ui_container : UiContainer
-var wpm_panel : WpmPanel
-var restart_test_button : Button
-var main : Control
-var main_panel : Panel
+#var quick_restart_button : Button
 #endregion
