@@ -11,6 +11,7 @@ func _enter_tree() -> void:
 	print("Node: Setting up " + str(self))
 
 func _ready() -> void:
+	ThemeManager.set_font(SettingsManager.current_settings.appearance.font)
 	for node in get_tree().get_nodes_in_group(&"option_handler"):
 		node.update_selection()
 

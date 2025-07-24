@@ -7,6 +7,7 @@ const DEFAULT_SETTINGS: Dictionary[String, Dictionary] = {
 		"resizable" : true,
 		"quick_restart" : InputManager.TAB,
 		"quick_restart_active" : false,
+		"difficulty" : Words.EASY,
 	},
 	"appearance" : {
 		"font" : null,
@@ -67,6 +68,7 @@ func save_settings(defaults: bool = false) -> void:
 	
 	if defaults:
 		final_settings = DEFAULT_SETTINGS.duplicate(true)
+		current_settings = DEFAULT_SETTINGS.duplicate(true)
 	else:
 		final_settings = current_settings.duplicate(true)
 		_clean_settings(final_settings)
@@ -75,11 +77,10 @@ func save_settings(defaults: bool = false) -> void:
 		var section_data: Dictionary = final_settings[section]
 		for key in section_data:
 			config.set_value(section, key, section_data[key])
-			
+	
 	var error := config.save(FILE_PATH)
 	if error == OK:
-		print("SettingsManager: Settings saved successfully to: " + FILE_PATH)
-		return
+		return print("SettingsManager: Settings saved successfully to: " + FILE_PATH)
 	printerr("SettingsManager Error: Failed to save settings (Error: " + error_string(error) + ") to: " + FILE_PATH)
 
 ## creates a new settings config file with DEFAULT_SETTINGS values

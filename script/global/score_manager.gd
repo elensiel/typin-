@@ -12,6 +12,7 @@ var correct_keystrokes: int = 0
 var wrong_keystrokes: int = 0
 #endregion
 
+#region score getters
 func _get_accuracy() -> float:
 	var total_keystrokes: float = correct_keystrokes + wrong_keystrokes
 	return (float(correct_keystrokes) / total_keystrokes) * 100
@@ -21,6 +22,7 @@ func _get_raw_speed() -> float:
 	return (total_keystrokes / 5) / TimerManager.get_time()
 
 func _get_net_wpm() -> int: return roundi(_get_raw_speed() * (_get_accuracy() / 100))
+#endregion
 
 func reset() -> void:
 	correct_keystrokes = 0

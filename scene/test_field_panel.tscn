@@ -1,33 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://c2v3vyv0582mg"]
 
 [ext_resource type="Theme" uid="uid://bjge8km2ldshd" path="res://resource/themes/test_field_panel.tres" id="1_hdrhf"]
-
-[sub_resource type="GDScript" id="GDScript_0t6fl"]
-script/source = "extends PanelContainer
-class_name TestFieldPanel
-
-func _draw() -> void:
-	var font: Font = theme.get_font(&\"normal_font\", &\"RichTextLabel\")
-	var font_size: int = theme.get_font_size(&\"normal_font_size\", &\"RichTextLabel\")
-	var height: float = font.get_height(font_size)
-	var target_lines: int = SettingsManager.current_settings.appearance.visible_lines
-	
-	$VBoxContainer/Text.custom_minimum_size.y = height * target_lines
-
-func _init() -> void:
-	ObjectReferences.test_field_panel = self
-	custom_minimum_size.x = SettingsManager.BASE_RESOLUTION.x / 1.50
-	custom_minimum_size.y =  SettingsManager.BASE_RESOLUTION.y / 1.75
-
-func _enter_tree() -> void:
-	print(\"Node: Setting up \" + str(self))
-	TextManager.connect_label($VBoxContainer/Text/RichTextLabel)
-	TypingManager.connect_line_edit($VBoxContainer/HBoxContainer/LineEdit)
-	TimerManager.connect_label($VBoxContainer/HBoxContainer/TimerLabel)
-
-func _ready() -> void:
-	visible = true
-"
+[ext_resource type="Script" uid="uid://bhjacmb13fvr0" path="res://script/test_field_panel.gd" id="2_hdrhf"]
 
 [node name="TestField" type="PanelContainer"]
 anchors_preset = 8
@@ -42,7 +16,7 @@ offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_hdrhf")
-script = SubResource("GDScript_0t6fl")
+script = ExtResource("2_hdrhf")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2

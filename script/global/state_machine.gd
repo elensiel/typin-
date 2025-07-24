@@ -27,7 +27,7 @@ func change_state(new_state: State) -> void:
 	_handle_visibility()
 
 func _handle_new() -> void:
-	#region do not touch--ff must be in order
+	#region do not touch -- the ff must be in order
 	TextManager.new_text()
 	TypingManager.new_test()
 	TextManager.update_text()

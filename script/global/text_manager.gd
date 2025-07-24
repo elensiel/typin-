@@ -2,6 +2,7 @@ extends Node
 
 var label : RichTextLabel
 var current_text : Array[String]
+var current_word_source : Array = SettingsManager.current_settings.general.difficulty
 
 func connect_label(node: RichTextLabel) -> void: 
 	print("TextManager: Connecting RichTextLabel: " + str(node))
@@ -12,7 +13,7 @@ func add_text() -> void:
 	print(&"TextMananger: Adding " + str(total_size - current_text.size()) + &" text")
 	
 	while current_text.size() <= total_size:
-		var word: String = Words.common_words.pick_random()
+		var word: String = current_word_source.pick_random()
 		if current_text.size() >= 1 && word.match(current_text[current_text.size() - 1]):
 			continue # avoid sequential repeated words
 		current_text.append(word)

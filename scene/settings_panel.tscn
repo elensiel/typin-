@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://tbtbxawnm2ne"]
+[gd_scene load_steps=27 format=3 uid="uid://tbtbxawnm2ne"]
 
 [ext_resource type="Theme" uid="uid://djxl4in888xtu" path="res://resource/themes/settings_panel.tres" id="1_rb3pu"]
 [ext_resource type="Script" uid="uid://d2b5ptfhbycqv" path="res://script/settings_panel.gd" id="2_vlppf"]
@@ -74,6 +74,16 @@ func update_selection() -> void:
 			selected = item
 			break
 
+func restore_default() -> void:
+	if current_window_mode != SettingsManager.DEFAULT_SETTINGS.general.window_mode:
+		@warning_ignore(\"int_as_enum_without_cast\")
+		@warning_ignore(\"int_as_enum_without_match\")
+		DisplayServer.window_set_mode(SettingsManager.DEFAULT_SETTINGS.general.window_mode)
+		current_window_mode = DisplayServer.window_get_mode()
+		#SettingsManager.current_settings.general.window_mode = current_window_mode
+		
+		%WindowResizable.update_selection() # update resizable disabled flag
+
 func _on_item_selected(_index: int) -> void: 
 	var id := get_selected_id()
 	
@@ -105,6 +115,15 @@ func update_selection() -> void:
 	
 	buttons[0].button_pressed = SettingsManager.current_settings.general.resizable
 	buttons[1].button_pressed = !SettingsManager.current_settings.general.resizable
+
+func restore_default() -> void:
+	var is_disabled: bool = SettingsManager.DEFAULT_SETTINGS.general.window_mode == DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN
+	
+	buttons[0].disabled = is_disabled
+	buttons[1].disabled = is_disabled
+	
+	buttons[0].button_pressed = SettingsManager.DEFAULT_SETTINGS.general.resizable
+	buttons[1].button_pressed = !SettingsManager.DEFAULT_SETTINGS.general.resizable
 
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
@@ -141,6 +160,10 @@ func update_selection() -> void:
 				button.button_pressed = true
 				break
 
+func restore_default() -> void:
+	if !buttons[0].button_pressed:
+		buttons[0].button_pressed = true
+
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
 		for button in buttons:
@@ -153,6 +176,24 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 		if InputManager.quick_restart_key_active:
 			InputManager.quick_restart_key = emitting_button.name
 			SettingsManager.current_settings.general.quick_restart = InputManager.quick_restart_key
+"
+
+[sub_resource type="GDScript" id="GDScript_l8mnh"]
+resource_name = "difficulty"
+script/source = "extends OptionButton
+
+#var current_difficulty: Array = 
+
+func update_selection() -> void:
+	selected = Words.get_all_array().find(TextManager.current_word_source)
+
+func restore_default() -> void:
+	TextManager.current_word_source = SettingsManager.DEFAULT_SETTINGS.general.difficulty
+	SettingsManager.current_settings.general.difficulty = TextManager.current_word_source
+
+func _on_item_selected(index: int) -> void:
+	TextManager.current_word_source = Words.get_all_array()[index]
+	SettingsManager.current_settings.general.difficulty = TextManager.current_word_source
 "
 
 [sub_resource type="GDScript" id="GDScript_xk1fi"]
@@ -169,6 +210,12 @@ func _enter_tree() -> void:
 
 func update_selection() -> void:
 	selected = (SettingsManager.current_settings.appearance.font_size - MINIMUM_FONT_SIZE) / INTERVAL
+
+func restore_default() -> void:
+	var current: int = SettingsManager.current_settings.appearance.font_size
+	var default: int = SettingsManager.DEFAULT_SETTINGS.appearance.font_size
+	
+	if current != default: ThemeManager.set_font_size(default)
 
 func _on_item_selected(index: int) -> void:
 	var current: int = SettingsManager.current_settings.appearance.font_size
@@ -189,6 +236,14 @@ func _enter_tree() -> void:
 
 func update_selection() -> void:
 	selected = SettingsManager.current_settings.appearance.visible_lines - 1
+
+func restore_default() -> void:
+	var current: int = SettingsManager.current_settings.appearance.visible_lines
+	var default: int = SettingsManager.DEFAULT_SETTINGS.appearance.visible_lines
+	
+	if current != default:
+		SettingsManager.current_settings.appearance.visible_lines = default
+		ObjectReferences.test_field_panel.queue_redraw()
 
 func _on_item_selected(index: int) -> void:
 	var current: int = SettingsManager.current_settings.appearance.visible_lines
@@ -222,6 +277,10 @@ func update_selection() -> void:
 				button.button_pressed = true
 				break
 
+func restore_default() -> void:
+	if !font_buttons[0].button_pressed:
+		font_buttons[0].button_pressed = true
+
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
 		for button in font_buttons:
@@ -254,6 +313,10 @@ func update_selection() -> void:
 	buttons[0].button_pressed = SettingsManager.current_settings.appearance.visible_typing_field
 	buttons[1].button_pressed = !SettingsManager.current_settings.appearance.visible_typing_field
 
+func restore_default() -> void:
+	if !buttons[0].button_pressed:
+		buttons[0].button_pressed = true
+
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
 		for button in buttons:
@@ -262,6 +325,23 @@ func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 		
 		ThemeManager.set_line_edit_visibility(emitting_button.name.match(&\"Yes\"))
 "
+
+[sub_resource type="GDScript" id="GDScript_skdsi"]
+resource_name = "buttons"
+script/source = "extends MarginContainer
+
+func _on_back_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.NEW)
+
+func _on_restore_defaults_pressed() -> void:
+	for node in get_tree().get_nodes_in_group(&\"option_handler\"):
+		node.restore_default()
+		node.update_selection()
+	
+	SettingsManager.save_settings(true)
+"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wr3al"]
 
 [node name="SettingsPanel" type="MarginContainer"]
 anchors_preset = 15
@@ -402,6 +482,35 @@ size_flags_horizontal = 3
 toggle_mode = true
 action_mode = 0
 text = "enter"
+
+[node name="Difficulty" type="HBoxContainer" parent="TabContents/General/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabContents/General/VBoxContainer/Difficulty"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderMedium"
+text = "difficulty"
+
+[node name="OptionButton" type="OptionButton" parent="TabContents/General/VBoxContainer/Difficulty" groups=["option_handler"]]
+layout_mode = 2
+size_flags_horizontal = 3
+action_mode = 1
+alignment = 1
+selected = 0
+allow_reselect = true
+item_count = 5
+popup/item_0/text = "easy"
+popup/item_0/id = 0
+popup/item_1/text = "intermediate"
+popup/item_1/id = 1
+popup/item_2/text = "advanced"
+popup/item_2/id = 2
+popup/item_3/text = "hard"
+popup/item_3/id = 3
+popup/item_4/text = "expert"
+popup/item_4/id = 4
+script = SubResource("GDScript_l8mnh")
 
 [node name="Appearance" type="MarginContainer" parent="TabContents"]
 visible = false
@@ -620,6 +729,32 @@ toggle_mode = true
 action_mode = 0
 text = "no"
 
+[node name="Buttons" type="MarginContainer" parent="TabContents"]
+layout_mode = 2
+size_flags_vertical = 10
+script = SubResource("GDScript_skdsi")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContents/Buttons"]
+layout_mode = 2
+
+[node name="Back" type="Button" parent="TabContents/Buttons/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "back"
+
+[node name="HSeparator" type="HSeparator" parent="TabContents/Buttons/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_wr3al")
+
+[node name="RestoreDefaults" type="Button" parent="TabContents/Buttons/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "restore defaults"
+
 [connection signal="item_selected" from="TabContents/General/VBoxContainer/WindowMode/OptionButton" to="TabContents/General/VBoxContainer/WindowMode/OptionButton" method="_on_item_selected"]
+[connection signal="item_selected" from="TabContents/General/VBoxContainer/Difficulty/OptionButton" to="TabContents/General/VBoxContainer/Difficulty/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="TabContents/Appearance/VBoxContainer/FontSize/OptionButton" to="TabContents/Appearance/VBoxContainer/FontSize/OptionButton" method="_on_item_selected"]
 [connection signal="item_selected" from="TabContents/Appearance/VBoxContainer/VisibleLines/OptionButton" to="TabContents/Appearance/VBoxContainer/VisibleLines/OptionButton" method="_on_item_selected"]
+[connection signal="pressed" from="TabContents/Buttons/HBoxContainer/Back" to="TabContents/Buttons" method="_on_back_pressed"]
+[connection signal="pressed" from="TabContents/Buttons/HBoxContainer/RestoreDefaults" to="TabContents/Buttons" method="_on_restore_defaults_pressed"]
