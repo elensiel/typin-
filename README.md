@@ -1,7 +1,6 @@
 # Progress Board
 
 ## 🟡 To Do
-- remove bg on submit
 - working timer
 - scoring system
 - scroll update
@@ -9,9 +8,10 @@
 ## 🟢 In Progress
 
 ## 🔵 Testing
-- Add non-continuous typing field.
-- Reflect correctly typed.
+- remove bg on submit
 
 ## ✅ Done
 - Display text.
 - Select first word.
+- Add non-continuous typing field.
+- Reflect correctly typed.

@@ -11,11 +11,6 @@ func connect_line_edit(node: LineEdit) -> void:
 	line_edit = node
 	line_edit.connect(&"text_changed", Callable.create(self, &"_on_line_edit_text_changed"))
 
-func evaluate(word: String) -> void:
-	if word_evaluator.is_word_correct(word, current_word):
-		return TextManager.render_text(pointer)
-	TextManager.render_text(pointer, false)
-
 func new_test() -> void:
 	pointer = 0
 	current_word = TextManager.current_text[pointer]
@@ -31,7 +26,7 @@ func next_word() -> void:
 	
 	pointer += 1
 	current_word = TextManager.current_text[pointer]
-	TextManager.render_text(pointer)
+	TextManager.render_on_type(pointer)
 	ObjectReferences.debug_test.current_word_value.text = current_word # DEBUG
 
 func _on_line_edit_text_changed(new_text: String) -> void:
@@ -46,14 +41,16 @@ func _on_line_edit_text_changed(new_text: String) -> void:
 	
 	# submit and evaluate
 	if new_text.ends_with(&" "):
-		evaluate(new_text.trim_suffix(&" "))
+		var is_correct: bool = word_evaluator.is_word_correct(new_text.trim_suffix(&" "), current_word)
+		TextManager.render_on_submit(pointer, is_correct)
 		next_word()
 	# bandaid for the not submitting if typed too fast bug
 	elif new_text.contains(&" "):
 		var index := new_text.find(&" ")
-		evaluate(new_text.substr(0, index))
+		var is_correct: bool = word_evaluator.is_word_correct(new_text.substr(0, index), current_word)
+		TextManager.render_on_submit(pointer, is_correct)
 		next_word()
 		line_edit.insert_text_at_caret(new_text.substr(index + 1, new_text.length()))
 	# typing the word still
 	else:
-		TextManager.render_text(pointer, word_evaluator.is_typed_correct(new_text, current_word))
+		TextManager.render_on_type(pointer, word_evaluator.is_typed_correct(new_text, current_word))

@@ -21,7 +21,7 @@ func change_state(new_state: State) -> void:
 func _handle_new() -> void:
 	TextManager.new_text()
 	TypingManager.new_test()
-	TextManager.render_text()
+	TextManager.render_on_type()
 
 func _handle_typing() -> void:pass
 	#TimerManager.start()

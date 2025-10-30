@@ -38,13 +38,24 @@ func new_text() -> void:
 	label.text = &""
 	add_text()
 
-func render_text(index: int = 0, correct: bool = true) -> void:
+func render_on_type(index: int = 0, correct: bool = true) -> void:
 	label.text = &""
 	
 	if correct:
 		current_text[index] = tag_helper.draw_background_correct(TypingManager.current_word)
 	else:
 		current_text[index] = tag_helper.draw_background_typo(TypingManager.current_word)
+	
+	for word in current_text:
+		label.append_text(word + &" ")
+
+func render_on_submit(index: int, correct: bool) -> void:
+	label.text = &""
+	
+	if correct:
+		current_text[index] = TypingManager.current_word
+	else:
+		current_text[index] = tag_helper.draw_underline(TypingManager.current_word)
 	
 	for word in current_text:
 		label.append_text(word + &" ")
