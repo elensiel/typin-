@@ -22,6 +22,7 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 ObjectReferences="*res://globals/object_references.gd"
 TextManager="*res://globals/TextManager/text_manager.gd"
 TypingManager="*res://globals/TypingManager/typing_manager.gd"
+TimerManager="*res://globals/timer_manager.gd"
 StateMachine="*res://globals/state_machine.gd"
 
 [display]

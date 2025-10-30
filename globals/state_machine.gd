@@ -17,12 +17,18 @@ func change_state(new_state: State) -> void:
 			_handle_new()
 		State.TYPING:
 			_handle_typing()
+		State.FINISHED:
+			_handle_finished()
 
 func _handle_new() -> void:
 	TextManager.new_text()
 	TypingManager.new_test()
 	TextManager.render_on_type()
 	TextManager.scroll_update()
+	TimerManager.reset()
 
-func _handle_typing() -> void:pass
-	#TimerManager.start()
+func _handle_typing() -> void:
+	TimerManager.start()
+
+func _handle_finished() -> void:
+	TimerManager.stop()

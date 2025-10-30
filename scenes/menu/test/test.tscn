@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c7muqacm6x235"]
+[gd_scene load_steps=7 format=3 uid="uid://c7muqacm6x235"]
 
 [ext_resource type="Theme" uid="uid://maf0ym8rh80l" path="res://scenes/menu/test/test.tres" id="1_m8iat"]
 [ext_resource type="Script" uid="uid://cjq2q0h7s75xe" path="res://scenes/menu/test/test.gd" id="2_rb2cn"]
 [ext_resource type="Script" uid="uid://ctyl5jodb476b" path="res://scenes/menu/test/rich_text_label.gd" id="3_0d8ue"]
 [ext_resource type="Script" uid="uid://bar6aew3lsb3f" path="res://scenes/menu/test/line_edit.gd" id="4_prp4p"]
+[ext_resource type="Script" uid="uid://drp3h7q458m5r" path="res://scenes/menu/test/label.gd" id="5_evufq"]
 [ext_resource type="PackedScene" uid="uid://1bs3ymeomdpk" path="res://scenes/_debug/test/test_debug_layer.tscn" id="5_uwd5h"]
 
 [node name="Test" type="Control"]
@@ -50,10 +51,14 @@ size_flags_horizontal = 3
 placeholder_text = " "
 script = ExtResource("4_prp4p")
 
+[node name="VSeparator" type="VSeparator" parent="CenterContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+
 [node name="Label" type="Label" parent="CenterContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "00:00"
+text = "60"
+script = ExtResource("5_evufq")
 
 [node name="TestDebugLayer" parent="." instance=ExtResource("5_uwd5h")]
 visible = false
