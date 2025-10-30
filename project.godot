@@ -1,0 +1,49 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="typin-"
+run/main_scene="uid://c2dv11drklmls"
+config/features=PackedStringArray("4.5", "GL Compatibility")
+run/max_fps=30
+run/low_processor_mode=true
+boot_splash/bg_color=Color(0, 0, 0, 1)
+
+[autoload]
+
+ObjectReferences="*res://globals/object_references.gd"
+TextManager="*res://globals/TextManager/text_manager.gd"
+TypingManager="*res://globals/TypingManager/typing_manager.gd"
+StateMachine="*res://globals/state_machine.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=2
+window/energy_saving/keep_screen_on=false
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/vsync/vsync_mode=0
+
+[dotnet]
+
+project/assembly_name="typin-"
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
