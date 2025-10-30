@@ -59,3 +59,8 @@ func render_on_submit(index: int, correct: bool) -> void:
 	
 	for word in current_text:
 		label.append_text(word + &" ")
+
+func scroll_update() -> void:
+	var cur_line := label.get_character_line(TypingManager.current_char_index)
+	label.scroll_to_line(cur_line - 1)
+	# TODO -- relative to visible lines

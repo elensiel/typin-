@@ -3,15 +3,15 @@
 ## 🟡 To Do
 - working timer
 - scoring system
-- scroll update
 
 ## 🟢 In Progress
 
 ## 🔵 Testing
-- remove bg on submit
+- scroll update
 
 ## ✅ Done
 - Display text.
 - Select first word.
 - Add non-continuous typing field.
 - Reflect correctly typed.
+- remove bg on submit

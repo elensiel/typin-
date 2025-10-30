@@ -13,12 +13,12 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = SubResource("Theme_vgagp")
 
-[node name="CurrentWord" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="VBoxContainer/CurrentWord"]
+[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "Current Word: "
 
-[node name="Value" type="Label" parent="VBoxContainer/CurrentWord"]
+[node name="Value" type="Label" parent="VBoxContainer/HBoxContainer"]
 layout_mode = 2

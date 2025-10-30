@@ -22,6 +22,7 @@ func _handle_new() -> void:
 	TextManager.new_text()
 	TypingManager.new_test()
 	TextManager.render_on_type()
+	TextManager.scroll_update()
 
 func _handle_typing() -> void:pass
 	#TimerManager.start()

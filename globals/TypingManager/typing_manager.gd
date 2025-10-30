@@ -3,6 +3,7 @@ extends Node
 @onready var word_evaluator := WordEvaluator.new()
 var line_edit: LineEdit
 
+var current_char_index: int = 0
 var current_word: String
 var pointer: int = 0
 
@@ -16,10 +17,11 @@ func new_test() -> void:
 	current_word = TextManager.current_text[pointer]
 	
 	line_edit.text = &""
-	ObjectReferences.debug_test.current_word_value.text = current_word # DEBUG
+	line_edit.grab_focus()
 
 func next_word() -> void:
 	line_edit.text = &""
+	current_char_index += current_word.length() + 1 # +1 for the whitespace
 	
 	# add more words on 50% completion
 	if pointer > (TextManager.current_text.size() * 0.5): TextManager.add_text()
@@ -27,7 +29,7 @@ func next_word() -> void:
 	pointer += 1
 	current_word = TextManager.current_text[pointer]
 	TextManager.render_on_type(pointer)
-	ObjectReferences.debug_test.current_word_value.text = current_word # DEBUG
+	TextManager.scroll_update()
 
 func _on_line_edit_text_changed(new_text: String) -> void:
 	# early exit on accidental 'space'
