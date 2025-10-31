@@ -43,13 +43,13 @@ func _on_line_edit_text_changed(new_text: String) -> void:
 	
 	# submit and evaluate
 	if new_text.ends_with(&" "):
-		var is_correct: bool = word_evaluator.is_word_correct(new_text.trim_suffix(&" "), current_word)
+		var is_correct := word_evaluator.is_word_correct(new_text.trim_suffix(&" "), current_word)
 		TextManager.render_on_submit(pointer, is_correct)
 		next_word()
 	# bandaid for the not submitting if typed too fast bug
 	elif new_text.contains(&" "):
 		var index := new_text.find(&" ")
-		var is_correct: bool = word_evaluator.is_word_correct(new_text.substr(0, index), current_word)
+		var is_correct := word_evaluator.is_word_correct(new_text.substr(0, index), current_word)
 		TextManager.render_on_submit(pointer, is_correct)
 		next_word()
 		line_edit.insert_text_at_caret(new_text.substr(index + 1, new_text.length()))

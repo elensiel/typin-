@@ -13,12 +13,32 @@ offset_right = 40.0
 offset_bottom = 40.0
 theme = SubResource("Theme_vgagp")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="CorrectKeystrokes" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Title" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Title" type="Label" parent="VBoxContainer/CorrectKeystrokes"]
 layout_mode = 2
-text = "Current Word: "
+text = "Correct Keystrokes: "
 
-[node name="Value" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Value" type="Label" parent="VBoxContainer/CorrectKeystrokes"]
+layout_mode = 2
+
+[node name="WrongKeystrokes" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer/WrongKeystrokes"]
+layout_mode = 2
+text = "Wrong Keystrokes: "
+
+[node name="Value" type="Label" parent="VBoxContainer/WrongKeystrokes"]
+layout_mode = 2
+
+[node name="MissedKeystrokes" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer/MissedKeystrokes"]
+layout_mode = 2
+text = "Missed Keystrokes: "
+
+[node name="Value" type="Label" parent="VBoxContainer/MissedKeystrokes"]
 layout_mode = 2

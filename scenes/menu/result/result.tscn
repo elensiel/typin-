@@ -1,0 +1,92 @@
+[gd_scene load_steps=7 format=3 uid="uid://bjitrt4w0fhlc"]
+
+[ext_resource type="Theme" uid="uid://b33gm1fa8q4k2" path="res://scenes/menu/result/result.tres" id="1_6slpi"]
+[ext_resource type="PackedScene" uid="uid://cpapg68n8ouyh" path="res://scenes/menu/result/base_sub_result.tscn" id="2_tg8es"]
+[ext_resource type="Script" uid="uid://dhcj6gefm0tk" path="res://scenes/menu/result/result.gd" id="2_uwp5x"]
+
+[sub_resource type="GDScript" id="GDScript_tg8es"]
+resource_name = "net_wpm_value"
+script/source = "extends Label
+
+func _enter_tree() -> void:
+	ScoreManager.labels[ScoreManager.Metric.NET_WPM] = self
+"
+
+[sub_resource type="GDScript" id="GDScript_uwp5x"]
+resource_name = "accuracy_value"
+script/source = "extends Label
+
+func _enter_tree() -> void:
+	ScoreManager.labels[ScoreManager.Metric.ACCURACY] = self
+"
+
+[sub_resource type="GDScript" id="GDScript_7ip2h"]
+resource_name = "raw_speed_value"
+script/source = "extends Label
+
+func _enter_tree() -> void:
+	ScoreManager.labels[ScoreManager.Metric.RAW_SPEED] = self
+"
+
+[node name="Result" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_6slpi")
+script = ExtResource("2_uwp5x")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="NetWPM" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Value" type="Label" parent="CenterContainer/VBoxContainer/NetWPM"]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_type_variation = &"HeaderLarge"
+text = "60 "
+script = SubResource("GDScript_tg8es")
+
+[node name="Unit" type="Label" parent="CenterContainer/VBoxContainer/NetWPM"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_type_variation = &"HeaderMedium"
+text = "WPM"
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Accuracy" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_tg8es")]
+layout_mode = 2
+
+[node name="Title" parent="CenterContainer/VBoxContainer/Accuracy" index="0"]
+text = "Accuracy"
+
+[node name="Value" parent="CenterContainer/VBoxContainer/Accuracy" index="1"]
+text = "98%"
+script = SubResource("GDScript_uwp5x")
+
+[node name="RawSpeed" parent="CenterContainer/VBoxContainer" instance=ExtResource("2_tg8es")]
+layout_mode = 2
+
+[node name="Title" parent="CenterContainer/VBoxContainer/RawSpeed" index="0"]
+text = "Raw Speed"
+
+[node name="Value" parent="CenterContainer/VBoxContainer/RawSpeed" index="1"]
+text = "62 WPM"
+script = SubResource("GDScript_7ip2h")
+
+[editable path="CenterContainer/VBoxContainer/Accuracy"]
+[editable path="CenterContainer/VBoxContainer/RawSpeed"]

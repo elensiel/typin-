@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cpapg68n8ouyh"]
+
+[node name="BaseSubResult" type="HBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TITLE"
+
+[node name="Value" type="Label" parent="."]
+layout_mode = 2
+text = "VALUE"

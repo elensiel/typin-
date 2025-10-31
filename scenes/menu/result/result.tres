@@ -1,0 +1,5 @@
+[gd_resource type="Theme" format=3 uid="uid://b33gm1fa8q4k2"]
+
+[resource]
+HeaderLarge/font_sizes/font_size = 80
+HeaderMedium/font_sizes/font_size = 40

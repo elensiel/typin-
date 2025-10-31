@@ -17,14 +17,6 @@ grow_vertical = 2
 theme = ExtResource("1_m8iat")
 script = ExtResource("2_rb2cn")
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
@@ -61,4 +53,3 @@ text = "60"
 script = ExtResource("5_evufq")
 
 [node name="TestDebugLayer" parent="." instance=ExtResource("5_uwd5h")]
-visible = false

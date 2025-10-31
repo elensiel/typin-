@@ -1,18 +1,17 @@
 # Progress Board
 
 ## 🟡 To Do
-- scoring system
 
 ## 🟢 In Progress
 
 ## 🔵 Testing
-
+- [ScoreManager] Core
 
 ## ✅ Done
-- Display text.
-- Select first word.
-- Add non-continuous typing field.
-- Reflect correctly typed.
-- remove bg on submit
-- scroll update
-- working timer
+- [TextManager] Display text.
+- [TypingManager] Select first word.
+- [TypingManager] Add non-continuous typing field.
+- [TagHelper] Reflect correctly typed.
+- [TagHelper] remove bg on submit
+- [TextManager] scroll update
+- [TimerManager] Core

@@ -1,15 +1,10 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://maf0ym8rh80l"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y1ptq"]
-bg_color = Color(0, 0, 0, 1)
-anti_aliasing = false
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://maf0ym8rh80l"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y1ptq"]
 
 [resource]
 Label/font_sizes/font_size = 30
 LineEdit/font_sizes/font_size = 30
-Panel/styles/panel = SubResource("StyleBoxFlat_y1ptq")
 RichTextLabel/font_sizes/normal_font_size = 46
 VSeparator/constants/separation = 10
 VSeparator/styles/separator = SubResource("StyleBoxEmpty_y1ptq")
