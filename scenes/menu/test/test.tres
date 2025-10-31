@@ -5,6 +5,6 @@
 [resource]
 Label/font_sizes/font_size = 30
 LineEdit/font_sizes/font_size = 30
-RichTextLabel/font_sizes/normal_font_size = 46
+RichTextLabel/font_sizes/normal_font_size = 70
 VSeparator/constants/separation = 10
 VSeparator/styles/separator = SubResource("StyleBoxEmpty_y1ptq")

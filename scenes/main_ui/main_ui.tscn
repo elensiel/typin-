@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://b7w6amly5fhwg"]
+
+[ext_resource type="Theme" uid="uid://cb6scrkkhpeeo" path="res://scenes/main_ui/main_ui.tres" id="1_4kns6"]
+[ext_resource type="Script" uid="uid://ja37bjd0eiak" path="res://scenes/main_ui/main_ui.gd" id="1_82ck7"]
+[ext_resource type="Texture2D" uid="uid://pdr5gtlc7bb1" path="res://assets/sprites/Repeat-Right.svg" id="1_jadpq"]
+
+[sub_resource type="GDScript" id="GDScript_4kns6"]
+resource_name = "button"
+script/source = "extends Button
+
+func _init() -> void:
+	ObjectReferences.restart_button = self
+"
+
+[node name="MainUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_behavior_recursive = 1
+theme = ExtResource("1_4kns6")
+script = ExtResource("1_82ck7")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+action_mode = 0
+icon = ExtResource("1_jadpq")
+flat = true
+icon_alignment = 1
+script = SubResource("GDScript_4kns6")
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

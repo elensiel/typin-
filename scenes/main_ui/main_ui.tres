@@ -1,0 +1,4 @@
+[gd_resource type="Theme" format=3 uid="uid://cb6scrkkhpeeo"]
+
+[resource]
+MarginContainer/constants/margin_bottom = 100

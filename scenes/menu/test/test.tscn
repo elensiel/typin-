@@ -8,6 +8,9 @@
 resource_name = "line_edit"
 script/source = "extends LineEdit
 
+func _init() -> void:
+	ObjectReferences.line_edit = self
+
 func _enter_tree() -> void:
 	TypingManager.connect_line_edit(self)
 "
@@ -57,6 +60,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_behavior_recursive = 2
 placeholder_text = " "
+keep_editing_on_text_submit = true
+context_menu_enabled = false
+emoji_menu_enabled = false
+middle_mouse_paste_enabled = false
 script = SubResource("GDScript_0d8ue")
 
 [node name="VSeparator" type="VSeparator" parent="CenterContainer/VBoxContainer/HBoxContainer"]
