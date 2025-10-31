@@ -21,4 +21,3 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sugp2")
 [node name="Test" parent="." instance=ExtResource("2_sugp2")]
 
 [node name="Result" parent="." instance=ExtResource("3_jyhfs")]
-visible = false

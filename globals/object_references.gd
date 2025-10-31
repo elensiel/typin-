@@ -1,5 +1,5 @@
 extends Node
 
-var debug_test: DebugTest
+## MENUS
 var test_menu: TestMenu
 var result_menu: ResultMenu

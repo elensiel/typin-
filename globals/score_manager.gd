@@ -21,7 +21,8 @@ func _get_net_wpm() -> int:
 
 func _get_raw_speed() -> float:
 	var total: float = correct + error + missed
-	return (total / 5) / (float(TimerManager.initial_seconds) / 60)
+	var duration_in_minutes: float = float(TimerManager.initial_seconds) / 60
+	return (total / 5) / duration_in_minutes
 
 func reset() -> void:
 	correct = 0
