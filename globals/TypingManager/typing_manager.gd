@@ -14,6 +14,7 @@ func connect_line_edit(node: LineEdit) -> void:
 
 func new_test() -> void:
 	pointer = 0
+	current_char_index = 0
 	current_word = TextManager.current_text[pointer]
 	
 	line_edit.text = &""
