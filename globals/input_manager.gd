@@ -11,7 +11,7 @@ func _input(event: InputEvent) -> void:
 		_switch_focus()
 
 func _switch_focus() -> void:
-	if ObjectReferences.line_edit.has_focus():
-		ObjectReferences.restart_button.grab_focus()
-	elif ObjectReferences.restart_button.has_focus():
+	if not ObjectReferences.line_edit.visible or ObjectReferences.restart_button.has_focus():
 		ObjectReferences.line_edit.grab_focus()
+	else:
+		ObjectReferences.restart_button.grab_focus()
