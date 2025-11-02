@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://coa25i18bx3hw"]
+
+[ext_resource type="Theme" uid="uid://bbgpal77buomg" path="res://scenes/menu/settings/settings.tres" id="1_116kb"]
+[ext_resource type="Script" uid="uid://dydph7wffy6q" path="res://scenes/menu/settings/settings.gd" id="2_63e34"]
+[ext_resource type="PackedScene" uid="uid://irm7qgbpopw5" path="res://scenes/menu/settings/options/quick_restart.tscn" id="2_gl3ae"]
+
+[sub_resource type="GDScript" id="GDScript_63e34"]
+resource_name = "back_button"
+script/source = "extends Button
+
+func _on_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.NEW)
+"
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_116kb")
+script = ExtResource("2_63e34")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(960, 0)
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -101.5
+offset_right = 101.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer"]
+layout_mode = 2
+tab_alignment = 1
+current_tab = 0
+
+[node name="general" type="ScrollContainer" parent="MarginContainer/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/TabContainer/general"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/general/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="QuickRestart" parent="MarginContainer/TabContainer/general/MarginContainer/VBoxContainer" instance=ExtResource("2_gl3ae")]
+layout_mode = 2
+
+[node name="appearance" type="ScrollContainer" parent="MarginContainer/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="Back" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "back"
+script = SubResource("GDScript_63e34")
+
+[node name="Restore" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+text = "restore defaults"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Back" to="MarginContainer/HBoxContainer/Back" method="_on_pressed"]

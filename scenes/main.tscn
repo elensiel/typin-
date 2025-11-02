@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c2dv11drklmls"]
+[gd_scene load_steps=7 format=3 uid="uid://c2dv11drklmls"]
 
 [ext_resource type="Script" uid="uid://ktj2lm5f5mg6" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://c7muqacm6x235" path="res://scenes/menu/test/test.tscn" id="2_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bjitrt4w0fhlc" path="res://scenes/menu/result/result.tscn" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://b7w6amly5fhwg" path="res://scenes/main_ui/main_ui.tscn" id="4_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://coa25i18bx3hw" path="res://scenes/menu/settings/settings.tscn" id="5_tbgi4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sugp2"]
 bg_color = Color(0, 0, 0, 1)
@@ -25,3 +26,5 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_sugp2")
 [node name="Result" parent="." instance=ExtResource("3_jyhfs")]
 
 [node name="MainUI" parent="." instance=ExtResource("4_jyhfs")]
+
+[node name="Settings" parent="." instance=ExtResource("5_tbgi4")]

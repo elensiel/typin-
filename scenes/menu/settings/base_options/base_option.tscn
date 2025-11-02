@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://os1xscjf8k6a"]
+
+[node name="BaseOption" type="HBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"OptionTitle"
+text = "TITLE"
+
+[node name="OptionButton" type="OptionButton" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3

@@ -1,0 +1,32 @@
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://bbgpal77buomg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_obfgw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dq2v4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_40i14"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gfkb4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qop13"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d1okc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_atg1i"]
+
+[resource]
+Button/font_sizes/font_size = 30
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_top = 10
+OptionTitle/base_type = &"Label"
+OptionTitle/font_sizes/font_size = 30
+TabContainer/colors/font_unselected_color = Color(0.7135178, 0.7135178, 0.71351784, 1)
+TabContainer/constants/tab_separation = 25
+TabContainer/font_sizes/font_size = 30
+TabContainer/styles/panel = SubResource("StyleBoxEmpty_obfgw")
+TabContainer/styles/tab_disabled = SubResource("StyleBoxEmpty_dq2v4")
+TabContainer/styles/tab_focus = SubResource("StyleBoxEmpty_40i14")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxEmpty_gfkb4")
+TabContainer/styles/tab_selected = SubResource("StyleBoxEmpty_qop13")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxEmpty_d1okc")
+TabContainer/styles/tabbar_background = SubResource("StyleBoxEmpty_atg1i")

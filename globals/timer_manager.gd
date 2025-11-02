@@ -9,7 +9,7 @@ func _enter_tree() -> void:
 	connect(&"timeout", Callable.create(self, &"_on_timeout"))
 
 func connect_label(node: Label) -> void: 
-	print("TimerManager: Connecting Timer Label: " + str(node))
+	print("TimerManager: Connecting: " + str(node))
 	label = node
 	_update_label()
 

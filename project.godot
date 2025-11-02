@@ -20,6 +20,7 @@ boot_splash/bg_color=Color(0, 0, 0, 1)
 [autoload]
 
 ObjectReferences="*res://globals/object_references.gd"
+SettingsManager="*res://globals/SettingsManager/settings_manager.gd"
 TextManager="*res://globals/TextManager/text_manager.gd"
 TypingManager="*res://globals/TypingManager/typing_manager.gd"
 TimerManager="*res://globals/timer_manager.gd"

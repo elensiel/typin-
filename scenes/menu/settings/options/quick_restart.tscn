@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://irm7qgbpopw5"]
+
+[ext_resource type="PackedScene" uid="uid://drb2voir0fwkv" path="res://scenes/menu/settings/base_options/base_multi_buttons.tscn" id="1_kf32f"]
+[ext_resource type="Script" uid="uid://cpy638w0mweoo" path="res://scenes/menu/settings/options/quick_restart.gd" id="2_nb57f"]
+
+[node name="QuickRestart" instance=ExtResource("1_kf32f")]
+script = ExtResource("2_nb57f")
+
+[node name="Label" parent="." index="0"]
+text = "quick restart"
+
+[node name="Button" parent="HBoxContainer" index="0"]
+focus_mode = 0
+text = "off"
+
+[node name="Button2" parent="HBoxContainer" index="1"]
+focus_mode = 0
+text = "esc"
+
+[node name="Button3" type="Button" parent="HBoxContainer" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+text = "tab"
+
+[node name="Button4" type="Button" parent="HBoxContainer" index="3"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+text = "enter"

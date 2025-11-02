@@ -6,12 +6,12 @@ var label: RichTextLabel
 var current_text: Array[String] = []
 
 func connect_label(node: RichTextLabel) -> void: 
-	print("TextManager: Connecting RichTextLabel: " + str(node))
+	print("TextManager: Connecting: " + str(node))
 	label = node
 
 func add_text() -> void:
 	var target_size := _get_target_size()
-	print(&"TextMananger: Adding " + str(target_size - current_text.size()) + &" text")
+	print(&"TextManager: Adding " + str(target_size - current_text.size()) + &" text")
 	
 	while current_text.size() <= target_size:
 		var word: String = Words.EASY.pick_random()
@@ -33,7 +33,7 @@ func _get_target_size() -> int:
 	return initial_size + ((minimum_font_size - modifier) * 6)
 
 func new_text() -> void:
-	print(&"TextMananger: Clearing text")
+	print(&"TextManager: Clearing text")
 	current_text.clear()
 	label.text = &""
 	add_text()

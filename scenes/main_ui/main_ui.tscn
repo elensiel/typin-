@@ -1,15 +1,30 @@
-[gd_scene load_steps=5 format=3 uid="uid://b7w6amly5fhwg"]
+[gd_scene load_steps=7 format=3 uid="uid://b7w6amly5fhwg"]
 
 [ext_resource type="Theme" uid="uid://cb6scrkkhpeeo" path="res://scenes/main_ui/main_ui.tres" id="1_4kns6"]
 [ext_resource type="Script" uid="uid://ja37bjd0eiak" path="res://scenes/main_ui/main_ui.gd" id="1_82ck7"]
 [ext_resource type="Texture2D" uid="uid://pdr5gtlc7bb1" path="res://assets/sprites/Repeat-Right.svg" id="1_jadpq"]
+[ext_resource type="Texture2D" uid="uid://d1xspg1g67vb8" path="res://assets/sprites/Gear.svg" id="4_nvekf"]
 
-[sub_resource type="GDScript" id="GDScript_4kns6"]
-resource_name = "button"
+[sub_resource type="GDScript" id="GDScript_3qihl"]
+resource_name = "restart_button"
 script/source = "extends Button
 
 func _init() -> void:
 	ObjectReferences.restart_button = self
+
+func _on_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.NEW)
+"
+
+[sub_resource type="GDScript" id="GDScript_vxb1p"]
+resource_name = "settings_button"
+script/source = "extends Button
+
+func _init() -> void:
+	ObjectReferences.settings_button = self
+
+func _on_pressed() -> void:
+	StateMachine.change_state(StateMachine.State.SETTINGS)
 "
 
 [node name="MainUI" type="Control"]
@@ -35,7 +50,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="Button" type="Button" parent="MarginContainer/VBoxContainer"]
+[node name="Restart" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_behavior_recursive = 2
@@ -44,6 +59,22 @@ action_mode = 0
 icon = ExtResource("1_jadpq")
 flat = true
 icon_alignment = 1
-script = SubResource("GDScript_4kns6")
+script = SubResource("GDScript_3qihl")
 
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Settings" type="Button" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+action_mode = 0
+icon = ExtResource("4_nvekf")
+flat = true
+icon_alignment = 1
+script = SubResource("GDScript_vxb1p")
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Restart" to="MarginContainer/VBoxContainer/Restart" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Settings" to="MarginContainer/HBoxContainer/Settings" method="_on_pressed"]
