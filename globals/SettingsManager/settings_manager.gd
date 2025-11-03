@@ -2,19 +2,16 @@ extends Node
 
 var loader := SettingsLoader.new()
 var saver := SettingsSaver.new()
+var _file_path := _get_directory() + "/settings_data.cfg"
 
 const DEFAULTS: Dictionary[String, Dictionary] = {
 	"general" : {
 		"shortcut_enabled" : false,
-		"shortcut_key" : &"",
+		"shortcut_key" : &"tab",
 	},
 }
 
-var current_settings: Dictionary[String, Dictionary]
-var _file_path := _get_directory() + "/settings_data.cfg"
-
-func _init() -> void:
-	current_settings = loader.load_data(_file_path)
+var current_settings: Dictionary[String, Dictionary] = loader.load_data(_file_path)
 
 func _get_directory() -> String:
 	var directory := OS.get_user_data_dir() + "/data"

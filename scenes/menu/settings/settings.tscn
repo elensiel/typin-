@@ -19,6 +19,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_behavior_recursive = 1
 theme = ExtResource("1_116kb")
 script = ExtResource("2_63e34")
 
@@ -36,6 +37,7 @@ grow_vertical = 2
 
 [node name="TabContainer" type="TabContainer" parent="MarginContainer"]
 layout_mode = 2
+mouse_behavior_recursive = 2
 tab_alignment = 1
 current_tab = 0
 
@@ -67,12 +69,16 @@ size_flags_vertical = 8
 [node name="Back" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
 text = "back"
 script = SubResource("GDScript_63e34")
 
 [node name="Restore" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
-text = "restore defaults"
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+text = "restore defaults*"
 
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Back" to="MarginContainer/HBoxContainer/Back" method="_on_pressed"]
