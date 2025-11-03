@@ -43,11 +43,16 @@ func _handle_finished() -> void:
 	ScoreManager.update_labels()
 
 func _handle_visibility() -> void:
-	# menu switching
+	# MENUS
 	ObjectReferences.test_menu.visible = current_state != State.FINISHED and current_state != State.SETTINGS
 	ObjectReferences.result_menu.visible = current_state == State.FINISHED
 	ObjectReferences.settings_menu.visible = current_state == State.SETTINGS
 	
-	# button visibility 
+	# BUTTONS
 	ObjectReferences.restart_button.visible = !InputManager.shortcut_enabled and current_state != State.SETTINGS
-	ObjectReferences.settings_button.visible = current_state != State.SETTINGS
+	# hide settings button while typing
+	ObjectReferences.settings_button.visible = current_state != State.SETTINGS and current_state != State.TYPING
+	
+	# CURSOR
+	# hides cursor while typing
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN if current_state == State.TYPING else Input.MOUSE_MODE_VISIBLE

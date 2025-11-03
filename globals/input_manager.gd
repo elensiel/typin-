@@ -12,11 +12,16 @@ var shortcut_enabled: bool = SettingsManager.current_settings.general.shortcut_e
 var shortcut_key: StringName = SettingsManager.current_settings.general.shortcut_key
 
 func _input(event: InputEvent) -> void:
-	if not shortcut_enabled and event.is_action_pressed(TAB):
-		return _switch_focus()
+	if event is InputEventKey:
+		if not shortcut_enabled and event.is_action_pressed(TAB):
+			return _switch_focus()
+		
+		if event.is_action_pressed(shortcut_key):
+			StateMachine.change_state(StateMachine.State.NEW)
 	
-	if event.is_action_pressed(shortcut_key):
-		StateMachine.change_state(StateMachine.State.NEW)
+	## show cursor on mouse motion
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_HIDDEN:
+		StateMachine.change_state(StateMachine.State.INTERRUPTED)
 
 func _switch_focus() -> void:
 	if not ObjectReferences.line_edit.visible or ObjectReferences.restart_button.has_focus():

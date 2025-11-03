@@ -2,13 +2,15 @@
 
 ## 🟡 To Do
 - [ADJUST] Scoring model
+- [FEATURE] Window mode option
+- [FEATURE] Font option
+- [FEATURE] Font size option
 
 ## 🟢 In Progress
 
 ## 🔵 Testing
-- [BUG] LineEdit and Restart Button not switching focus on TAB press
-- [FEATURE] Keyboard shortcuts for restarting the test
 - [CORE] Settings Menu
+- [FEATURE] Hide mouse while typing
 
 ## ✅ Done
 - [CORE] Display text.
@@ -20,3 +22,6 @@
 - [CORE] timer
 - [CORE] scoring system
 - [CORE] Test Loop
+- [BUG] LineEdit and Restart Button not switching focus on TAB press
+- [FEATURE] Keyboard shortcuts for restarting the test
+- [HOTFIX] Data loading sanitization
