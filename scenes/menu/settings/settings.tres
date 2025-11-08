@@ -1,4 +1,8 @@
-[gd_resource type="Theme" load_steps=8 format=3 uid="uid://bbgpal77buomg"]
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://bbgpal77buomg"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_obfgw"]
+color = Color(0.49803922, 0.49803922, 0.49803922, 1)
+thickness = 2
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_obfgw"]
 
@@ -16,6 +20,7 @@
 
 [resource]
 Button/font_sizes/font_size = 30
+HSeparator/styles/separator = SubResource("StyleBoxLine_obfgw")
 Label/fonts/font = null
 MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_top = 10

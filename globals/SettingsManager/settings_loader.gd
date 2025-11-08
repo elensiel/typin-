@@ -36,6 +36,7 @@ func _fill_missing(loaded_data: Dictionary[String, Dictionary]) -> void:
 			if not loaded_section.has(key):
 				loaded_section[key] = default_section[key]
 
+## Ensure correct data type
 func _sanitize(loaded_data: Dictionary[String, Dictionary]) -> void:
 	for section in SettingsManager.DEFAULTS:
 		var default_section := SettingsManager.DEFAULTS[section]

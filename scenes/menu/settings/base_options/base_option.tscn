@@ -6,9 +6,13 @@ mouse_behavior_recursive = 1
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 2
 theme_type_variation = &"OptionTitle"
 text = "TITLE"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="OptionButton" type="OptionButton" parent="."]
 layout_mode = 2
