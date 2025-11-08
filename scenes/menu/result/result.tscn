@@ -48,23 +48,32 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
 [node name="NetWPM" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="Dummy" type="Label" parent="CenterContainer/VBoxContainer/NetWPM"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderMedium"
+
 [node name="Value" type="Label" parent="CenterContainer/VBoxContainer/NetWPM"]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_type_variation = &"HeaderLarge"
-text = "60 "
+text = "60"
 script = SubResource("GDScript_tg8es")
 
 [node name="Unit" type="Label" parent="CenterContainer/VBoxContainer/NetWPM"]
 layout_mode = 2
 size_flags_horizontal = 10
+size_flags_vertical = 0
 theme_type_variation = &"HeaderMedium"
-text = "WPM"
+text = "wpm"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
@@ -73,9 +82,11 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="Title" parent="CenterContainer/VBoxContainer/Accuracy" index="0"]
-text = "Accuracy"
+theme_type_variation = &"HeaderSmall"
+text = "accuracy"
 
 [node name="Value" parent="CenterContainer/VBoxContainer/Accuracy" index="1"]
+theme_type_variation = &"HeaderSmall"
 text = "98%"
 script = SubResource("GDScript_uwp5x")
 
@@ -83,10 +94,12 @@ script = SubResource("GDScript_uwp5x")
 layout_mode = 2
 
 [node name="Title" parent="CenterContainer/VBoxContainer/RawSpeed" index="0"]
-text = "Raw Speed"
+theme_type_variation = &"HeaderSmall"
+text = "raw speed"
 
 [node name="Value" parent="CenterContainer/VBoxContainer/RawSpeed" index="1"]
-text = "62 WPM"
+theme_type_variation = &"HeaderSmall"
+text = "62 wpm"
 script = SubResource("GDScript_7ip2h")
 
 [editable path="CenterContainer/VBoxContainer/Accuracy"]

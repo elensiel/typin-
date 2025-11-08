@@ -32,4 +32,4 @@ func reset() -> void:
 func update_labels() -> void:
 	labels[Metric.NET_WPM].text = str(_get_net_wpm())
 	labels[Metric.ACCURACY].text = str(snappedf(_get_accuracy(), 0.01)) + &"%"
-	labels[Metric.RAW_SPEED].text = str(roundi(_get_raw_speed())) + &" WPM"
+	labels[Metric.RAW_SPEED].text = str(roundi(_get_raw_speed())) + &"wpm"
