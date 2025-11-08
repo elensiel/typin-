@@ -5,7 +5,6 @@
 - [FEATURE] Restore default to options
 
 ## 🟢 In Progress
-- [FEATURE] Window mode option
 
 ## 🔵 Testing
 
@@ -27,3 +26,4 @@
 - [FEATURE] Font size option
 - [BUG] SettingsLoader crashing when detecting new entry on DEFAULTS
 - [CORE] Settings Menu
+- [FEATURE] Window mode option
