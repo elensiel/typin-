@@ -3,14 +3,13 @@
 ## 🟡 To Do
 - [ADJUST] Scoring model
 - [FEATURE] Window mode option
-- [FEATURE] Font size option
+- [FEATURE] Restore default to options
 
 ## 🟢 In Progress
 
 ## 🔵 Testing
 - [CORE] Settings Menu
-- [FEATURE] Hide mouse while typing
-- [FEATURE] Font option
+- [BUG] SettingsLoader crashing when detecting new entry on DEFAULTS
 
 ## ✅ Done
 - [CORE] Display text.
@@ -22,6 +21,9 @@
 - [CORE] timer
 - [CORE] scoring system
 - [CORE] Test Loop
+- [FEATURE] Hide mouse while typing
 - [BUG] LineEdit and Restart Button not switching focus on TAB press
 - [FEATURE] Keyboard shortcuts for restarting the test
 - [HOTFIX] Data loading sanitization
+- [FEATURE] Font option
+- [FEATURE] Font size option

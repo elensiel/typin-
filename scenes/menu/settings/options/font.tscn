@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://c4bxlor5ffmao"]
+[gd_scene load_steps=14 format=3 uid="uid://c4bxlor5ffmao"]
 
 [ext_resource type="PackedScene" uid="uid://dn55af3s0585n" path="res://scenes/menu/settings/base_options/base_v_multi_buttons.tscn" id="1_oypwf"]
 [ext_resource type="FontFile" uid="uid://crc35ql7lu5fj" path="res://assets/fonts/CascadiaCode-Regular.ttf" id="2_mgvc8"]
@@ -11,9 +11,9 @@
 [ext_resource type="FontFile" uid="uid://bu6kubq210tc8" path="res://assets/fonts/LibertinusMono-Regular.ttf" id="8_e3cdf"]
 [ext_resource type="FontFile" uid="uid://cxm1temflv1jt" path="res://assets/fonts/RobotoMono-Regular.ttf" id="9_ug1ts"]
 [ext_resource type="FontFile" uid="uid://b6otk48ux17vp" path="res://assets/fonts/Ubuntu-Regular.ttf" id="10_04cho"]
+[ext_resource type="FontFile" uid="uid://blulh12of4app" path="res://assets/fonts/SourceCodePro-Regular.ttf" id="11_kq47q"]
 
-[sub_resource type="SystemFont" id="SystemFont_xbtnf"]
-subpixel_positioning = 0
+[sub_resource type="SystemFont" id="SystemFont_kq47q"]
 
 [node name="Font" instance=ExtResource("1_oypwf")]
 script = ExtResource("2_xbtnf")
@@ -21,94 +21,114 @@ script = ExtResource("2_xbtnf")
 [node name="Label" parent="." index="0"]
 text = "font"
 
-[node name="Button9" type="Button" parent="HBoxContainer" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-theme_override_fonts/font = SubResource("SystemFont_xbtnf")
-toggle_mode = true
+[node name="Button" parent="Content/VBoxContainer/HBoxContainer" index="0"]
+theme_override_fonts/font = SubResource("SystemFont_kq47q")
 text = "default"
 
-[node name="Button" parent="HBoxContainer" index="1"]
-focus_mode = 0
+[node name="Button2" parent="Content/VBoxContainer/HBoxContainer" index="1"]
 theme_override_fonts/font = ExtResource("2_mgvc8")
 text = "Cascadia Code"
 
-[node name="Button2" parent="HBoxContainer" index="2"]
+[node name="Button3" type="Button" parent="Content/VBoxContainer/HBoxContainer" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
 theme_override_fonts/font = ExtResource("3_xbtnf")
+toggle_mode = true
+action_mode = 0
 text = "Courier Prime"
 
-[node name="Button" parent="HBoxContainer2" index="0"]
-focus_mode = 0
-theme_override_fonts/font = ExtResource("5_87h0x")
-text = "Inconsolata"
-
-[node name="Button2" parent="HBoxContainer2" index="1"]
-focus_mode = 0
-theme_override_fonts/font = ExtResource("6_nac4o")
-text = "JetBrains Mono"
-
-[node name="Button3" type="Button" parent="HBoxContainer2" index="2"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
-theme_override_fonts/font = ExtResource("10_04cho")
-toggle_mode = true
-text = "Ubuntu"
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="." index="3"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Button4" type="Button" parent="HBoxContainer3" index="0"]
-layout_mode = 2
-size_flags_horizontal = 3
-focus_mode = 0
+[node name="Button" parent="Content/VBoxContainer/HBoxContainer2" index="0"]
 theme_override_fonts/font = ExtResource("4_kq47q")
-toggle_mode = true
 text = "IBM Plex Mono"
 
-[node name="Button5" type="Button" parent="HBoxContainer3" index="1"]
+[node name="Button2" parent="Content/VBoxContainer/HBoxContainer2" index="1"]
+theme_override_fonts/font = ExtResource("5_87h0x")
+text = "Incosolata
+"
+
+[node name="Button3" type="Button" parent="Content/VBoxContainer/HBoxContainer2" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("6_nac4o")
+toggle_mode = true
+action_mode = 0
+text = "JetBrains Mono"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Content/VBoxContainer" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button" type="Button" parent="Content/VBoxContainer/HBoxContainer3" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
 theme_override_fonts/font = ExtResource("7_2yxsp")
 toggle_mode = true
+action_mode = 0
 text = "Lato"
 
-[node name="Button6" type="Button" parent="HBoxContainer3" index="2"]
+[node name="Button2" type="Button" parent="Content/VBoxContainer/HBoxContainer3" index="1"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
 theme_override_fonts/font = ExtResource("8_e3cdf")
 toggle_mode = true
+action_mode = 0
 text = "Libertinus Mono"
 
-[node name="HBoxContainer4" type="HBoxContainer" parent="." index="4"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Button7" type="Button" parent="HBoxContainer4" index="0"]
+[node name="Button3" type="Button" parent="Content/VBoxContainer/HBoxContainer3" index="2"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
 theme_override_fonts/font = ExtResource("9_ug1ts")
 toggle_mode = true
+action_mode = 0
 text = "Roboto Mono"
 
-[node name="Button8" type="Button" parent="HBoxContainer4" index="1"]
+[node name="HBoxContainer4" type="HBoxContainer" parent="Content/VBoxContainer" index="3"]
 layout_mode = 2
 size_flags_horizontal = 3
-focus_mode = 0
-theme_override_fonts/font = ExtResource("7_2yxsp")
-toggle_mode = true
-text = "Source Code Pro"
 
-[node name="Button2" type="Button" parent="HBoxContainer4" index="2"]
+[node name="Button" type="Button" parent="Content/VBoxContainer/HBoxContainer4" index="0"]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-disabled = true
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("11_kq47q")
 toggle_mode = true
+action_mode = 0
+text = "SourceCode Pro"
+
+[node name="Button2" type="Button" parent="Content/VBoxContainer/HBoxContainer4" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("10_04cho")
+toggle_mode = true
+action_mode = 0
+text = "Ubuntu"
+
+[node name="Button3" type="Button" parent="Content/VBoxContainer/HBoxContainer4" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+toggle_mode = true
+action_mode = 0
 flat = true

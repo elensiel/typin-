@@ -11,10 +11,10 @@ enum Option {
 @onready var buttons: Array[Node] = $HBoxContainer.get_children()
 
 func _ready() -> void:
+	_update_selection()
+	
 	for button in buttons:
 		button.toggled.connect(Callable.create(self, &"_on_toggled").bind(button))
-	
-	_update_selection()
 
 func _update_selection() -> void:
 	if not InputManager.shortcut_enabled:

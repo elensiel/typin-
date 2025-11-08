@@ -2,6 +2,7 @@
 
 [node name="BaseOption" type="HBoxContainer"]
 size_flags_horizontal = 3
+mouse_behavior_recursive = 1
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
@@ -12,3 +13,5 @@ text = "TITLE"
 [node name="OptionButton" type="OptionButton" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2

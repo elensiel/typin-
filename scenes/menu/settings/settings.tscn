@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://coa25i18bx3hw"]
+[gd_scene load_steps=7 format=3 uid="uid://coa25i18bx3hw"]
 
 [ext_resource type="Theme" uid="uid://bbgpal77buomg" path="res://scenes/menu/settings/settings.tres" id="1_116kb"]
 [ext_resource type="Script" uid="uid://dydph7wffy6q" path="res://scenes/menu/settings/settings.gd" id="2_63e34"]
 [ext_resource type="PackedScene" uid="uid://irm7qgbpopw5" path="res://scenes/menu/settings/options/quick_restart.tscn" id="2_gl3ae"]
 [ext_resource type="PackedScene" uid="uid://c4bxlor5ffmao" path="res://scenes/menu/settings/options/font.tscn" id="4_i6fum"]
+[ext_resource type="PackedScene" uid="uid://fw5ugit7fcqe" path="res://scenes/menu/settings/options/font_size.tscn" id="4_tlw56"]
 
 [sub_resource type="GDScript" id="GDScript_63e34"]
 resource_name = "back_button"
@@ -71,6 +72,9 @@ size_flags_vertical = 3
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/TabContainer/appearance/MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="FontSize" parent="MarginContainer/TabContainer/appearance/MarginContainer/VBoxContainer" instance=ExtResource("4_tlw56")]
+layout_mode = 2
 
 [node name="Font" parent="MarginContainer/TabContainer/appearance/MarginContainer/VBoxContainer" instance=ExtResource("4_i6fum")]
 layout_mode = 2
