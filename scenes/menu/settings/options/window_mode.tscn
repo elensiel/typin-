@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://dnotsyk2afavq"]
+
+[ext_resource type="PackedScene" uid="uid://os1xscjf8k6a" path="res://scenes/menu/settings/base_options/base_option.tscn" id="1_6qlyj"]
+[ext_resource type="Script" uid="uid://cuupd2xf16cil" path="res://scenes/menu/settings/options/window_mode.gd" id="2_45ufn"]
+
+[node name="WindowMode" instance=ExtResource("1_6qlyj")]
+script = ExtResource("2_45ufn")
+
+[node name="Label" parent="." index="0"]
+text = "window mode"
+
+[node name="OptionButton" parent="." index="2"]
+selected = 1
+item_count = 3
+popup/item_0/text = "windowed"
+popup/item_0/id = 0
+popup/item_1/text = "maximized"
+popup/item_1/id = 2
+popup/item_2/text = "fullscreen"
+popup/item_2/id = 3
+
+[connection signal="item_selected" from="OptionButton" to="." method="_on_option_button_item_selected"]

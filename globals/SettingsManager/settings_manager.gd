@@ -6,6 +6,7 @@ var _file_path := _get_directory() + "/settings_data.cfg"
 
 const DEFAULTS: Dictionary[String, Dictionary] = {
 	"general" : {
+		"window_mode" : 2,
 		"shortcut_enabled" : false,
 		"shortcut_key" : &"tab",
 	},
@@ -25,6 +26,10 @@ func _get_directory() -> String:
 
 func save_changes() -> void:
 	var has_changes := false
+	
+	if current_settings.general.window_mode != DisplayServer.window_get_mode():
+		current_settings.general.window_mode = DisplayServer.window_get_mode()
+		has_changes = true
 	
 	if current_settings.general.shortcut_enabled != InputManager.shortcut_enabled:
 		current_settings.general.shortcut_enabled = InputManager.shortcut_enabled
