@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dllwgugpyef8j"]
+
+[node name="BaseSpinBox" type="HBoxContainer"]
+size_flags_horizontal = 3
+mouse_behavior_recursive = 1
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_type_variation = &"OptionTitle"
+text = "TITLE"
+
+[node name="HSeparator" type="HSeparator" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SpinBox" type="SpinBox" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_behavior_recursive = 2
+min_value = 30.0
+max_value = 70.0
+step = 2.0
+value = 30.0
+rounded = true
+alignment = 1

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://fw5ugit7fcqe"]
+
+[ext_resource type="PackedScene" uid="uid://dllwgugpyef8j" path="res://scenes/menu/settings/base_options/base_spin_box.tscn" id="1_8xqbw"]
+[ext_resource type="Script" uid="uid://b12cv6onq3fnn" path="res://scenes/menu/settings/options/font_size.gd" id="2_0wy5t"]
+
+[node name="FontSize" instance=ExtResource("1_8xqbw")]
+script = ExtResource("2_0wy5t")
+
+[node name="Label" parent="." index="0"]
+text = "font size"
+
+[node name="SpinBox" parent="." index="2"]
+size_flags_horizontal = 6
+
+[connection signal="value_changed" from="SpinBox" to="." method="_on_spin_box_value_changed"]
