@@ -29,7 +29,6 @@ func _update_selection() -> void:
 		InputManager.ENTER:
 			buttons[Option.ENTER].button_pressed = true
 
-
 func _on_toggled(toggled_on: bool, emitting_button: Button) -> void:
 	if toggled_on:
 		for button in buttons:

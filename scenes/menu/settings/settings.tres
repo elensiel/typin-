@@ -16,6 +16,7 @@
 
 [resource]
 Button/font_sizes/font_size = 30
+Label/fonts/font = null
 MarginContainer/constants/margin_bottom = 10
 MarginContainer/constants/margin_top = 10
 OptionTitle/base_type = &"Label"

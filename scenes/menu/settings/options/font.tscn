@@ -1,0 +1,114 @@
+[gd_scene load_steps=13 format=3 uid="uid://c4bxlor5ffmao"]
+
+[ext_resource type="PackedScene" uid="uid://dn55af3s0585n" path="res://scenes/menu/settings/base_options/base_v_multi_buttons.tscn" id="1_oypwf"]
+[ext_resource type="FontFile" uid="uid://crc35ql7lu5fj" path="res://assets/fonts/CascadiaCode-Regular.ttf" id="2_mgvc8"]
+[ext_resource type="Script" uid="uid://boudcy6p7ycmb" path="res://scenes/menu/settings/options/font.gd" id="2_xbtnf"]
+[ext_resource type="FontFile" uid="uid://d36a7upkysffy" path="res://assets/fonts/CourierPrime-Regular.ttf" id="3_xbtnf"]
+[ext_resource type="FontFile" uid="uid://ms8jtuk3x47v" path="res://assets/fonts/IBMPlexMono-Regular.ttf" id="4_kq47q"]
+[ext_resource type="FontFile" uid="uid://b3hcnyx0ttgr8" path="res://assets/fonts/Inconsolata-Regular.ttf" id="5_87h0x"]
+[ext_resource type="FontFile" uid="uid://ccye245wbi224" path="res://assets/fonts/JetBrainsMono-Regular.ttf" id="6_nac4o"]
+[ext_resource type="FontFile" uid="uid://cgeniw6ilimhm" path="res://assets/fonts/Lato-Regular.ttf" id="7_2yxsp"]
+[ext_resource type="FontFile" uid="uid://bu6kubq210tc8" path="res://assets/fonts/LibertinusMono-Regular.ttf" id="8_e3cdf"]
+[ext_resource type="FontFile" uid="uid://cxm1temflv1jt" path="res://assets/fonts/RobotoMono-Regular.ttf" id="9_ug1ts"]
+[ext_resource type="FontFile" uid="uid://b6otk48ux17vp" path="res://assets/fonts/Ubuntu-Regular.ttf" id="10_04cho"]
+
+[sub_resource type="SystemFont" id="SystemFont_xbtnf"]
+subpixel_positioning = 0
+
+[node name="Font" instance=ExtResource("1_oypwf")]
+script = ExtResource("2_xbtnf")
+
+[node name="Label" parent="." index="0"]
+text = "font"
+
+[node name="Button9" type="Button" parent="HBoxContainer" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = SubResource("SystemFont_xbtnf")
+toggle_mode = true
+text = "default"
+
+[node name="Button" parent="HBoxContainer" index="1"]
+focus_mode = 0
+theme_override_fonts/font = ExtResource("2_mgvc8")
+text = "Cascadia Code"
+
+[node name="Button2" parent="HBoxContainer" index="2"]
+focus_mode = 0
+theme_override_fonts/font = ExtResource("3_xbtnf")
+text = "Courier Prime"
+
+[node name="Button" parent="HBoxContainer2" index="0"]
+focus_mode = 0
+theme_override_fonts/font = ExtResource("5_87h0x")
+text = "Inconsolata"
+
+[node name="Button2" parent="HBoxContainer2" index="1"]
+focus_mode = 0
+theme_override_fonts/font = ExtResource("6_nac4o")
+text = "JetBrains Mono"
+
+[node name="Button3" type="Button" parent="HBoxContainer2" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = ExtResource("10_04cho")
+toggle_mode = true
+text = "Ubuntu"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="." index="3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button4" type="Button" parent="HBoxContainer3" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = ExtResource("4_kq47q")
+toggle_mode = true
+text = "IBM Plex Mono"
+
+[node name="Button5" type="Button" parent="HBoxContainer3" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = ExtResource("7_2yxsp")
+toggle_mode = true
+text = "Lato"
+
+[node name="Button6" type="Button" parent="HBoxContainer3" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = ExtResource("8_e3cdf")
+toggle_mode = true
+text = "Libertinus Mono"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="." index="4"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Button7" type="Button" parent="HBoxContainer4" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = ExtResource("9_ug1ts")
+toggle_mode = true
+text = "Roboto Mono"
+
+[node name="Button8" type="Button" parent="HBoxContainer4" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_fonts/font = ExtResource("7_2yxsp")
+toggle_mode = true
+text = "Source Code Pro"
+
+[node name="Button2" type="Button" parent="HBoxContainer4" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+disabled = true
+toggle_mode = true
+flat = true

@@ -9,6 +9,9 @@ const DEFAULTS: Dictionary[String, Dictionary] = {
 		"shortcut_enabled" : false,
 		"shortcut_key" : &"tab",
 	},
+	#"appearance" : {
+		#"font" : null,
+	#},
 }
 
 var current_settings: Dictionary[String, Dictionary] = loader.load_data(_file_path)

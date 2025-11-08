@@ -3,7 +3,6 @@
 ## 🟡 To Do
 - [ADJUST] Scoring model
 - [FEATURE] Window mode option
-- [FEATURE] Font option
 - [FEATURE] Font size option
 
 ## 🟢 In Progress
@@ -11,6 +10,7 @@
 ## 🔵 Testing
 - [CORE] Settings Menu
 - [FEATURE] Hide mouse while typing
+- [FEATURE] Font option
 
 ## ✅ Done
 - [CORE] Display text.

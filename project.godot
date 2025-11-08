@@ -27,6 +27,7 @@ TimerManager="*res://globals/timer_manager.gd"
 ScoreManager="*res://globals/score_manager.gd"
 InputManager="*res://globals/input_manager.gd"
 StateMachine="*res://globals/state_machine.gd"
+ThemeManager="*res://globals/theme_manager.gd"
 
 [display]
 

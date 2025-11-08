@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://irm7qgbpopw5"]
 
-[ext_resource type="PackedScene" uid="uid://drb2voir0fwkv" path="res://scenes/menu/settings/base_options/base_multi_buttons.tscn" id="1_kf32f"]
+[ext_resource type="PackedScene" uid="uid://drb2voir0fwkv" path="res://scenes/menu/settings/base_options/base_h_multi_buttons.tscn" id="1_kf32f"]
 [ext_resource type="Script" uid="uid://cpy638w0mweoo" path="res://scenes/menu/settings/options/quick_restart.gd" id="2_nb57f"]
 
 [node name="QuickRestart" instance=ExtResource("1_kf32f")]
