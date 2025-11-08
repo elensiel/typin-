@@ -17,7 +17,7 @@ func save_data(file_path: String, defaults: bool = false) -> void:
 	
 	var error := config.save(file_path)
 	if error != OK:
-		var error_msg := "SettingsManager Error: Failed to save settings (Error: %s) to: %s" % [error_string(error), file_path]
+		var error_msg := "SettingsSaver Error: Failed to save settings (Error: %s) to: %s" % [error_string(error), file_path]
 		return print_rich("[color=yellow]%s[/color]" % error_msg)
 	
-	return print("SettingsManager: Settings saved successfully to: " + file_path)
+	return print("SettingsSaver: Settings saved successfully to: " + file_path)

@@ -9,9 +9,10 @@ const DEFAULTS: Dictionary[String, Dictionary] = {
 		"shortcut_enabled" : false,
 		"shortcut_key" : &"tab",
 	},
-	#"appearance" : {
-		#"font" : null,
-	#},
+	"appearance" : {
+		"font" : null,
+		"font_size" : 48,
+	},
 }
 
 var current_settings: Dictionary[String, Dictionary] = loader.load_data(_file_path)
@@ -31,6 +32,14 @@ func save_changes() -> void:
 	
 	if current_settings.general.shortcut_key != InputManager.shortcut_key:
 		current_settings.general.shortcut_key = InputManager.shortcut_key
+		has_changes = true
+	
+	if current_settings.appearance.font != ThemeManager.current_font:
+		current_settings.appearance.font = ThemeManager.current_font
+		has_changes = true
+	
+	if current_settings.appearance.font_size != ThemeManager.current_font_size:
+		current_settings.appearance.font_size = ThemeManager.current_font_size
 		has_changes = true
 	
 	if has_changes:
