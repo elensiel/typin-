@@ -4,6 +4,7 @@
 - [ADJUST] Scoring model
 
 ## 🟢 In Progress
+- [FEATURE] Exit settings on "ESC" press
 
 ## 🔵 Testing
 

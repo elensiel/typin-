@@ -22,6 +22,11 @@ func _input(event: InputEvent) -> void:
 	elif event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_HIDDEN:
 		StateMachine.change_state(StateMachine.State.INTERRUPTED)
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if StateMachine.current_state == StateMachine.State.SETTINGS:
+		if event.is_action_pressed(ESC):
+			StateMachine.change_state(StateMachine.State.NEW)
+
 ## switch button focus between restart button and line edit
 func _switch_focus() -> void:
 	if not ObjectReferences.line_edit.visible or ObjectReferences.restart_button.has_focus():
