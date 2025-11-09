@@ -4,7 +4,6 @@
 - [ADJUST] Scoring model
 
 ## 🟢 In Progress
-- [FEATURE] Restore default to options
 
 ## 🔵 Testing
 
@@ -27,3 +26,4 @@
 - [BUG] SettingsLoader crashing when detecting new entry on DEFAULTS
 - [CORE] Settings Menu
 - [FEATURE] Window mode option
+- [FEATURE] Restore default to options
