@@ -2,9 +2,9 @@
 
 ## 🟡 To Do
 - [ADJUST] Scoring model
-- [FEATURE] Restore default to options
 
 ## 🟢 In Progress
+- [FEATURE] Restore default to options
 
 ## 🔵 Testing
 

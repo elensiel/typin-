@@ -49,3 +49,30 @@ func save_changes() -> void:
 	
 	if has_changes:
 		saver.save_data(_file_path)
+
+func restore_defaults() -> void:
+	var has_changes := false
+	current_settings = DEFAULTS.duplicate_deep()
+	
+	if current_settings.general.window_mode != DisplayServer.window_get_mode():
+		DisplayServer.window_set_mode(current_settings.general.window_mode)
+		has_changes = true
+	
+	if current_settings.general.shortcut_enabled != InputManager.shortcut_enabled:
+		InputManager.shortcut_enabled = current_settings.general.shortcut_enabled
+		has_changes = true
+	
+	if current_settings.general.shortcut_key != InputManager.shortcut_key:
+		InputManager.shortcut_key = current_settings.general.shortcut_key
+		has_changes = true
+	
+	if current_settings.appearance.font != ThemeManager.current_font:
+		ThemeManager.set_font(current_settings.appearance.font, false)
+		has_changes = true
+	
+	if current_settings.appearance.font_size != ThemeManager.current_font_size:
+		ThemeManager.set_font_size(current_settings.appearance.font_size, false)
+		has_changes = true
+	
+	if has_changes:
+		saver.save_data(_file_path, true)

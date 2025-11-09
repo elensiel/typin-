@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://coa25i18bx3hw"]
+[gd_scene load_steps=9 format=3 uid="uid://coa25i18bx3hw"]
 
 [ext_resource type="Theme" uid="uid://bbgpal77buomg" path="res://scenes/menu/settings/settings.tres" id="1_116kb"]
 [ext_resource type="Script" uid="uid://dydph7wffy6q" path="res://scenes/menu/settings/settings.gd" id="2_63e34"]
@@ -13,6 +13,15 @@ script/source = "extends Button
 
 func _on_pressed() -> void:
 	StateMachine.change_state(StateMachine.State.NEW)
+"
+
+[sub_resource type="GDScript" id="GDScript_qed7a"]
+resource_name = "restore_button"
+script/source = "extends Button
+
+func _on_pressed() -> void:
+	SettingsManager.restore_defaults()
+	get_tree().reload_current_scene()
 "
 
 [node name="Settings" type="Control"]
@@ -104,5 +113,7 @@ size_flags_horizontal = 10
 mouse_behavior_recursive = 2
 mouse_default_cursor_shape = 2
 text = "restore defaults*"
+script = SubResource("GDScript_qed7a")
 
 [connection signal="pressed" from="MarginContainer/HBoxContainer/Back" to="MarginContainer/HBoxContainer/Back" method="_on_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Restore" to="MarginContainer/HBoxContainer/Restore" method="_on_pressed"]
